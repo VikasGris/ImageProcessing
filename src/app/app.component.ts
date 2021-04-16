@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ResponseService } from './response.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ImageProcessing';
+
+  result: any;
+
+  constructor(private service: ResponseService) { }
+
+  getResponse() {
+    this.service.getResponse().subscribe(response => {
+      this.result = response;
+    }, (error: HttpErrorResponse) => {
+      alert(error.statusText);
+    })
+  }
 }
