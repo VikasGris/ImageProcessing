@@ -1,4 +1,5 @@
 <form [formGroup]="form" (submit)="onSubmit()">
+<<<<<<< HEAD
     <input 
     type="file" 
     name="file" 
@@ -8,3 +9,9 @@
     multiple = "">
     <button class="btn btn-primary" type="submit">Upload</button>
 </form>
+=======
+    <input type="file" name="file" id="file" (change)="onFileChange($event)" formControlName="file" multiple>
+    <button class="btn btn-primary" [disabled]='!hasFinishedReading' type="submit">Upload</button>
+</form>
+>>>>>>> 7e7bd1aca282f25cd70c916f5334e59896e81000
+
