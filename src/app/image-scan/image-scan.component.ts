@@ -14,7 +14,7 @@ import { ResponseService } from '../response.service';
 export class ImageScanComponent implements OnInit {
   file;
   form;
-  hasFinishedReding = false;
+  hasFinishedReading = false;
 
   constructor(private service: ResponseService, private http: HttpClient) {
     
@@ -46,17 +46,17 @@ export class ImageScanComponent implements OnInit {
         'page': jsonstring
       };
       console.log('JSON Data', temp);
-      this.hasFinishedReding = true;
+      this.hasFinishedReading = true;
     }
 }
 
   
 
   onSubmit() {
-    this.service.postResponse(JSON.parse(this.file)).subscribe(response => {
+    this.service.postResponse(this.file).subscribe(response => {
       console.log(response, "response");
       console.log(this.file);
-      this.hasFinishedReding = false;
+      this.hasFinishedReading = false;
       this.file = null;
     }, (error) => {
       console.log('error', error);

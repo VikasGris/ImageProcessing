@@ -10,12 +10,12 @@
         <th>Date</th>
         <th>Impression</th>
       </tr>
-      <tr>
-        <td>{{result.Patient_Name }}</td>
-        <td>{{result.Age }}</td>
-        <td>{{result.Sex }}</td>
-        <td>{{result.Date }}</td>
-        <td>{{result.Impression }}</td>
+      <tr *ngFor = "let results of result">
+        <td>{{results.Patient_Name }}</td>
+        <td>{{results.Age }}</td>
+        <td>{{results.Sex }}</td>
+        <td>{{results.Date }}</td>
+        <td>{{results.Impression }}</td>
       </tr>
     </table>
   </div>
