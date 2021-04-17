@@ -1,4 +1,10 @@
 <form [formGroup]="form" (submit)="onSubmit()">
-    <input type="file" name="file" id="file" (change)="onFileChange($event)" formControlName="file" multiple>
+    <input 
+    type="file" 
+    name="file" 
+    id="file" 
+    (change)="onFileChange($event)" 
+    formControlName="files" 
+    multiple = "">
     <button class="btn btn-primary" type="submit">Upload</button>
 </form>
