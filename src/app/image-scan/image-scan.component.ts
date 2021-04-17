@@ -53,7 +53,14 @@ export class ImageScanComponent implements OnInit {
   
 
   onSubmit() {
-    this.service.postResponse(this.file).subscribe(response => {
+    console.log('onsubmit', this.file);
+    const params = {
+      '_id':1,
+      'page': this.file
+    };
+    console.log('temp', params);
+    
+    this.service.postResponse(params).subscribe(response => {
       console.log(response, "response");
       console.log(this.file);
       this.hasFinishedReading = false;
