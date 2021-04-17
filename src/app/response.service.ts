@@ -19,5 +19,6 @@ export class ResponseService {
   }
   postResponse(formData): Observable<any> {
     return this.http.post(this.configUrl + 'result', formData);
+    
   }
 }
