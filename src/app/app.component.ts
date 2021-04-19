@@ -9,15 +9,15 @@ import { ResponseService } from './response.service';
 })
 export class AppComponent {
 
-  result: any;
+  // result: any;
 
-  constructor(private service: ResponseService) { }
+  // constructor(private service: ResponseService) { }
 
-  getResponse() {
-    this.service.getResponse().subscribe(response => {
-      this.result = response;
-    }, (error: HttpErrorResponse) => {
-      alert(error.statusText);
-    })
-  }
+  // getResponse() {
+  //   this.service.getResponse().subscribe(response => {
+  //     this.result = response;
+  //   }, (error: HttpErrorResponse) => {
+  //     alert(error.statusText);
+  //   })
+  // }
 }
