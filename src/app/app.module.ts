@@ -7,10 +7,11 @@ import { AppComponent } from './app.component';
 import { ImageScanComponent } from './image-scan/image-scan.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    ImageScanComponent
+    ImageScanComponent,
   ],
   imports: [
     BrowserModule,

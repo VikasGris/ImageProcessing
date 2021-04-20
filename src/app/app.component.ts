@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ResponseService } from './response.service';
 
@@ -11,13 +10,6 @@ export class AppComponent {
 
   result: any;
 
-  constructor(private service: ResponseService) { }
+  constructor() { }
 
-  getResponse() {
-    this.service.getResponse().subscribe(response => {
-      this.result = response;
-    }, (error: HttpErrorResponse) => {
-      alert(error.statusText);
-    })
-  }
 }
