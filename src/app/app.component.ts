@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ResponseService } from './response.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,5 @@ import { ResponseService } from './response.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
-  result: any;
-
-  constructor() { }
 
 }

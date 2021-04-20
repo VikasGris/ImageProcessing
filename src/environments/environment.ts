@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl:"http://127.0.0.1:9000/"
-  // url:"https://pokeapi.co"
+  // baseUrl:"http://192.168.1.78:9000/"
+  baseUrl:"http://localhost:9000/"
 };
 
 /*
