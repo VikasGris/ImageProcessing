@@ -34,7 +34,7 @@ export class ImageScanComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      files: new FormControl(null),
+      files: new FormControl(''),
       select: new FormControl("", Validators.required)
     });
   }
@@ -109,11 +109,14 @@ export class ImageScanComponent implements OnInit {
     this.service.postResponseSave(finalOutput).subscribe(response => {
       this.alert = true;
       this.success = response;
+      this.base64textString = [];
+      this.result = null;
+      this.form.value.select = null;
       this.form.reset();
       console.log(this.form.reset())
       console.log("Final Response", response)
     }, (error) => {
-
+      this.alert = false;
       console.log("Final Error", error);
     })
   }
