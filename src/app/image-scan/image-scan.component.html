@@ -10,14 +10,14 @@
             formControlName="files" 
             accept=".png, .jpg, .jpeg, .pdf">
             <button class="btn btn-primary" [disabled]='!hasFinishedReading' type="submit">Upload</button>
-            <!-- <div *ngIf='error' class="alert alert-danger" role="alert">
+             <div *ngIf='error' class="alert alert-danger" role="alert">
                 {{error}}
             </div>
             <div class="text-center m-4">
                 <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-            </div>   -->
+            </div>   
         </form>
     </div>
     <div class=" col-md-3 smallScanCard">
@@ -34,14 +34,14 @@
             <form [formGroup]="form" (submit)="onSubmit()">
             <select formControlName="select" class="form-control" (change)="selectId($event)">
                 <option disabled>Select Document</option>
-                <option>Choose Document_Id</option>
+                <!-- <option>Choose Document_Id</option> -->
                 <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
             </select>
-            <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger">
+            <!-- <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger">
                 <div *ngIf = "f.select.errors.required">
                     Document_id Required
                 </div>
-            </div>
+            </div> -->
         </form>
         </div>
 
@@ -59,7 +59,7 @@
                     <td>{{result.Age }}</td>
                     <td>{{result.Sex }}</td>
                     <td>{{result.Date }}</td>
-                    <td>{{result.Impression }}</td> -->
+                    <td>{{result.Impression }}</td>  -->
                 </tr>
             </table>
         </div>
