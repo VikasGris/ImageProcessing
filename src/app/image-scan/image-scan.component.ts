@@ -11,13 +11,15 @@ import { ResponseService } from '../response.service';
 export class ImageScanComponent implements OnInit {
   base64textString = [];  
   file;
+  listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
+  result;
   form;
   error: any = null;
   isLoading = false;
   hasFinishedReading = false;
-  result;
   finalresult;
-  listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
+  success;
+  
   
 
 constructor(private service: ResponseService) {    
@@ -73,11 +75,10 @@ handleReaderLoaded(e) {
   }
 
   onSubmitImage() {
-    const params = [{
+    const params = {
       '_id':this.form.value.select,
       'page': this.base64textString,
-    }
-    ];
+    };
     
     this.service.postResponse(params).subscribe(response => {
       console.log("Success", response)
@@ -102,6 +103,7 @@ handleReaderLoaded(e) {
       }
     };
     this.service.postResponse(finalOutput).subscribe(response => {
+      this.success = response;
       console.log("Final Response" , response)
     }, (error) => {
       console.log("Final Error" , error);
