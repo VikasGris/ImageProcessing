@@ -87,7 +87,7 @@ export class ImageScanComponent implements OnInit {
       'page': this.base64textString,
     };
 
-    this.service.postResponse(params).subscribe(response => {
+    this.service.postResponseSave(params).subscribe(response => {
       console.log("Success", response)
     }, (error) => {
       console.log("Error", error)
@@ -106,7 +106,7 @@ export class ImageScanComponent implements OnInit {
         'text': this.finalresult
       }
     };
-    this.service.postResponse(finalOutput).subscribe(response => {
+    this.service.postResponseSave(finalOutput).subscribe(response => {
       this.alert = true;
       this.success = response;
       this.form.reset();
