@@ -25,8 +25,9 @@ export class ImageScanComponent implements OnInit {
   hasFinishedReading = false;
   finalresult;
   success;
+  alert:boolean = false;
 
-
+  
 
   constructor(private service: ResponseService) {
   }
@@ -94,10 +95,6 @@ export class ImageScanComponent implements OnInit {
   }
 
   onSubmitText() {
-    // this.result = {
-    //   'Name': 'P. Vikas',
-    //   'Age': '21'
-    // };
     this.finalresult = this.result;
     const finalOutput = {
       'r':
@@ -110,9 +107,13 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.service.postResponse(finalOutput).subscribe(response => {
+      this.alert = true;
       this.success = response;
+      this.form.reset();
+      console.log(this.form.reset())
       console.log("Final Response", response)
     }, (error) => {
+
       console.log("Final Error", error);
     })
   }
