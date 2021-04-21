@@ -11,9 +11,9 @@ export class ResponseService {
   configUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
-  
+
   postResponse(formData): Observable<any> {
-    console.log('service', formData);
+    // console.log('service', formData);
     return this.http.post(this.configUrl + 'debug', formData);
   }
 }
