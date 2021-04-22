@@ -81,10 +81,11 @@ export class ImageScanComponent implements OnInit {
       this.result = response
       this.error = null
       this.isLoading = true;
+      this.getResult = true;
     }, (error) => {
       this.error = error.statusText;
       this.isLoading = false
-      this.getResult = true;
+      
       
     })
   }
@@ -97,7 +98,9 @@ export class ImageScanComponent implements OnInit {
 
     this.service.postResponseSave(params).subscribe(response => {
       if(response.code === "success"){
-        location.reload();
+        setTimeout(() =>{
+          location.reload();
+        },2000)
         this.successAlert = true;
       }
       else{
