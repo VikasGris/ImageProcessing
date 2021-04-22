@@ -6,9 +6,26 @@
 body{
     overflow: hidden;
 }
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+  }
+  tr{
+      border: none;
+  }
+th, td {
+    padding: 5px;
+    text-align: left;
+  }
+  td{
+      border-left: 1px solid black;
+  }
+  .scrollit{
+      overflow: auto;
+  }
 .smallScanCard{
-    background-color: rgba(240,240,240);
-    border-radius: 10px;
+    
     height: 600px;
     margin-left: -20px;
 }
@@ -21,7 +38,7 @@ body{
     margin-top: 20px;
     margin-left: 25px;
     margin-bottom: 10px;
-    width: 100px;
+    
 }
 .scanImage {
     /* border: 1px solid #ddd; */
@@ -31,12 +48,12 @@ body{
     height: 210px;
     
   }
-.scanImage.closeIcon{
+/* .scanImage.closeIcon{
     background-image: url("../../assets/image/close.jpg");
     background-repeat: no-repeat;
     height: 30px;
     width: 30px;
-  }
+  } */
 img:hover {
     box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
@@ -45,15 +62,15 @@ img:hover {
     padding-top: 30px;
 } */
 .card1{
-    width: 80%;
+    width: 58%;
     height: 83%;
     background-color: white;
-    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-bottom: 25px;
     overflow-y: scroll;
 }
-.card.close{
+/* .card.close{
     width: 30px;
     height: 30px;
     padding-left: 200px;
-}
+} */

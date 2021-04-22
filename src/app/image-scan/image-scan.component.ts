@@ -23,6 +23,7 @@ export class ImageScanComponent implements OnInit {
   isLoading = false;
   hasFinishedReading = false;
   selectDropdownId;
+  getResult = false;
   idSelected = false;
   finalresult;
   successAlert:boolean = false;
@@ -48,6 +49,7 @@ export class ImageScanComponent implements OnInit {
       reader.readAsBinaryString(inputFile)
       this.hasFinishedReading = true;
       console.log(this.hasFinishedReading)
+      
     }
   }
 
@@ -82,6 +84,8 @@ export class ImageScanComponent implements OnInit {
     }, (error) => {
       this.error = error.statusText;
       this.isLoading = false
+      this.getResult = true;
+      
     })
   }
 
@@ -92,6 +96,13 @@ export class ImageScanComponent implements OnInit {
     };
 
     this.service.postResponseSave(params).subscribe(response => {
+      if(response.code === "success"){
+        location.reload();
+        this.successAlert = true;
+      }
+      else{
+        this.errorAlert = true;
+      }
       console.log("Success", response)
     }, (error) => {
       console.log("Error", error)
@@ -112,17 +123,17 @@ export class ImageScanComponent implements OnInit {
     };
     this.service.postResponseSave(finalOutput).subscribe(response => {
       if(response.code === "success"){
-        this.successAlert = true;
-        this.base64textString = [];
-        this.result = null;
-        this.form.value.select = null;
-        this.form.reset();
-        console.log(this.form.reset())
+        location.reload()
+           this.successAlert = true;
+        // this.base64textString = [];
+        // this.result = null;
+        // this.form.value.select = null;
+           this.form.reset();
+        // console.log(this.form.reset())
       }
       else{
         this.errorAlert = true;
       }
-      
       console.log("Final Response", response)
     }, (error) => {
       console.log("Final Error", error);

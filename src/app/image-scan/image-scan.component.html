@@ -1,3 +1,4 @@
+<body>
 <div class="row">
     <div class="col-md-5">
             <!-- <form [formGroup]="form" (submit)="onSubmit()">
@@ -30,11 +31,10 @@
 
     <div class="col-md-3 smallScanCard">
         <button class="btn btn-primary btnAlign">Scan</button>
-        <button class="btn btn-primary btnAlign">Reset</button><br />
+        <button class="btn btn-primary btnAlign">Reset</button>
         <div class="closeIcon"></div>
-
         <div class="image-container card1">
-            <img class="scanImage" *ngFor="let item of base64textString" src={{item}} alt="" height="100%" width="100%">
+            <img class="scanImage" *ngFor="let item of base64textString" src={{item}} alt="">
         </div>
     </div>
 
@@ -70,26 +70,42 @@
         </form>
         </div>
 
-        <div>
-            <table class="table">
+        <div class="scrollit">
+            <table>
                 <tr>
-                    <th>Patient Name</th>
-                    <th>Age</th>
-                    <th>Sex</th>
-                    <th>Date</th>
-                    <th>Impression</th>
+                    <th>Patient Name :</th>
+                    <td>{{result.Patient_Name }}</td>
                 </tr>
                 <tr>
-                    <td>{{result.Patient_Name }}</td>
+                    <th>Age :</th>
                     <td>{{result.Age }}</td>
+                </tr>
+                <tr>
+                    <th>Sex :</th>
                     <td>{{result.Sex }}</td>
+                </tr>
+                <tr>
+                    <th>Date :</th>
                     <td>{{result.Date }}</td>
+                </tr>
+                <tr>
+                    <th>Impression :</th>
                     <td>{{result.Impression }}</td> 
                 </tr>
             </table>
         </div>
-        <button class="btn btn-primary" type="submit" (click)="onSubmitImage()" style="margin-right: 10px;">Save As Image</button>
-        <button class="btn btn-primary" type="submit" (click)="onSubmitText()">Save As Text</button>
+        <button 
+        class="btn btn-primary" 
+        type="submit" 
+        (click)="onSubmitImage()" 
+        style="margin-right: 10px;"
+        [disabled] = "!getResult">Save As Image</button>
+        <button 
+        class="btn btn-primary" 
+        type="submit" 
+        (click)="onSubmitText()"
+        [disabled] = "!getResult">Save As Text</button>
         <!-- <div>{{success.message}}</div> -->
     </div>
 </div>
+</body>
