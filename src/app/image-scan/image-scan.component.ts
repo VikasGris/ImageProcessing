@@ -10,7 +10,6 @@ import { ResponseService } from '../response.service';
 })
 export class ImageScanComponent implements OnInit {
   base64textString = [];
-  file;
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
   result = {
     Age: null,
@@ -23,8 +22,9 @@ export class ImageScanComponent implements OnInit {
   error: any = null;
   isLoading = false;
   hasFinishedReading = false;
+  selectDropdownId;
+  idSelected = false;
   finalresult;
-  success;
   successAlert:boolean = false;
   errorAlert:boolean = false;
 
@@ -47,17 +47,20 @@ export class ImageScanComponent implements OnInit {
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(inputFile)
       this.hasFinishedReading = true;
+      console.log(this.hasFinishedReading)
     }
   }
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
-    console.log(this.base64textString)
+    //console.log(this.base64textString)
   }
 
   selectId(event) {
-    console.log(event.target.value);
-    this.hasFinishedReading = true
+     //console.log(event.target.value);
+     this.selectDropdownId = this.form.value.select;
+    this.idSelected = true
+    console.log(this.idSelected)
   }
   get f() {
     return this.form.controls;
@@ -65,17 +68,17 @@ export class ImageScanComponent implements OnInit {
 
 
   onSubmit() {
-    this.isLoading = true;
     const params = {
-      '_id': this.form.value.select,
+      '_id': this.selectDropdownId,
       'page': this.base64textString,
     };
-
-    console.log('temp', params);
-    console.log(this.form.value)
+    
+    //console.log('temp', params);
+    //console.log(this.form.value)
     this.service.postResponse(params).subscribe(response => {
       this.result = response
       this.error = null
+      this.isLoading = true;
     }, (error) => {
       this.error = error.statusText;
       this.isLoading = false
@@ -108,8 +111,7 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.service.postResponseSave(finalOutput).subscribe(response => {
-      this.success = response;
-      if(this.success === "success"){
+      if(response.code === "success"){
         this.successAlert = true;
         this.base64textString = [];
         this.result = null;
@@ -124,10 +126,6 @@ export class ImageScanComponent implements OnInit {
       console.log("Final Response", response)
     }, (error) => {
       console.log("Final Error", error);
-      // this.success = "error"
-      // if(this.success){
-      //   this.errorAlert = true;
-      // }
     })
   }
 }

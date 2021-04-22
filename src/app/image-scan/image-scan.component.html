@@ -53,7 +53,7 @@
                     (change)="onFileChange($event)" 
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf">
-            <button class="btn btn-primary" [disabled]='!hasFinishedReading' type="submit">Upload</button>
+            <button class="btn btn-primary" [disabled]='!hasFinishedReading && !idSelected' type="submit" style="margin-top: 10px;">Upload</button>
             <div *ngIf='error' class="alert alert-danger" role="alert">
                 {{error}}
             </div>
@@ -64,7 +64,7 @@
             </div>   
             <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger">
                 <div *ngIf = "f.select.errors.required">
-                    Document_id Required
+                    Document ID Required
                 </div>
             </div>
         </form>
@@ -88,7 +88,7 @@
                 </tr>
             </table>
         </div>
-        <button class="btn btn-primary" type="submit" (click)="onSubmitImage()">Save As Image</button>
+        <button class="btn btn-primary" type="submit" (click)="onSubmitImage()" style="margin-right: 10px;">Save As Image</button>
         <button class="btn btn-primary" type="submit" (click)="onSubmitText()">Save As Text</button>
         <!-- <div>{{success.message}}</div> -->
     </div>
