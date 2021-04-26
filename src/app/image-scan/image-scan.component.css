@@ -44,7 +44,15 @@
     height: 210px;
     margin-top: 8px;
 }
-img:hover {
+.large_image {
+    border-radius: 4px;
+    padding: 3px;
+    width: 93%;
+    height: 93%;
+    margin-top: 17px;
+    margin-left: 15px;
+}
+.scanImage:hover {
     box-shadow: 0 0 5px 2px rgba(4, 186, 247, 0.5);
 }
 .card1{

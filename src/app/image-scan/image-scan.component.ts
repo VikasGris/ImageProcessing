@@ -132,7 +132,7 @@ export class ImageScanComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isLoading = false;
+    this.isLoading = true;
     const params = {
       '_id': this.selectDropdownId,
       'page': this.base64textString,
@@ -140,7 +140,7 @@ export class ImageScanComponent implements OnInit {
     this.service.postResponse(params).subscribe(response => {
       this.result = response
       this.error = null
-      this.isLoading = true;
+      this.isLoading = false;
       this.getResult = true;
     }, (error) => {
       this.error = error.statusText;
@@ -150,11 +150,17 @@ export class ImageScanComponent implements OnInit {
 
   onSubmitImage() {
     const params = {
-      '_id': this.form.value.select,
-      'page': this.base64textString,
+      'input':
+      {
+        '_id': this.form.value.select,
+        'page': this.base64textString,
+      },
+      'output': {
+        'text': this.finalresult
+      }
     };
 
-    this.service.postResponseSave(params).subscribe(response => {
+    this.service.postResponseSaveasImage(params).subscribe(response => {
       if(response.code === "success"){
         setTimeout(() =>{
           location.reload();
@@ -173,16 +179,16 @@ export class ImageScanComponent implements OnInit {
   onSubmitText() {
     this.finalresult = this.result;
     const finalOutput = {
-      'r':
+      'input':
       {
         '_id': this.form.value.select,
         'page': this.base64textString,
       },
-      's': {
+      'output': {
         'text': this.finalresult
       }
     };
-    this.service.postResponseSave(finalOutput).subscribe(response => {
+    this.service.postResponseSaveasText(finalOutput).subscribe(response => {
       // this.success = response;
       // location.reload();
       if(response.code === "success"){
