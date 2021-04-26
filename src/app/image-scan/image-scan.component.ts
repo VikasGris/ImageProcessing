@@ -12,6 +12,7 @@ import { ResponseService } from '../response.service';
 })
 export class ImageScanComponent implements OnInit {
   base64textString = [];
+  base64textString1;
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
   result = {
     Age: null,
@@ -93,17 +94,23 @@ export class ImageScanComponent implements OnInit {
 
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
-    console.log(event.target.files)
+    //console.log(event.target.files)
     if (inputFile) {
       const reader = new FileReader();
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(inputFile)
     }
+    //console.log(inputFile)
   }
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
-    console.log(this.base64textString)
+    //console.log(this.base64textString1)
+  }
+  onClick(event){
+    var target = event.target || event.srcElement || event.currentTarget;
+    var idAttr = target.attributes.id;
+    var value = idAttr.nodeValue;
   }
 
   // onDelete(){
@@ -170,9 +177,9 @@ export class ImageScanComponent implements OnInit {
       else{
         this.errorAlert = true;
       }
-      console.log("Success", response)
+      //console.log("Success", response)
     }, (error) => {
-      console.log("Error", error)
+      //console.log("Error", error)
     })
   }
 
@@ -197,12 +204,12 @@ export class ImageScanComponent implements OnInit {
         this.result = null;
         this.form.value.select = null;
            this.form.reset();
-        console.log(this.form.reset())
+        //console.log(this.form.reset())
       }
-      console.log("Final Response", response)
+      //console.log("Final Response", response)
     }, (error) => {
       this.errorAlert = true;
-      console.log("Final Error", error);
+      //console.log("Final Error", error);
     })
   }
 }
