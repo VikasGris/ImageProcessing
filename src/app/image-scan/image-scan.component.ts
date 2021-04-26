@@ -21,13 +21,15 @@ export class ImageScanComponent implements OnInit {
     Date: null,
     Impression: null,
   };
+  im1=null;
   form;
   error: any = null;
   isLoading = false;
   selectDropdownId;
   getResult = false;
   finalresult;
-  success;
+  success={code:null,
+  message:null};
   successAlert:boolean = false;
   errorAlert:boolean = false;
   deleteImage;
@@ -105,13 +107,15 @@ export class ImageScanComponent implements OnInit {
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
+    this.im1 = this.base64textString[this.base64textString.length-1]
     //console.log(this.base64textString1)
   }
   onClick(event){
-    // var target = event.target || event.srcElement || event.currentTarget;
-    // var idAttr = target.attributes.id;
-    // var value = idAttr.nodeValue;
-    console.log(event.target.attributes.id.value)
+    //var target = event.target;
+    //var idAttr = target.attributes.id;
+    //var value = idAttr.nodeValue;
+    this.im1 = this.base64textString[event.target.attributes.id.value]
+    //console.log(event.target.attributes.id.value)
   }
 
   // onDelete(){
@@ -169,10 +173,9 @@ export class ImageScanComponent implements OnInit {
     };
 
     this.service.postResponseSaveasImage(params).subscribe(response => {
+      this.success = response;
       if(response.code === "success"){
-        setTimeout(() =>{
-          location.reload();
-        },2000)
+        //setTimeout(() =>{location.reload(); },2000)
         this.successAlert = true;
       }
       else{
@@ -199,12 +202,12 @@ export class ImageScanComponent implements OnInit {
        this.success = response;
       // location.reload();
       if(response.code === "success"){
-        location.reload()
+        //location.reload()
         this.successAlert = true;
-        this.base64textString = [];
-        this.result = null;
-        this.form.value.select = null;
-        this.form.reset();
+        //this.base64textString = [];
+        //this.result = null;
+        //this.form.value.select = null;
+        //this.form.reset();
         //console.log(this.form.reset())
       }
       else{
