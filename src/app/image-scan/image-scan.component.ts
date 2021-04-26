@@ -21,7 +21,7 @@ export class ImageScanComponent implements OnInit {
     Date: null,
     Impression: null,
   };
-  im1=null;
+  im1='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
   error: any = null;
   isLoading = false;
