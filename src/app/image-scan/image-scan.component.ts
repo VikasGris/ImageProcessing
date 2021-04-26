@@ -156,7 +156,7 @@ export class ImageScanComponent implements OnInit {
         'page': this.base64textString,
       },
       'output': {
-        'text': this.result
+        'fields': this.result
       }
     };
 
@@ -184,7 +184,7 @@ export class ImageScanComponent implements OnInit {
         'page': this.base64textString,
       },
       'output': {
-        'text': this.result
+        'fields': this.result
       }
     };
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
