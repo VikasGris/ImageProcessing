@@ -132,7 +132,7 @@ export class ImageScanComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isLoading = true;
+    this.isLoading = false;
     const params = {
       '_id': this.selectDropdownId,
       'page': this.base64textString,
@@ -140,7 +140,7 @@ export class ImageScanComponent implements OnInit {
     this.service.postResponse(params).subscribe(response => {
       this.result = response
       this.error = null
-      this.isLoading = false;
+      this.isLoading = true;
       this.getResult = true;
     }, (error) => {
       this.error = error.statusText;
