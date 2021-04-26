@@ -1,19 +1,6 @@
-<body>
+<div id="overflow">
 <div class="row">
     <div class="col-md-5">
-            <!-- <form [formGroup]="form" (submit)="onSubmit()">
-            <input 
-            type="file" 
-            name="file" 
-            id="file" 
-            (change)="onFileChange($event)" 
-            formControlName="files" 
-            accept=".png, .jpg, .jpeg, .pdf">
-            <button class="btn btn-primary" [disabled]='!hasFinishedReading' type="submit">Upload</button>
-             <div *ngIf='error' class="alert alert-danger" role="alert">
-                {{error}}
-            </div>
-        </form> -->
         <div *ngIf = "successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
              The data was stored successfully.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -26,24 +13,29 @@
               <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    </div>
-
-
-    <div class="col-md-3 smallScanCard">
-        <button class="btn btn-primary btnAlign">Scan</button>
-        <button class="btn btn-primary btnAlign">Reset</button>
-        <div class="closeIcon"></div>
-        <div class="image-container card1">
-            <img class="scanImage" *ngFor="let item of base64textString" src={{item}} alt="">
+        <label style="margin-left: 10px;">Select Scanner:</label>
+        <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br>
+        <div class="image">
         </div>
     </div>
+    <div class="col-md-2 smallScanCard">
+        <button class="btn btn-primary btnAlign" (click)="acquireImage()">Scan</button>
+        <button class="btn btn-primary btnAlign" (click) = "onReset()">Reset</button>
+        <div id="card1" class="card1 image-container">
+            <i class="bi bi-trash"></i>
+        </div>
+        <!-- <div class="image-container card1">
+            
+            <img class="scanImage" *ngFor="let item of base64textString" src={{item}} alt="">
+        </div> -->
+    </div>
 
-    <div class="mt-3 col-md-4">
+    <div class="mt-3 col-md-5 ml-3">
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
-                <select formControlName="select" class="form-control" (change)="selectId($event)">
-                    <option disabled>Select Document</option>
-                    <!-- <option>Choose Document_Id</option> -->
+                <label for="">Select Report Type</label>
+                <select formControlName="select" class="form-control w-auto" (change)="selectId($event)">
+                    <option>Select Document</option>
                     <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
                 </select>
                 <input 
@@ -53,7 +45,11 @@
                     (change)="onFileChange($event)" 
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf">
-            <button class="btn btn-primary" [disabled]='!hasFinishedReading && !idSelected' type="submit" style="margin-top: 10px;">Upload</button>
+            <button 
+            class="btn btn-primary" 
+            [disabled]='form.invalid && form.invalid' 
+            type="submit" 
+            style="margin-top: 10px;">Upload</button>
             <div *ngIf='error' class="alert alert-danger" role="alert">
                 {{error}}
             </div>
@@ -71,27 +67,29 @@
         </div>
 
         <div class="scrollit">
-            <table>
+            <table class="table table-hover w-auto">
+                <tbody>
                 <tr>
-                    <th>Patient Name :</th>
-                    <td>{{result.Patient_Name }}</td>
+                    <th>Report Type</th>
+                    <td>{{result.Patient_Name}}</td>
                 </tr>
                 <tr>
-                    <th>Age :</th>
+                    <th>Report Date</th>
                     <td>{{result.Age }}</td>
                 </tr>
                 <tr>
-                    <th>Sex :</th>
+                    <th>Impression</th>
                     <td>{{result.Sex }}</td>
                 </tr>
                 <tr>
-                    <th>Date :</th>
+                    <th>Name of the scan centre</th>
                     <td>{{result.Date }}</td>
                 </tr>
                 <tr>
-                    <th>Impression :</th>
+                    <th>Name of the consultant</th>
                     <td>{{result.Impression }}</td> 
                 </tr>
+            </tbody>
             </table>
         </div>
         <button 
@@ -105,7 +103,6 @@
         type="submit" 
         (click)="onSubmitText()"
         [disabled] = "!getResult">Save As Text</button>
-        <!-- <div>{{success.message}}</div> -->
     </div>
 </div>
-</body>
+</div>

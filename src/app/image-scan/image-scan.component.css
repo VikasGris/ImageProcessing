@@ -1,29 +1,6 @@
-/* img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-} */
-body{
+#overflow{
     overflow: hidden;
 }
-table {
-    border: 1px solid black;
-    border-collapse: collapse;
-    margin-bottom: 5px;
-  }
-  tr{
-      border: none;
-  }
-th, td {
-    padding: 5px;
-    text-align: left;
-  }
-  td{
-      border-left: 1px solid black;
-  }
-  .scrollit{
-      overflow: auto;
-  }
 .smallScanCard{
     
     height: 600px;
@@ -36,41 +13,25 @@ th, td {
 }
 .btnAlign{
     margin-top: 20px;
-    margin-left: 25px;
+    margin-left: 30px;
     margin-bottom: 10px;
-    
 }
-.scanImage {
-    /* border: 1px solid #ddd; */
+#scanImage {
     border-radius: 4px;
-    padding: 5px;
+    padding: 3px;
+    margin:3px;
     width: 160px;
     height: 210px;
-    
-  }
-/* .scanImage.closeIcon{
-    background-image: url("../../assets/image/close.jpg");
-    background-repeat: no-repeat;
-    height: 30px;
-    width: 30px;
-  } */
-img:hover {
-    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    margin-top: 8px;
 }
-/* img{
-    border: 1px solid #ddd;
-    padding-top: 30px;
-} */
+img:hover {
+    box-shadow: 0 0 5px 2px rgba(4, 186, 247, 0.5);
+}
 .card1{
-    width: 58%;
+    width: 93%;
     height: 83%;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-bottom: 25px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
-/* .card.close{
-    width: 30px;
-    height: 30px;
-    padding-left: 200px;
-} */
