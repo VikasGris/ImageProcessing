@@ -7,6 +7,7 @@
     height: 550px;
     border-radius: 5px;
     margin-left: 10px;
+    margin-top: 22px;
 }
 /* .scrollbar{
     background-color: rgba(230, 230, 243, 0.986);
@@ -19,6 +20,12 @@
     height: 600px;
     margin-left: -20px;
 }
+.file{
+    margin-left: 30px;
+}
+.upload{
+    margin-left: 200px;
+}
 .image-container{
     margin-top: 10px;
     margin-left: 20px;
@@ -29,7 +36,7 @@
     margin-left: 30px;
     margin-bottom: 10px;
 }
-#scanImage {
+.scanImage {
     border-radius: 4px;
     padding: 3px;
     margin:3px;

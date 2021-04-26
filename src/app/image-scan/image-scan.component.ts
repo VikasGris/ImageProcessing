@@ -47,46 +47,46 @@ export class ImageScanComponent implements OnInit {
       files: new FormControl(null,Validators.required),
       select: new FormControl(null, Validators.required)
     });
-    Dynamsoft.DWT.Containers = [{ WebTwainId: 'dwtObject', ContainerId: this.containerId, Width:'auto', Height:'auto' }];
-    Dynamsoft.DWT.RegisterEvent('OnWebTwainReady', () => { this.Dynamsoft_OnReady(); });
-    console.log(Dynamsoft.DWT)
-    Dynamsoft.DWT.ProductKey = 't00891wAAAJyHArHjdRL0wBNHC47fVCY41/FatXNtYRsY6D/2tMOnqU3ecIoRTzEw1WNKa7lZJEgzA3fD39lzbscdtF5Wtxa/Cwnz3QLUgU8QaQCj65BTN2rtK7Q=';
-    Dynamsoft.DWT.ResourcesPath = 'assets/Resources';
-    Dynamsoft.DWT.Load();
+    // Dynamsoft.DWT.Containers = [{ WebTwainId: 'dwtObject', ContainerId: this.containerId, Width:'auto', Height:'auto' }];
+    // Dynamsoft.DWT.RegisterEvent('OnWebTwainReady', () => { this.Dynamsoft_OnReady(); });
+    // console.log(Dynamsoft.DWT)
+    // Dynamsoft.DWT.ProductKey = 't00891wAAAJyHArHjdRL0wBNHC47fVCY41/FatXNtYRsY6D/2tMOnqU3ecIoRTzEw1WNKa7lZJEgzA3fD39lzbscdtF5Wtxa/Cwnz3QLUgU8QaQCj65BTN2rtK7Q=';
+    // Dynamsoft.DWT.ResourcesPath = 'assets/Resources';
+    // Dynamsoft.DWT.Load();
   }
 
   //DWT
 
-  Dynamsoft_OnReady(): void {
-    this.DWObject = Dynamsoft.DWT.GetWebTwain('card1');
-    let count = this.DWObject.SourceCount;
-    console.log(count)
-    this.selectSources = <HTMLSelectElement>document.getElementById("sources");
-    this.selectSources.options.length = 0;
-    for (let i = 0; i < count; i++) {
-      this.selectSources.options.add(new Option(this.DWObject.GetSourceNameItems(i), i.toString()));
-    }
-  }
+  // Dynamsoft_OnReady(): void {
+  //   this.DWObject = Dynamsoft.DWT.GetWebTwain('card1');
+  //   let count = this.DWObject.SourceCount;
+  //   console.log(count)
+  //   this.selectSources = <HTMLSelectElement>document.getElementById("sources");
+  //   this.selectSources.options.length = 0;
+  //   for (let i = 0; i < count; i++) {
+  //     this.selectSources.options.add(new Option(this.DWObject.GetSourceNameItems(i), i.toString()));
+  //   }
+  // }
 
-  acquireImage(): void{
-    if(!this.DWObject){
-      this.DWObject = Dynamsoft.DWT.GetWebTwain('card1');
-      console.log(Dynamsoft);
-      console.log("First If",this.DWObject)
-    }
-    if(this.DWObject.SourceCount > 0 && this.DWObject.SelectSourceByIndex(this.selectSources.selectedIndex)){
-      const onAcquireImageSuccess = () => { this.DWObject.CloseSource();};
-      const onAcquireImageFailure = onAcquireImageSuccess;
-      this.DWObject.OpenSource();
-      this.DWObject.AcquireImage( {}, onAcquireImageSuccess,onAcquireImageFailure);
-      console.log(this.DWObject)
-    }
+  // acquireImage(): void{
+  //   if(!this.DWObject){
+  //     this.DWObject = Dynamsoft.DWT.GetWebTwain('card1');
+  //     console.log(Dynamsoft);
+  //     console.log("First If",this.DWObject)
+  //   }
+  //   if(this.DWObject.SourceCount > 0 && this.DWObject.SelectSourceByIndex(this.selectSources.selectedIndex)){
+  //     const onAcquireImageSuccess = () => { this.DWObject.CloseSource();};
+  //     const onAcquireImageFailure = onAcquireImageSuccess;
+  //     this.DWObject.OpenSource();
+  //     this.DWObject.AcquireImage( {}, onAcquireImageSuccess,onAcquireImageFailure);
+  //     console.log(this.DWObject)
+  //   }
     
-    else{
-      alert("No Source Available!");
-      console.log("No source")
-    }
-  }
+  //   else{
+  //     alert("No Source Available!");
+  //     console.log("No source")
+  //   }
+  // }
 
   
 
@@ -183,17 +183,17 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.service.postResponseSave(finalOutput).subscribe(response => {
-      this.success = response;
-      location.reload();
-      // if(response.code === "success"){
-      //   location.reload()
-      //      this.successAlert = true;
-      //   this.base64textString = [];
-      //   this.result = null;
-      //   this.form.value.select = null;
-      //      this.form.reset();
-      //   console.log(this.form.reset())
-      // }
+      // this.success = response;
+      // location.reload();
+      if(response.code === "success"){
+        location.reload()
+           this.successAlert = true;
+        this.base64textString = [];
+        this.result = null;
+        this.form.value.select = null;
+           this.form.reset();
+        console.log(this.form.reset())
+      }
       console.log("Final Response", response)
     }, (error) => {
       this.errorAlert = true;
