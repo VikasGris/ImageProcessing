@@ -108,9 +108,10 @@ export class ImageScanComponent implements OnInit {
     //console.log(this.base64textString1)
   }
   onClick(event){
-    var target = event.target || event.srcElement || event.currentTarget;
-    var idAttr = target.attributes.id;
-    var value = idAttr.nodeValue;
+    // var target = event.target || event.srcElement || event.currentTarget;
+    // var idAttr = target.attributes.id;
+    // var value = idAttr.nodeValue;
+    console.log(event.target.attributes.id.value)
   }
 
   // onDelete(){
@@ -195,16 +196,19 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
-      // this.success = response;
+       this.success = response;
       // location.reload();
       if(response.code === "success"){
         location.reload()
-           this.successAlert = true;
+        this.successAlert = true;
         this.base64textString = [];
         this.result = null;
         this.form.value.select = null;
-           this.form.reset();
+        this.form.reset();
         //console.log(this.form.reset())
+      }
+      else{
+        this.errorAlert = true;
       }
       //console.log("Final Response", response)
     }, (error) => {
