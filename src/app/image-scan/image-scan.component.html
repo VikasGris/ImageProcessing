@@ -16,6 +16,7 @@
         <label style="margin-left: 10px;">Select Scanner:</label>
         <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br>
         <div class="image">
+            <img src="" alt="">
         </div>
     </div>
     <div class="col-md-2 smallScanCard">
@@ -38,13 +39,13 @@
                     <option>Select Document</option>
                     <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
                 </select>
-                <input 
+                <!-- <input 
                     type="file" 
                     name="file" 
                     id="file" 
                     (change)="onFileChange($event)" 
                     formControlName="files" 
-                    accept=".png, .jpg, .jpeg, .pdf">
+                    accept=".png, .jpg, .jpeg, .pdf"> -->
             <button 
             class="btn btn-primary" 
             [disabled]='form.invalid && form.invalid' 

@@ -1,6 +1,19 @@
 #overflow{
     overflow: hidden;
 }
+.image{
+    background-color: rgba(230, 230, 243, 0.986);
+    width: 540px;
+    height: 550px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+/* .scrollbar{
+    background-color: rgba(230, 230, 243, 0.986);
+    border-radius: 5px;
+    width: 220px;
+    height: 500px;
+} */
 .smallScanCard{
     
     height: 600px;
