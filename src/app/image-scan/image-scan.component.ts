@@ -91,8 +91,6 @@ export class ImageScanComponent implements OnInit {
   //   }
   // }
 
-  
-
 
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
@@ -102,7 +100,6 @@ export class ImageScanComponent implements OnInit {
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(inputFile)
     }
-    //console.log(inputFile)
   }
 
   handleReaderLoaded(e) {
@@ -111,25 +108,9 @@ export class ImageScanComponent implements OnInit {
     //console.log(this.base64textString1)
   }
   onClick(event){
-    //var target = event.target;
-    //var idAttr = target.attributes.id;
     //var value = idAttr.nodeValue;
     this.im1 = this.base64textString[event.target.attributes.id.value]
-    //console.log(event.target.attributes.id.value)
   }
-
-  // onDelete(){
-  //   this.deleteImage = this.base64textString
-  //   console.log(this.deleteImage)
-  //   this.deleteImage.shift()
-  //   console.log(this.deleteImage)
-  // }
-
-  // onRescan(e){
-  //   console.log(this.deleteImage)
-  //   console.log(this.base64textString)
-  //   this.base64textString.splice(0,0,this.onFileChange)
-  // }
 
   selectId(event) {
      //console.log(event.target.value);
@@ -175,8 +156,11 @@ export class ImageScanComponent implements OnInit {
     this.service.postResponseSaveasImage(params).subscribe(response => {
       this.success = response;
       if(response.code === "success"){
-        //setTimeout(() =>{location.reload(); },2000)
+        setTimeout(() =>{location.reload(); },2000)
         this.successAlert = true;
+        this.base64textString = [];
+        this.result = null;
+        this.form.value.select = null;
       }
       else{
         this.errorAlert = true;
@@ -202,12 +186,12 @@ export class ImageScanComponent implements OnInit {
        this.success = response;
       // location.reload();
       if(response.code === "success"){
-        //location.reload()
+        location.reload()
         this.successAlert = true;
-        //this.base64textString = [];
-        //this.result = null;
-        //this.form.value.select = null;
-        //this.form.reset();
+        this.base64textString = [];
+        this.result = null;
+        this.form.value.select = null;
+        this.form.reset();
         //console.log(this.form.reset())
       }
       else{
