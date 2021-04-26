@@ -156,7 +156,7 @@ export class ImageScanComponent implements OnInit {
         'page': this.base64textString,
       },
       'output': {
-        'text': this.finalresult
+        'text': this.result
       }
     };
 
@@ -177,7 +177,6 @@ export class ImageScanComponent implements OnInit {
   }
 
   onSubmitText() {
-    this.finalresult = this.result;
     const finalOutput = {
       'input':
       {
@@ -185,7 +184,7 @@ export class ImageScanComponent implements OnInit {
         'page': this.base64textString,
       },
       'output': {
-        'text': this.finalresult
+        'text': this.result
       }
     };
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {

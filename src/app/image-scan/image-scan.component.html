@@ -25,8 +25,8 @@
         </form>
         <!-- <label style="margin-left: 10px;">Select Scanner:</label>
         <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br> -->
-        <div class="image">
-            <!-- <img class="large_image" *ngFor="let item of base64textString" src={{item}} alt=""> -->
+        <div class="image" *ngFor="let item of base64textString">
+            <img class="large_image" src={{item}} alt="">
         </div>
     </div>
     <div class="col-md-2 smallScanCard" style="margin-top: 30px;">
