@@ -158,9 +158,10 @@ export class ImageScanComponent implements OnInit {
         this.base64textString = [];
         this.result = null;
         this.form.value.select = null;
+        location.reload()
       }
       else{
-         
+        this.errorAlert = true;
       }
       
     }, (error) => {
@@ -186,12 +187,12 @@ export class ImageScanComponent implements OnInit {
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
       if(response.code === "success"){
-        location.reload()
         this.successAlert = true;
         this.base64textString = [];
         this.result = null;
         this.form.value.select = null;
         this.form.reset();
+        location.reload();
       }
       else{
         this.errorAlert = true;
