@@ -21,7 +21,7 @@ export class ImageScanComponent implements OnInit {
     Date: null,
     Impression: null,
   };
-  im1='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
   error: any = null;
   isLoading = false;
@@ -94,7 +94,6 @@ export class ImageScanComponent implements OnInit {
 
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
-    //console.log(event.target.files)
     if (inputFile) {
       const reader = new FileReader();
       reader.onload = this.handleReaderLoaded.bind(this);
@@ -104,16 +103,13 @@ export class ImageScanComponent implements OnInit {
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
-    this.im1 = this.base64textString[this.base64textString.length-1]
-    //console.log(this.base64textString1)
+    this.image_view = this.base64textString[this.base64textString.length-1]
   }
   onClick(event){
-    //var value = idAttr.nodeValue;
-    this.im1 = this.base64textString[event.target.attributes.id.value]
+    this.image_view = this.base64textString[event.target.attributes.id.value]
   }
 
   selectId(event) {
-     //console.log(event.target.value);
      this.selectDropdownId = this.form.value.select;
   }
   get f() {
@@ -152,23 +148,26 @@ export class ImageScanComponent implements OnInit {
         'fields': this.result
       }
     };
-
+    this.errorAlert = false;
+    this.successAlert = false;
+    //console.log(this.errorAlert)
     this.service.postResponseSaveasImage(params).subscribe(response => {
       this.success = response;
       if(response.code === "success"){
-        setTimeout(() =>{location.reload(); },2000)
         this.successAlert = true;
         this.base64textString = [];
         this.result = null;
         this.form.value.select = null;
       }
       else{
-        this.errorAlert = true;
+         
       }
-      //console.log("Success", response)
+      
     }, (error) => {
-      //console.log("Error", error)
+      this.errorAlert = true;
+      //console.log(this.errorAlert)
     })
+    
   }
 
   onSubmitText() {
@@ -182,9 +181,10 @@ export class ImageScanComponent implements OnInit {
         'fields': this.result
       }
     };
+    this.errorAlert = false;
+    this.successAlert = false;
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
-      // location.reload();
       if(response.code === "success"){
         location.reload()
         this.successAlert = true;
@@ -192,15 +192,14 @@ export class ImageScanComponent implements OnInit {
         this.result = null;
         this.form.value.select = null;
         this.form.reset();
-        //console.log(this.form.reset())
       }
       else{
         this.errorAlert = true;
       }
-      //console.log("Final Response", response)
     }, (error) => {
       this.errorAlert = true;
-      //console.log("Final Error", error);
+      //console.log(this.errorAlert)
     })
+
   }
 }

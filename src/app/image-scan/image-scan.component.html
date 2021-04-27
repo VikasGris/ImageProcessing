@@ -1,7 +1,6 @@
 <div id="overflow">
 <div class="row">
     <div class="col-md-5">
-        
         <form [formGroup]="form" (submit)="onSubmit()">
             <input 
                 class="file"
@@ -15,7 +14,7 @@
         <!-- <label style="margin-left: 10px;">Select Scanner:</label>
         <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br> -->
         <div class="image">
-            <img class="large_image" src={{base64textString[base64textString.length-1]}}>
+            <img class="large_image" src={{image_view}}>
         </div>
     </div>
     <div class="col-md-2 smallScanCard" style="margin-top: 41px;">
@@ -28,7 +27,6 @@
             <img class="scanImage" *ngFor="let item of base64textString;let i = index" id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
         </div>
     </div>
-
     <div class="mt-3 col-md-5 ml-3">
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
@@ -95,14 +93,14 @@
         type="submit" 
         (click)="onSubmitText()"
         [disabled] = "!getResult">Save As Text</button>
-        <div *ngIf = "successAlert && !errorAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div *ngIf = "successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
              {{success.message}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div *ngIf = "errorAlert && !successAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{success.message}}
+        <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            Try Again
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
