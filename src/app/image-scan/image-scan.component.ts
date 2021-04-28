@@ -12,7 +12,6 @@ import { ResponseService } from '../response.service';
 })
 export class ImageScanComponent implements OnInit {
   base64textString = [];
-  base64textString1;
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
   result = {
     Age: null,
@@ -32,7 +31,13 @@ export class ImageScanComponent implements OnInit {
   message:null};
   successAlert:boolean = false;
   errorAlert:boolean = false;
-  deleteImage;
+  zoom:boolean = false;
+  largeImage:boolean = true;
+  zoomIcon:boolean = false;
+  successCount = 0;
+  failedCount = 0;
+  cd;
+  
 
   //Dynamic Web Twin:
   DWObject:WebTwain;
@@ -91,7 +96,7 @@ export class ImageScanComponent implements OnInit {
   //   }
   // }
 
-
+  inputFile: File;
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
     if (inputFile) {
@@ -99,14 +104,32 @@ export class ImageScanComponent implements OnInit {
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(inputFile)
     }
+    
   }
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
-    this.image_view = this.base64textString[this.base64textString.length-1]
+    console.log(this.base64textString)
+    this.image_view = this.base64textString[this.base64textString.length-1];
+    this.zoomIcon = true;
   }
   onClick(event){
     this.image_view = this.base64textString[event.target.attributes.id.value]
+  }
+
+  removeSelectedFile(index){
+    this.base64textString.splice(index,1);
+  }
+
+  onClickZoom(){
+    this.zoom = true;
+    this.largeImage = false;
+    //console.log(this.zoom,this.largeImage)
+  }
+  onZoomOut(event){
+    this.zoom = false;
+    this.largeImage = true;
+    //console.log(this.zoom,this.largeImage)
   }
 
   selectId(event) {
@@ -122,6 +145,9 @@ export class ImageScanComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
+    setTimeout ( () =>{
+      this.isLoading = false;
+    },5000)
     const params = {
       '_id': this.selectDropdownId,
       'page': this.base64textString,
@@ -149,15 +175,16 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.errorAlert = false;
-    this.successAlert = false;
     //console.log(this.errorAlert)
     this.service.postResponseSaveasImage(params).subscribe(response => {
       this.success = response;
+      this.successCount = this.successCount + 1;
       if(response.code === "success"){
         this.successAlert = true;
         this.base64textString = [];
         this.result = null;
         this.form.value.select = null;
+        this.form.reset();
         location.reload()
       }
       else{
@@ -166,6 +193,8 @@ export class ImageScanComponent implements OnInit {
       
     }, (error) => {
       this.errorAlert = true;
+      this.failedCount = this.failedCount+1;
+      console.log(this.failedCount)
       //console.log(this.errorAlert)
     })
     
@@ -183,7 +212,6 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.errorAlert = false;
-    this.successAlert = false;
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
       if(response.code === "success"){

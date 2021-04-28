@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ImageScanComponent } from './image-scan/image-scan.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
+
 
 
 @NgModule({
@@ -16,7 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxBootstrapIconsModule.pick(allIcons)
   ],
   providers: [],
   bootstrap: [AppComponent]

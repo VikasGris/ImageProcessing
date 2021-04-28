@@ -1,8 +1,10 @@
-<div id="overflow">
+<body>
+<div>
 <div class="row">
     <div class="col-md-5">
         <form [formGroup]="form" (submit)="onSubmit()">
             <input 
+            *ngIf = "largeImage"
                 class="file"
                 type="file" 
                 name="file" 
@@ -11,30 +13,48 @@
                 formControlName="files" 
                 accept=".png, .jpg, .jpeg, .pdf">
         </form>
+        <div *ngIf = "zoom" class="zoom">
+            <img src={{image_view}} alt="" class="ZoomImage" style="display: inline-block;position: relative;">
+            <span aria-hidden="true" class="zoomCloseIcon" (click) = "onZoomOut($event)" style="cursor: pointer;">×</span>
+        </div>
         <!-- <label style="margin-left: 10px;">Select Scanner:</label>
         <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br> -->
-        <div class="image">
-            <img class="large_image" src={{image_view}}>
+        <div class="image" *ngIf = "largeImage">
+            <img class="large_image" src={{image_view}} style="display: inline-block;position: relative;">
+            <i-bs name="zoom-in"
+            *ngIf = "zoomIcon"
+            width="40"
+              height="40" style="cursor: pointer;" (click)= "onClickZoom()"  class="zoomInIcon">
+        </i-bs>
         </div>
     </div>
-    <div class="col-md-2 smallScanCard" style="margin-top: 41px;">
+    
+    <div class="col-md-2 smallScanCard" style="margin-top: -16px;">
         <button class="btn btn-primary btnAlign">Scan</button>
         <button class="btn btn-primary btnAlign" (click) = "onReset()">Reset</button>
         <!-- <div id="card1" class="card1 image-container">
             <i class="bi bi-trash"></i>
         </div> -->
         <div class="image-container card1">
-            <img class="scanImage" *ngFor="let item of base64textString;let i = index" id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
+            <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
+                <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i)">×</span>
+                  </button>
+                <!-- <i class="material-icons"  style="cursor: pointer;">delete</i> -->
+            </div>
         </div>
     </div>
     <div class="mt-3 col-md-5 ml-3">
+        <span>Success Count:</span>
+        <span>Falier Count:</span>
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
-                <label for="">Select Report Type</label><br/>
+                <label for="">Select Report Type</label>
                 <select formControlName="select" class="form-control w-auto" (change)="selectId($event)">
                     <option>Select Document</option>
                     <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
-                </select>
+                </select> 
             <button 
             class="btn btn-primary upload" 
             [disabled]='form.invalid && form.invalid' 
@@ -60,6 +80,14 @@
             <table class="table table-hover w-auto">
                 <tbody>
                 <tr>
+                    <th>Name of the scan centre</th>
+                    <td>{{result.Date }}</td>
+                </tr>
+                <tr>
+                    <th>Name of the consultant</th>
+                    <td>{{result.Impression}}</td> 
+                </tr>
+                <tr>
                     <th>Report Type</th>
                     <td>{{result.Patient_Name}}</td>
                 </tr>
@@ -71,14 +99,6 @@
                     <th>Impression</th>
                     <td>{{result.Sex }}</td>
                 </tr>
-                <tr>
-                    <th>Name of the scan centre</th>
-                    <td>{{result.Date }}</td>
-                </tr>
-                <tr>
-                    <th>Name of the consultant</th>
-                    <td>{{result.Impression}}</td> 
-                </tr>
             </tbody>
             </table>
         </div>
@@ -87,7 +107,7 @@
         type="submit" 
         (click)="onSubmitImage()" 
         style="margin-right: 10px;"
-        [disabled] = "!getResult">Save As Image</button>
+        >Save As Image</button>
         <button 
         class="btn btn-primary" 
         type="submit" 
@@ -100,7 +120,7 @@
             </button>
         </div>
         <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-            Try Again
+            {{success.message}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -108,3 +128,4 @@
     </div>
 </div>
 </div>
+</body>
