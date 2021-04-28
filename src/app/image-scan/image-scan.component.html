@@ -78,23 +78,27 @@
                 <tbody>
                 <tr>
                     <th>Name of the scan centre</th>
-                    <td>{{result.Date }}</td>
+                    <td>{{result.scan_center_name}}</td>
                 </tr>
                 <tr>
                     <th>Name of the consultant</th>
-                    <td>{{result.Impression}}</td> 
+                    <td>{{result.Patient_Name}}</td> 
                 </tr>
                 <tr>
                     <th>Report Type</th>
-                    <td>{{result.Patient_Name}}</td>
+                    <td>{{result.report_type}}</td>
                 </tr>
                 <tr>
                     <th>Report Date</th>
-                    <td>{{result.Age }}</td>
+                    <td>
+                        {{result.Date }}
+                    </td>
                 </tr>
                 <tr>
                     <th>Impression</th>
-                    <td>{{result.Sex }}</td>
+                    <td>
+                        {{result.Impression}}
+                    </td>
                 </tr>
             </tbody>
             </table>
@@ -104,12 +108,12 @@
         type="submit" 
         (click)="onSubmitImage()" 
         style="margin-right: 10px;"
-        >Save As Image</button>
+        [disabled] = "!getResult">Save As Image</button>
         <button 
         class="btn btn-primary" 
         type="submit" 
         (click)="onSubmitText()"
-        >Save As Text</button>
+        [disabled] = "!getResult">Save As Text</button>
         <div *ngIf = "successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
              {{success.message}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

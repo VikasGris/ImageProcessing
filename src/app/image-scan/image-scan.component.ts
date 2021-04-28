@@ -20,6 +20,8 @@ export class ImageScanComponent implements OnInit {
     Sex: null,
     Date: null,
     Impression: null,
+    scan_center_name:null,
+    report_type:null
   };
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
@@ -132,7 +134,8 @@ export class ImageScanComponent implements OnInit {
   onZoomOut(i,event){
     this.zoom = false;
     this.largeImage = true;
-    console.group(this.image_view = this.base64textString[event.target.attributes.id.value])
+    //this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    //this.image_view = this.base64textString[event.target.attributes.id.value]
     //console.log(this.zoom,this.largeImage)
   }
 
@@ -149,9 +152,9 @@ export class ImageScanComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-    setTimeout ( () =>{
-      this.isLoading = false;
-    },5000)
+    // setTimeout ( () =>{
+    //   this.isLoading = false;
+    // },5000)
     const params = {
       '_id': this.selectDropdownId,
       'page': this.base64textString,
