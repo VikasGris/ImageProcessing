@@ -4,6 +4,7 @@
     <div class="col-md-5">
         <form [formGroup]="form" (submit)="onSubmit()">
             <input 
+            #myInput
             *ngIf = "largeImage"
                 class="file"
                 type="file" 
@@ -14,8 +15,8 @@
                 accept=".png, .jpg, .jpeg, .pdf">
         </form>
         <div *ngIf = "zoom" class="zoom">
-            <img src={{image_view}} alt="" class="ZoomImage" style="display: inline-block;position: relative;">
-            <span aria-hidden="true" class="zoomCloseIcon" (click) = "onZoomOut($event)" style="cursor: pointer;">×</span>
+            <img src={{image_view}} alt="" id={{i}} class="ZoomImage" style="display: inline-block;position: relative;">
+            <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
         </div>
         <!-- <label style="margin-left: 10px;">Select Scanner:</label>
         <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br> -->
@@ -32,22 +33,18 @@
     <div class="col-md-2 smallScanCard" style="margin-top: -16px;">
         <button class="btn btn-primary btnAlign">Scan</button>
         <button class="btn btn-primary btnAlign" (click) = "onReset()">Reset</button>
-        <!-- <div id="card1" class="card1 image-container">
-            <i class="bi bi-trash"></i>
-        </div> -->
         <div class="image-container card1">
             <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                 <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
                 <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i)">×</span>
+                    <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)">×</span>
                   </button>
-                <!-- <i class="material-icons"  style="cursor: pointer;">delete</i> -->
             </div>
         </div>
     </div>
     <div class="mt-3 col-md-5 ml-3">
-        <span>Success Count:</span>
-        <span>Falier Count:</span>
+        <span>Success Count:{{successCount}}</span>&nbsp;&nbsp;&nbsp;
+        <span>Faliure Count:{{failedCount}}</span>
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
                 <label for="">Select Report Type</label>
@@ -112,7 +109,7 @@
         class="btn btn-primary" 
         type="submit" 
         (click)="onSubmitText()"
-        [disabled] = "!getResult">Save As Text</button>
+        >Save As Text</button>
         <div *ngIf = "successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
              {{success.message}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

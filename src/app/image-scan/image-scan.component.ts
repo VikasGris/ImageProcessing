@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Dynamsoft from 'dwt';
 import { WebTwain } from 'dwt/dist/types/WebTwain';
@@ -11,6 +11,7 @@ import { ResponseService } from '../response.service';
   styleUrls: ['./image-scan.component.css']
 })
 export class ImageScanComponent implements OnInit {
+  @ViewChild('myInput') file;
   base64textString = [];
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
   result = {
@@ -36,7 +37,6 @@ export class ImageScanComponent implements OnInit {
   zoomIcon:boolean = false;
   successCount = 0;
   failedCount = 0;
-  cd;
   
 
   //Dynamic Web Twin:
@@ -95,8 +95,6 @@ export class ImageScanComponent implements OnInit {
   //     console.log("No source")
   //   }
   // }
-
-  inputFile: File;
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
     if (inputFile) {
@@ -109,7 +107,6 @@ export class ImageScanComponent implements OnInit {
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
-    console.log(this.base64textString)
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
   }
@@ -117,8 +114,14 @@ export class ImageScanComponent implements OnInit {
     this.image_view = this.base64textString[event.target.attributes.id.value]
   }
 
-  removeSelectedFile(index){
+  removeSelectedFile(index,event){
     this.base64textString.splice(index,1);
+    this.image_view = this.base64textString[this.base64textString.length-1];
+    if(this.base64textString.length === 0){
+      this.zoomIcon = false;
+      this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+      this.file.nativeElement.value = "";
+    }
   }
 
   onClickZoom(){
@@ -126,9 +129,10 @@ export class ImageScanComponent implements OnInit {
     this.largeImage = false;
     //console.log(this.zoom,this.largeImage)
   }
-  onZoomOut(event){
+  onZoomOut(i,event){
     this.zoom = false;
     this.largeImage = true;
+    console.group(this.image_view = this.base64textString[event.target.attributes.id.value])
     //console.log(this.zoom,this.largeImage)
   }
 
@@ -159,7 +163,8 @@ export class ImageScanComponent implements OnInit {
       this.getResult = true;
     }, (error) => {
       this.error = error.statusText;
-      this.isLoading = false
+      this.isLoading = false;
+      this.failedCount = this.failedCount + 1;
     })
   }
 
@@ -227,6 +232,7 @@ export class ImageScanComponent implements OnInit {
       }
     }, (error) => {
       this.errorAlert = true;
+      this.failedCount = this.failedCount + 1;
       //console.log(this.errorAlert)
     })
 

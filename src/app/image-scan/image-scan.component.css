@@ -71,6 +71,7 @@ div.row{
     right: -228px;
     font-weight: bold;
     font-size: xxx-large;
+    z-index: 1;
 }
 .ZoomImage{
     width: 769px;
@@ -78,6 +79,7 @@ div.row{
     margin-left: 20px;
     align-items: center;
     display: inline-block;
+    z-index: 1;
 }
 .large_image {
     border-radius: 4px;
