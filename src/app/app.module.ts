@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar'
+import { MatCardModule } from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar'
     HttpClientModule,
     NgxBootstrapIconsModule.pick(allIcons),
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

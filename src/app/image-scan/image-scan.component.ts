@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-//import {ThemePalette} from '@angular/material/core';
-//import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import {ThemePalette} from '@angular/material/core';
+import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 import { ResponseService } from '../response.service';
 
@@ -11,9 +11,7 @@ import { ResponseService } from '../response.service';
   styleUrls: ['./image-scan.component.css']
 })
 export class ImageScanComponent implements OnInit {
-  //  color: ThemePalette = 'primary';
-  //  mode: ProgressSpinnerMode = 'determinate';
-  //  value = 50;
+  
   @ViewChild('myInput') file;
   base64textString = [];
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
@@ -26,6 +24,8 @@ export class ImageScanComponent implements OnInit {
     scan_center_name:null,
     report_type:null
   };
+  
+  disabledupload=true;
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
   error: any = null;
@@ -53,6 +53,7 @@ export class ImageScanComponent implements OnInit {
     });
   }
 
+
   onFileChange(event: any): void {
     var inputFile = event.target.files[0];
     if (inputFile) {
@@ -72,8 +73,8 @@ export class ImageScanComponent implements OnInit {
   onClick(event){
     this.image_view = this.base64textString[event.target.attributes.id.value]
     if(this.base64textString.length === 0){
-      alert("Please select file")
-      console.log(this.base64textString) 
+      
+      //console.log(this.base64textString) 
     }
   }
 
@@ -84,6 +85,8 @@ export class ImageScanComponent implements OnInit {
       this.zoomIcon = false;
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
       this.file.nativeElement.value = "";
+      this.disabledupload = true;
+      alert("Please select file")
     }
   }
 
@@ -97,7 +100,16 @@ export class ImageScanComponent implements OnInit {
   }
 
   selectId(event) {
-     this.selectDropdownId = this.form.value.select;
+    //alert(this.form.value.select)
+    if(this.form.value.select!=='Select Document'){
+      this.selectDropdownId = this.form.value.select;
+      this.disabledupload = false;
+    }
+    else{
+      this.disabledupload = true;
+      alert("id")
+    } 
+
   }
   
   get f() {

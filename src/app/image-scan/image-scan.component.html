@@ -63,7 +63,7 @@
                 </select> 
             <button 
             class="btn btn-primary upload" 
-            [disabled]='!base64textString || base64textString.length ===0' 
+            [disabled]='disabledupload===true' 
             type="submit" 
             style="margin-top: 10px;">Upload</button>
             <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
@@ -72,27 +72,16 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <mat-spinner></mat-spinner>
-            <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->
-            <!-- <mat-card>
-                <mat-radio-group [(ngModel)]="mode">
-                    <mat-radio-button class="example-margin" value="determinate">
-                    </mat-radio-button>
-                </mat-radio-group>
-            <mat-card-content>
-                <mat-progress-spinner
-                    class="example-margin"
-                    [color]="color"
-                    [mode]="mode"
-                    [value]="value">
-                </mat-progress-spinner>
-              </mat-card-content>
-            </mat-card> -->
-            <div class="text-center m-4">
+            
+            
+            
+
+
+            <!-- <div class="text-center m-4">
                 <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-            </div>   
+            </div>    -->
             <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 Document ID Required
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
