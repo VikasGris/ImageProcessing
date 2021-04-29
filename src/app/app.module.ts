@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { ImageScanComponent } from './image-scan/image-scan.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
-
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar'
 
 @NgModule({
   declarations: [
@@ -19,7 +19,9 @@ import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxBootstrapIconsModule.pick(allIcons)
+    NgxBootstrapIconsModule.pick(allIcons),
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

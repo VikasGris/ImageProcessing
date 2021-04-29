@@ -12,6 +12,9 @@ div.row{
     margin-left: 10px;
     margin-top: 32px;
 }
+.form{
+    display: flex;
+}
 /* .scrollbar{
     background-color: rgba(230, 230, 243, 0.986);
     border-radius: 5px;
@@ -51,6 +54,12 @@ div.row{
     height: 210px;
     margin-top: 8px;
 }
+.zoom{
+    background-color: black;
+    width: 778px;
+    height: 646px;
+    margin-left: 10px;
+}
 .closeIcon{
     position: absolute;
     top: -6px;
@@ -68,15 +77,18 @@ div.row{
 .zoomCloseIcon{
     position: absolute;
     top: -23px;
-    right: -228px;
+    right: -224px;
+    color: white;
     font-weight: bold;
     font-size: xxx-large;
     z-index: 1;
 }
 .ZoomImage{
     width: 769px;
-    height: 648px;
-    margin-left: 20px;
+    height: 638px;
+    margin-top: 4px;
+    border-radius: 5px;
+    margin-left: 4px;
     align-items: center;
     display: inline-block;
     z-index: 1;

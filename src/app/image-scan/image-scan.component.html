@@ -2,7 +2,7 @@
 <div>
 <div class="row">
     <div class="col-md-5">
-        <form [formGroup]="form" (submit)="onSubmit()">
+        <form [formGroup]="form" (submit)="onSubmit()" class="form">
             <input 
             #myInput
             *ngIf = "largeImage"
@@ -12,15 +12,25 @@
                 id="file" 
                 (change)="onFileChange($event)" 
                 formControlName="files" 
-                accept=".png, .jpg, .jpeg, .pdf">
+                accept=".png, .jpg, .jpeg, .pdf" width="50%">
+                <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Data strored Successfully!!
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                   </button>
+               </div>
+               <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                   {{success.message}}
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                   </button>
+               </div>
         </form>
         <div *ngIf = "zoom" class="zoom">
             <img src={{image_view}} alt="" id={{i}} class="ZoomImage" style="display: inline-block;position: relative;">
             <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
         </div>
-        <!-- <label style="margin-left: 10px;">Select Scanner:</label>
-        <select id="sources" class="form-control w-auto" style="margin-left: 10px;"></select> <br> -->
-        <div class="image" *ngIf = "largeImage">
+        <div class="image">
             <img class="large_image" src={{image_view}} style="display: inline-block;position: relative;">
             <i-bs name="zoom-in"
             *ngIf = "zoomIcon"
@@ -29,9 +39,8 @@
         </i-bs>
         </div>
     </div>
-    
     <div class="col-md-2 smallScanCard" style="margin-top: -16px;">
-        <button class="btn btn-primary btnAlign">Scan</button>
+        <button class="btn btn-primary btnAlign" disabled>Scan</button>
         <button class="btn btn-primary btnAlign" (click) = "onReset()">Reset</button>
         <div class="image-container card1">
             <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
@@ -43,36 +52,54 @@
         </div>
     </div>
     <div class="mt-3 col-md-5 ml-3">
-        <span>Success Count:{{successCount}}</span>&nbsp;&nbsp;&nbsp;
-        <span>Faliure Count:{{failedCount}}</span>
+        <span>Operations Suceeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
+        <span>Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
-                <label for="">Select Report Type</label>
+                <label for="">Select Report Type</label>&nbsp;&nbsp;
                 <select formControlName="select" class="form-control w-auto" (change)="selectId($event)">
                     <option>Select Document</option>
                     <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
                 </select> 
             <button 
             class="btn btn-primary upload" 
-            [disabled]='form.invalid && form.invalid' 
+            [disabled]='!base64textString || base64textString.length ===0' 
             type="submit" 
             style="margin-top: 10px;">Upload</button>
-            <div *ngIf='error' class="alert alert-danger" role="alert">
-                {{error}}
+            <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                Server not respond please contact your admin
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->
+            <!-- <mat-card>
+                <mat-radio-group [(ngModel)]="mode">
+                    <mat-radio-button class="example-margin" value="determinate">
+                    </mat-radio-button>
+                </mat-radio-group>
+            <mat-card-content>
+                <mat-progress-spinner
+                    class="example-margin"
+                    [color]="color"
+                    [mode]="mode"
+                    [value]="value">
+                </mat-progress-spinner>
+              </mat-card-content>
+            </mat-card> -->
             <div class="text-center m-4">
                 <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>   
-            <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger">
-                <div *ngIf = "f.select.errors.required">
-                    Document ID Required
-                </div>
+            <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                Document ID Required
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         </form>
         </div>
-
         <div class="scrollit">
             <table class="table table-hover w-auto">
                 <tbody>
@@ -108,24 +135,12 @@
         type="submit" 
         (click)="onSubmitImage()" 
         style="margin-right: 10px;"
-        [disabled] = "!getResult">Save As Image</button>
+        [disabled] = "!getResult">Mark for Review</button>
         <button 
         class="btn btn-primary" 
         type="submit" 
         (click)="onSubmitText()"
-        [disabled] = "!getResult">Save As Text</button>
-        <div *ngIf = "successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-             {{success.message}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-            {{success.message}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        [disabled] = "!getResult">Update Database</button>
     </div>
 </div>
 </div>
