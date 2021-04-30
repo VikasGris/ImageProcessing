@@ -1,5 +1,5 @@
 body{
-    overflow: hidden;
+    overflow: auto;
 }
 div.row{
     height: 646px;

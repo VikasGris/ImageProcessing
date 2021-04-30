@@ -15,16 +15,13 @@ export class ImageScanComponent implements OnInit {
   
   @ViewChild('myInput') file;
   base64textString = [];
-  listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
+  listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics", "New_Document"];
   result:any = {
-    Age: null,
-    Patient_Name: null,
-    Sex: null,
-    Date: null,
-    Impression: null,
-    scan_center_name:null,
-    report_type:null,
-    confidence:null
+    Patient_Name: [null, null],
+    Date:  [null, null],
+    Impression:  [null, null],
+    scan_center_name: [null, null],
+    report_type: [null, null],
   };
   
   disabledupload=true;
@@ -135,11 +132,19 @@ export class ImageScanComponent implements OnInit {
 
   onReset(){
     this.form.reset();
+    this.form.value.select = null;
     this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     this.zoomIcon = false
     this.base64textString = [];
-    this.result = {}
-    console.log(this.base64textString)
+    this.result = {
+      Patient_Name: [null, null],
+      Date:  [null, null],
+      Impression:  [null, null],
+      scan_center_name: [null, null],
+      report_type: [null, null],
+    };
+    this.disabledupload = true;
+    
   }
 
   onSubmit() {
@@ -200,7 +205,7 @@ export class ImageScanComponent implements OnInit {
         this.result = {};
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.zoomIcon = false
-        //this.form.value.select = null;
+        this.form.value.select = null;
         this.getResult = false;
         this.uploadButton = false
         this.form.reset();
