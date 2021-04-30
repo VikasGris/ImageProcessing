@@ -1,8 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {ThemePalette} from '@angular/material/core';
-import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ResponseService } from '../response.service';
 
@@ -48,12 +45,11 @@ export class ImageScanComponent implements OnInit {
   seconds;
   resend_otp_waiting_time = 15;
   
-  constructor(private service: ResponseService,private spinner: NgxSpinnerService) {
+  constructor(private service: ResponseService) {
     
   }
 
   ngOnInit(): void {
-    this.spinner.show();
     this.form = new FormGroup({
       files: new FormControl(null,Validators.required),
       select: new FormControl(null, Validators.required)
@@ -93,7 +89,6 @@ export class ImageScanComponent implements OnInit {
       setTimeout (() =>{
         this.uploadFileAlert = false;
       },3000)
-      
     }
     //this.uploadFileAlert = false;
     // console.log(this.uploadFileAlert);
@@ -121,9 +116,7 @@ export class ImageScanComponent implements OnInit {
       setTimeout(() =>{
         this.DropdownId = false;
       },3000)
-      
     } 
-
   }
 
   get f() {
@@ -202,28 +195,32 @@ export class ImageScanComponent implements OnInit {
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         this.base64textString = [];
-        this.result = {};
+        this.result = {
+          Patient_Name: [null, null],
+          Date:  [null, null],
+          Impression:  [null, null],
+          scan_center_name: [null, null],
+          report_type: [null, null],
+        };
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.zoomIcon = false
         this.form.value.select = null;
         this.getResult = false;
-        this.uploadButton = false
+        this.uploadButton = false;
+        this.disabledupload = true;
         this.form.reset();
         //location.reload()
       }
       else{
         this.errorAlert = true;
         this.failedCount = this.failedCount+1;
-
       }
-      
     }, (error) => {
       this.errorAlert = true;
       this.failedCount = this.failedCount+1;
       console.log(this.failedCount)
       //console.log(this.errorAlert)
     })
-    
   }
 
   onSubmitText() {
@@ -244,12 +241,19 @@ export class ImageScanComponent implements OnInit {
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         this.base64textString = [];
-        this.result = {};
+        this.result = {
+          Patient_Name: [null, null],
+          Date:  [null, null],
+          Impression:  [null, null],
+          scan_center_name: [null, null],
+          report_type: [null, null],
+        };
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.zoomIcon = false
-        //this.form.value.select = null;
+        this.form.value.select = null;
         this.getResult = false;
-        this.uploadButton = false
+        this.uploadButton = false;
+        this.disabledupload = true;
         this.form.reset();
         //location.reload();
       }
