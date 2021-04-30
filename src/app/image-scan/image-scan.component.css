@@ -118,3 +118,15 @@ div.row{
     overflow-y: auto;
 }
 
+/* @media only screen and   (min-width: 1px) and (max-width: 1400px) {
+    .zoomCloseIcon{
+        position: absolute;
+        top: -23px;
+        right: -224px;
+        color: white;
+        font-weight: bold;
+        font-size: xxx-large;
+        z-index: 1;
+    }
+  } */
+

@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ResponseService } from '../response.service';
 
@@ -15,26 +16,29 @@ export class ImageScanComponent implements OnInit {
   @ViewChild('myInput') file;
   base64textString = [];
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
-  result = {
+  result:any = {
     Age: null,
     Patient_Name: null,
     Sex: null,
     Date: null,
     Impression: null,
     scan_center_name:null,
-    report_type:null
+    report_type:null,
+    confidence:null
   };
   
   disabledupload=true;
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
-  error: any = null;
+  error: boolean = false;
   isLoading = false;
   selectDropdownId;
   getResult = false;
   finalresult;
   success={code:null,
   message:null};
+  uploadFileAlert = false;
+  DropdownId = false;
   successAlert:boolean = false;
   errorAlert:boolean = false;
   zoom:boolean = false;
@@ -42,15 +46,22 @@ export class ImageScanComponent implements OnInit {
   zoomIcon:boolean = false;
   successCount = 0;
   failedCount = 0;
+  uploadButton:boolean = false;
+  responseButton:boolean = false;
+  seconds;
+  resend_otp_waiting_time = 15;
   
-  constructor(private service: ResponseService) {
+  constructor(private service: ResponseService,private spinner: NgxSpinnerService) {
+    
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.form = new FormGroup({
       files: new FormControl(null,Validators.required),
       select: new FormControl(null, Validators.required)
     });
+    
   }
 
 
@@ -60,25 +71,20 @@ export class ImageScanComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(inputFile)
-    }
-    
+    }   
   }
 
   handleReaderLoaded(e) {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
-    
+    console.log(this.base64textString)
   }
   onClick(event){
     this.image_view = this.base64textString[event.target.attributes.id.value]
-    if(this.base64textString.length === 0){
-      
-      //console.log(this.base64textString) 
-    }
   }
 
-  removeSelectedFile(index,event){
+  removeSelectedFile(index){
     this.base64textString.splice(index,1);
     this.image_view = this.base64textString[this.base64textString.length-1];
     if(this.base64textString.length === 0){
@@ -86,13 +92,20 @@ export class ImageScanComponent implements OnInit {
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
       this.file.nativeElement.value = "";
       this.disabledupload = true;
-      alert("Please select file")
+      this.uploadFileAlert = true;
+      setTimeout (() =>{
+        this.uploadFileAlert = false;
+      },3000)
+      
     }
+    //this.uploadFileAlert = false;
+    // console.log(this.uploadFileAlert);
   }
 
   onClickZoom(){
     this.zoom = true;
     this.largeImage = false;
+    console.log(this.largeImage)
   }
   onZoomOut(i,event){
     this.zoom = false;
@@ -107,21 +120,34 @@ export class ImageScanComponent implements OnInit {
     }
     else{
       this.disabledupload = true;
-      alert("id")
+      this.DropdownId = true;
+      setTimeout(() =>{
+        this.DropdownId = false;
+      },3000)
+      
     } 
 
   }
-  
+
   get f() {
     return this.form.controls;
   }
 
   onReset(){
-    location.reload();
+    this.form.reset();
+    this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    this.zoomIcon = false
+    this.base64textString = [];
+    this.result = {}
+    console.log(this.base64textString)
   }
 
   onSubmit() {
+    this.uploadButton = true;
+    this.responseButton = true;
     this.isLoading = true;
+    this.error = false;
+    this.count();
     // setTimeout ( () =>{
     //   this.isLoading = false;
     // },5000)
@@ -130,17 +156,28 @@ export class ImageScanComponent implements OnInit {
       'page': this.base64textString,
     };
     this.service.postResponse(params).subscribe(response => {
-      this.successCount = this.successCount + 1;
       this.result = response
-      this.error = null
       this.isLoading = false;
+      this.uploadButton = false;
+      this.responseButton = false;
       this.getResult = true;
     }, (error) => {
-      this.error = error;
+      this.error = true;
+      setTimeout(() =>{
+        this.error = false;
+      },3000)
       this.isLoading = false;
-      this.failedCount = this.failedCount + 1;
+      this.uploadButton = false;
+      this.responseButton = false;
     })
   }
+  count() {
+    this.seconds = this.resend_otp_waiting_time;
+    const timer = setInterval(() => {
+      this.seconds = this.seconds - 1;
+      if (!this.seconds) clearInterval(timer);
+    }, 1000);
+  };
 
   onSubmitImage() {
     const params = {
@@ -154,18 +191,20 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.errorAlert = false;
-    //console.log(this.errorAlert)
-    
     this.service.postResponseSaveasImage(params).subscribe(response => {
       this.success = response;
       if(response.code === "success"){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         this.base64textString = [];
-        this.result = null;
-        this.form.value.select = null;
+        this.result = {};
+        this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        this.zoomIcon = false
+        //this.form.value.select = null;
+        this.getResult = false;
+        this.uploadButton = false
         this.form.reset();
-        location.reload()
+        //location.reload()
       }
       else{
         this.errorAlert = true;
@@ -194,19 +233,20 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.errorAlert = false;
-    this.successAlert = false;
-    console.log(this.successAlert)
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
       if(response.code === "success"){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
-        console.log(this.successAlert)
         this.base64textString = [];
-        this.result = null;
-        this.form.value.select = null;
+        this.result = {};
+        this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        this.zoomIcon = false
+        //this.form.value.select = null;
+        this.getResult = false;
+        this.uploadButton = false
         this.form.reset();
-        location.reload();
+        //location.reload();
       }
       else{
         this.errorAlert = true;

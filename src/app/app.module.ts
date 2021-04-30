@@ -9,6 +9,7 @@ import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar'
 import { MatCardModule } from '@angular/material/card';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatCardModule } from '@angular/material/card';
     NgxBootstrapIconsModule.pick(allIcons),
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatCardModule
+    MatCardModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

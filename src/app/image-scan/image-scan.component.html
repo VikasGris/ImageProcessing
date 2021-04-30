@@ -1,11 +1,11 @@
 <body>
 <div>
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-5 col-xs-12">
         <form [formGroup]="form" (submit)="onSubmit()" class="form">
             <input 
             #myInput
-            *ngIf = "largeImage"
+                *ngIf = "largeImage"
                 class="file"
                 type="file" 
                 name="file" 
@@ -13,24 +13,12 @@
                 (change)="onFileChange($event)" 
                 formControlName="files" 
                 accept=".png, .jpg, .jpeg, .pdf" width="50%">
-                <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                    Data strored Successfully!!
-                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                   </button>
-               </div>
-               <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                   {{success.message}}
-                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                   </button>
-               </div>
         </form>
         <div *ngIf = "zoom" class="zoom">
             <img src={{image_view}} alt="" id={{i}} class="ZoomImage" style="display: inline-block;position: relative;">
             <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
         </div>
-        <div class="image">
+        <div class="image" id="image">
             <img class="large_image" src={{image_view}} style="display: inline-block;position: relative;">
             <i-bs name="zoom-in"
             *ngIf = "zoomIcon"
@@ -39,10 +27,10 @@
         </i-bs>
         </div>
     </div>
-    <div class="col-md-2 smallScanCard" style="margin-top: -16px;">
+    <div class="col-md-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
         <button class="btn btn-primary btnAlign" disabled>Scan</button>
         <button class="btn btn-primary btnAlign" (click) = "onReset()">Reset</button>
-        <div class="image-container card1">
+        <div class="image-container card1" id="image1">
             <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                 <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
                 <button type="button" class="close" aria-label="Close">
@@ -51,8 +39,8 @@
             </div>
         </div>
     </div>
-    <div class="mt-3 col-md-5 ml-3">
-        <span>Operations Suceeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
+    <div class="mt-3 col-md-5 ml-3 col-xs-12">
+        <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
         <span>Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
         <div>
             <form [formGroup]="form" (submit)="onSubmit()">
@@ -62,60 +50,73 @@
                     <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
                 </select> 
             <button 
+            *ngIf = "!uploadButton"
             class="btn btn-primary upload" 
             [disabled]='disabledupload===true' 
             type="submit" 
             style="margin-top: 10px;">Upload</button>
+            <button *ngIf = "responseButton" class="btn btn-primary ml-2" type="button"  nbButton
+            status="primary" >
+                <span class="text-lowercase"> {{ seconds}}s</span>&nbsp; Estimated time
+            </button>
             <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                Server not respond please contact your admin
+                Server can't respond please contact your admin
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            
-            
-            
-
-
-            <!-- <div class="text-center m-4">
+            <div class="text-center m-4">
                 <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-            </div>    -->
+            </div>   
             <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 Document ID Required
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                Please select file to upload
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                Please select document ID
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </form>
         </div>
-        <div class="scrollit">
+        <div class="scrollit" id="result">
             <table class="table table-hover w-auto">
                 <tbody>
                 <tr>
                     <th>Name of the scan centre</th>
                     <td>{{result.scan_center_name}}</td>
+                    <td>{{result.confidence}}</td>
                 </tr>
                 <tr>
                     <th>Name of the consultant</th>
                     <td>{{result.Patient_Name}}</td> 
+                    <td>{{result.confidence}}</td> 
                 </tr>
                 <tr>
                     <th>Report Type</th>
                     <td>{{result.report_type}}</td>
+                    <td>{{result.confidence}}</td>
                 </tr>
                 <tr>
                     <th>Report Date</th>
-                    <td>
-                        {{result.Date }}
-                    </td>
+                    <td>{{result.Date}}</td>
+                    <td>{{result.confidence}}</td>
                 </tr>
                 <tr>
                     <th>Impression</th>
-                    <td>
-                        {{result.Impression}}
-                    </td>
+                    <td>{{result.Impression}}</td>
+                    <td>{{result.confidence}}</td>
                 </tr>
             </tbody>
             </table>
@@ -131,6 +132,18 @@
         type="submit" 
         (click)="onSubmitText()"
         [disabled] = "!getResult">Update Database</button>
+        <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            Data strored Successfully!!
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+       </div>
+       <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+           <strong>Error!</strong> Please try again
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+       </div>
     </div>
 </div>
 </div>
