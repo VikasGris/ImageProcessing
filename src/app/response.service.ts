@@ -17,6 +17,11 @@ export class ResponseService {
     return this.http.post(this.configUrl + 'debug', formData);
   }
 
+  postTestResponse(): Observable<any> {
+    //console.log('service');
+    return this.http.get(this.configUrl + 'test');
+  }
+
   postResponseSaveasImage(formData): Observable<any> {
     console.log('service', formData);
     return this.http.post(this.configUrl + 'saveasimage', formData);

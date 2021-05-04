@@ -20,7 +20,8 @@ export class ImageScanComponent implements OnInit {
     scan_center_name: [null, null],
     report_type: [null, null],
   };
-  
+  fileDisable = false;
+  closeIcon = true;
   disabledupload=true;
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   form;
@@ -42,8 +43,14 @@ export class ImageScanComponent implements OnInit {
   failedCount = 0;
   uploadButton:boolean = false;
   responseButton:boolean = false;
-  seconds;
-  resend_otp_waiting_time = 15;
+  //averageTime = [15,15,15,15,15];
+  averageTime = 15;
+  seconds = 0;
+  averageTime_Index = 0;
+  avgSeconds = 0;
+
+
+  
   
   constructor(private service: ResponseService) {
     
@@ -59,6 +66,7 @@ export class ImageScanComponent implements OnInit {
 
 
   onFileChange(event: any): void {
+    this.closeIcon = true;
     var inputFile = event.target.files[0];
     if (inputFile) {
       const reader = new FileReader();
@@ -90,8 +98,6 @@ export class ImageScanComponent implements OnInit {
         this.uploadFileAlert = false;
       },3000)
     }
-    //this.uploadFileAlert = false;
-    // console.log(this.uploadFileAlert);
   }
 
   onClickZoom(){
@@ -105,7 +111,6 @@ export class ImageScanComponent implements OnInit {
   }
 
   selectId(event) {
-    //alert(this.form.value.select)
     if(this.form.value.select!=='Select Document'){
       this.selectDropdownId = this.form.value.select;
       this.disabledupload = false;
@@ -140,25 +145,42 @@ export class ImageScanComponent implements OnInit {
     
   }
 
+  onScanTest(){
+    this.service.postTestResponse().subscribe(response =>{
+      console.log("test",response)
+    }, (error) =>{
+      console.log(error)
+    })
+  }
+
   onSubmit() {
     this.uploadButton = true;
     this.responseButton = true;
     this.isLoading = true;
     this.error = false;
     this.count();
-    // setTimeout ( () =>{
-    //   this.isLoading = false;
-    // },5000)
     const params = {
       '_id': this.selectDropdownId,
       'page': this.base64textString,
     };
+    
     this.service.postResponse(params).subscribe(response => {
       this.result = response
       this.isLoading = false;
+      // if(this.averageTime_Index >=5){
+      //   this.averageTime_Index = 0;
+      // }
+      //this.averageTime[this.averageTime_Index] =this.avgSeconds - this.seconds;
+      //this.averageTime_Index = this.averageTime_Index + 1;
+      this.averageTime = Math.floor((this.seconds ))
+      if(this.averageTime < 4){
+        this.averageTime = 7
+      }
       this.uploadButton = false;
       this.responseButton = false;
       this.getResult = true;
+      this.fileDisable = true;
+      this.closeIcon = false;
     }, (error) => {
       this.error = true;
       setTimeout(() =>{
@@ -170,11 +192,32 @@ export class ImageScanComponent implements OnInit {
     })
   }
   count() {
-    this.seconds = this.resend_otp_waiting_time;
+    //console.log(this.timer)
+    // for(var i =0;i<=5;i++){
+    //   time
+    // }
+    // this.averageTime.push(this.avg)
+    // console.log(this.averageTime)
+
+    
+    // var sum =0;
+    // for(var i = 0; i < this.averageTime.length; i++){
+    //   sum +=  this.averageTime[i]; 
+    // }
+    // this.timer = 15 - this.time;
+    // console.log(this.time)
+    //this.avgSeconds = Math.floor(sum/this.averageTime.length);
+    //this.seconds = this.avgSeconds;
+    this.seconds = this.averageTime;
+     console.log("Start");
+     console.log(this.averageTime , this.seconds);
     const timer = setInterval(() => {
       this.seconds = this.seconds - 1;
       if (!this.seconds) clearInterval(timer);
     }, 1000);
+    
+    
+  
   };
 
   onSubmitImage() {
@@ -193,7 +236,7 @@ export class ImageScanComponent implements OnInit {
       this.success = response;
       if(response.code === "success"){
         this.successAlert = true;
-        this.successCount = this.successCount + 1;
+        this.failedCount = this.failedCount + 1;
         this.base64textString = [];
         this.result = {
           Patient_Name: [null, null],
@@ -209,17 +252,18 @@ export class ImageScanComponent implements OnInit {
         this.uploadButton = false;
         this.disabledupload = true;
         this.form.reset();
-        //location.reload()
+        setTimeout(() =>{
+          this.successAlert = false;
+        },4000)
       }
       else{
         this.errorAlert = true;
-        this.failedCount = this.failedCount+1;
+        //this.failedCount = this.failedCount+1;
       }
     }, (error) => {
       this.errorAlert = true;
       this.failedCount = this.failedCount+1;
       console.log(this.failedCount)
-      //console.log(this.errorAlert)
     })
   }
 
@@ -235,6 +279,7 @@ export class ImageScanComponent implements OnInit {
       }
     };
     this.errorAlert = false;
+    this.successAlert = false;
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
       if(response.code === "success"){
@@ -255,16 +300,17 @@ export class ImageScanComponent implements OnInit {
         this.uploadButton = false;
         this.disabledupload = true;
         this.form.reset();
-        //location.reload();
+        setTimeout(() =>{
+          this.successAlert = false;
+        },4000)
       }
       else{
         this.errorAlert = true;
-        this.failedCount = this.failedCount+1;
+        //this.failedCount = this.failedCount+1;
       }
     }, (error) => {
       this.errorAlert = true;
-      this.failedCount = this.failedCount + 1;
-      //console.log(this.errorAlert)
+      //this.failedCount = this.failedCount + 1;
     })
 
   }

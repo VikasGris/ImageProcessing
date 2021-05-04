@@ -1,8 +1,11 @@
 body{
-    overflow: auto;
+    overflow: hidden;
 }
 div.row{
     height: 646px;
+}
+.table td, .table th{
+    padding: 5px;
 }
 .image{
     background-color: rgba(230, 230, 243, 0.986);
@@ -14,6 +17,9 @@ div.row{
 }
 .form{
     display: flex;
+}
+.mt-3{
+    margin-top: 1.2rem!important;
 }
 /* .scrollbar{
     background-color: rgba(230, 230, 243, 0.986);
@@ -31,6 +37,10 @@ div.row{
 }
 .file{
     margin-left: 30px;
+    margin-top: 6px;
+}
+.mt-2, .my-2 {
+    margin-top: 0.9rem!important;
 }
 .upload{
     margin-left: 20px;
@@ -39,12 +49,11 @@ div.row{
 .image-container{
     margin-top: 10px;
     margin-left: 20px;
-    
 }
 .btnAlign{
-    margin-top: 20px;
-    margin-left: 30px;
-    margin-bottom: 10px;
+    margin-top: 23px;
+    margin-left: 32px;
+    margin-bottom: 15px;
 }
 .scanImage {
     border-radius: 4px;
@@ -78,7 +87,7 @@ div.row{
     position: absolute;
     top: -23px;
     right: -224px;
-    color: white;
+    color: brown;
     font-weight: bold;
     font-size: xxx-large;
     z-index: 1;
@@ -118,15 +127,15 @@ div.row{
     overflow-y: auto;
 }
 
-/* @media only screen and   (min-width: 1px) and (max-width: 1400px) {
+@media only screen and   (min-width: 1200px) and (max-width: 1400px) {
     .zoomCloseIcon{
         position: absolute;
         top: -23px;
         right: -224px;
-        color: white;
+        color: brown;
         font-weight: bold;
         font-size: xxx-large;
         z-index: 1;
     }
-  } */
+  }
 

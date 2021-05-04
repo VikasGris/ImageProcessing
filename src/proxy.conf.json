@@ -1,10 +1,10 @@
-/* {
+ {
     "/api": {
-      "target": "https://yavar-app.herokuapp.com/",
+      "target": "https://tesseract.codingtown.com/",
       "secure": true,
       "changeOrigin": true,
       "pathRewrite": {
         "^/api": ""
       }
     }
-  } */
+  } 
