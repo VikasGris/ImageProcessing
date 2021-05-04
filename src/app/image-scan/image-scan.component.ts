@@ -20,6 +20,7 @@ export class ImageScanComponent implements OnInit {
     scan_center_name: [null, null],
     report_type: [null, null],
   };
+  editData;
   fileDisable = false;
   closeIcon = true;
   disabledupload=true;
@@ -48,10 +49,14 @@ export class ImageScanComponent implements OnInit {
   seconds = 0;
   averageTime_Index = 0;
   avgSeconds = 0;
+  inputEnable = false;
+  res = null;
+  resid = null;
 
 
-  
-  
+  //di = {'Patient Name':'Patient_Name','Scan Center':'scan_center_name',"Impression":'Impression'}
+ di={}
+
   constructor(private service: ResponseService) {
     
   }
@@ -64,6 +69,32 @@ export class ImageScanComponent implements OnInit {
     
   }
 
+  new():void{
+    /* let di1={}
+    for (let resultkey in this.result){
+      for(let key in this.di){
+        
+        if(this.di[key] === resultkey ){
+          di1[key] = this.di[key]
+          console.log(key,this.di[key])  }
+  }
+  }*/
+  
+    for (let key in this.result){
+      console.log(this.result[key])
+      if(this.result[key][1] === null){
+        //console.log('null detect' ,val)
+      }
+      else{
+        this.di[key]=this.result[key]
+        //arr = ['Patr',this.result[key][0],this.result[key][1]]
+  
+          //console.log('not null')
+      }
+    }
+    console.log(this.di)
+  
+  }
 
   onFileChange(event: any): void {
     this.closeIcon = true;
@@ -79,10 +110,29 @@ export class ImageScanComponent implements OnInit {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
-    console.log(this.base64textString)
+    //console.log(this.base64textString)
   }
   onClick(event){
     this.image_view = this.base64textString[event.target.attributes.id.value]
+  }
+
+  onEdit(event){
+    this.resid= event.target.attributes[1].nodeValue;
+    console.log(this.resid);
+    this.res = this.result[event.target.attributes[1].nodeValue][0];
+    console.log(this.res);
+    this.inputEnable = true;
+  }
+
+  onEditData(e){
+    //console.log(e)
+    this.res = e.target.value;
+  }
+
+  changeEdit(){
+    this.result[this.resid][0]= this.res;
+    //console.log(this.result);
+    this.inputEnable = false;
   }
 
   removeSelectedFile(index){
@@ -96,7 +146,7 @@ export class ImageScanComponent implements OnInit {
       this.uploadFileAlert = true;
       setTimeout (() =>{
         this.uploadFileAlert = false;
-      },3000)
+      },5000)
     }
   }
 
@@ -145,51 +195,72 @@ export class ImageScanComponent implements OnInit {
     
   }
 
-  onScanTest(){
-    this.service.postTestResponse().subscribe(response =>{
-      console.log("test",response)
-    }, (error) =>{
-      console.log(error)
-    })
-  }
+  // onScanTest(){
+  //   this.service.postTestResponse().subscribe(response =>{
+  //     console.log("test",response)
+  //   }, (error) =>{
+  //     console.log(error)
+  //   })
+  // }
+
+ 
 
   onSubmit() {
-    this.uploadButton = true;
-    this.responseButton = true;
-    this.isLoading = true;
-    this.error = false;
-    this.count();
-    const params = {
-      '_id': this.selectDropdownId,
-      'page': this.base64textString,
-    };
     
-    this.service.postResponse(params).subscribe(response => {
-      this.result = response
-      this.isLoading = false;
-      // if(this.averageTime_Index >=5){
-      //   this.averageTime_Index = 0;
-      // }
-      //this.averageTime[this.averageTime_Index] =this.avgSeconds - this.seconds;
-      //this.averageTime_Index = this.averageTime_Index + 1;
-      this.averageTime = Math.floor((this.seconds ))
-      if(this.averageTime < 4){
-        this.averageTime = 7
-      }
-      this.uploadButton = false;
-      this.responseButton = false;
-      this.getResult = true;
-      this.fileDisable = true;
-      this.closeIcon = false;
-    }, (error) => {
-      this.error = true;
-      setTimeout(() =>{
+    this.service.postTestResponse().subscribe(response =>{
+      if(response.code === "success"){
+        this.uploadButton = true;
+        this.responseButton = true;
+        this.isLoading = true;
         this.error = false;
-      },3000)
-      this.isLoading = false;
-      this.uploadButton = false;
-      this.responseButton = false;
+        this.count();
+        const params = {
+          '_id': this.selectDropdownId,
+          'page': this.base64textString,
+        };
+        this.service.postResponse(params).subscribe(response => {
+          this.result = response
+          this.isLoading = false;
+          // if(this.averageTime_Index >=5){
+          //   this.averageTime_Index = 0;
+          // }
+          //this.averageTime[this.averageTime_Index] =this.avgSeconds - this.seconds;
+          //this.averageTime_Index = this.averageTime_Index + 1;
+          this.averageTime = Math.floor((this.seconds ))
+          if(this.averageTime < 4){
+            this.averageTime = 7
+          }
+          this.uploadButton = false;
+          this.responseButton = false;
+          this.getResult = true;
+          this.fileDisable = true;
+          this.closeIcon = false;
+        }, 
+        (error) => {
+          // alert("Report error")
+          console.log( error)
+          console.log(error.defaultStatus)
+          this.error = true;
+              setTimeout(() =>{
+                this.error = false;
+              },5000)
+          this.isLoading = false;
+          this.uploadButton = false;
+          this.responseButton = false;
+        }
+        )
+
+      }
+    },(error) =>{
+      this.error = true;
+              setTimeout(() =>{
+                this.error = false;
+              },5000)
+          
     })
+    
+    
+    
   }
   count() {
     //console.log(this.timer)
@@ -209,13 +280,16 @@ export class ImageScanComponent implements OnInit {
     //this.avgSeconds = Math.floor(sum/this.averageTime.length);
     //this.seconds = this.avgSeconds;
     this.seconds = this.averageTime;
-     console.log("Start");
-     console.log(this.averageTime , this.seconds);
+     //console.log("Start");
+     //console.log(this.averageTime , this.seconds);
     const timer = setInterval(() => {
-      this.seconds = this.seconds - 1;
+      
+      if(this.seconds>0){
+        this.seconds = this.seconds - 1;
+       
+      }
       if (!this.seconds) clearInterval(timer);
-    }, 1000);
-    
+      }, 1000);
     
   
   };

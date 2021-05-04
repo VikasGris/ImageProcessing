@@ -12,6 +12,7 @@
                     (change)="onFileChange($event)" 
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                    [disabled] = "fileDisable === true"
                 >
             </form>
             <div *ngIf = "zoom" class="zoom">
@@ -29,7 +30,7 @@
             </div>
         </div>
         <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
-            <button class="btn btn-secondary btnAlign btn-md" (click) ="onScanTest()" disabled>Scan</button>
+            <button class="btn btn-secondary btnAlign btn-md" (click) ="new()" disabled>Scan</button>
             <button class="btn btn-primary btnAlign btn-md" (click) = "onReset()">Reset</button>
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
@@ -93,37 +94,43 @@
                 </form>
             </div>
             <div class="scrollit" id="result">
+                <form class="form-inline" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit()">
+                    <div class="form-group mx-sm-3 mb-2">
+                      <input type="text" class="form-control" value={{res}} (change)= "onEditData($event)">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Save</button>
+                </form>
                 <table class="table table-hover table-striped" style="overflow-y: auto;">
                     <tbody style="overflow-y: auto;">
                     <tr>
-                        <th class="th-sm"></th>
-                        <td class="th-lg"></td>
-                        <th class="th-sm">Confidence (%)</th>
+                        <th></th>
+                        <td></td>
+                        <th>Confidence (%)</th>
                     </tr>
                     <tr>
                         <th class="w-25">Name of the scan centre</th>
-                        <td class="w-50">{{result.scan_center_name[0]}}</td>
-                        <td class="w-25">{{result.scan_center_name[1]}}</td>
+                        <td class="w-50" id='scan_center_name' (click) = "onEdit($event)">{{result.scan_center_name[0]}}</td>
+                        <td class="w-25 text-center">{{result.scan_center_name[1]}}</td>
                     </tr>
                     <tr>
                         <th class="w-25">Name of the consultant</th>
-                        <td class="w-50">{{result.Patient_Name[0]}}</td> 
-                        <td class="w-25">{{result.Patient_Name[1]}}</td> 
+                        <td class="w-50" id='Patient_Name' (click) = "onEdit($event)">{{result.Patient_Name[0]}}</td> 
+                        <td class="w-25 text-center">{{result.Patient_Name[1]}}</td> 
                     </tr>
                     <tr>
                         <th class="w-25">Report Type</th>
-                        <td class="w-50">{{result.report_type[0]}}</td>
-                        <td class="w-25">{{result.report_type[1]}}</td>
+                        <td class="w-50" id='report_type' (click) = "onEdit($event)">{{result.report_type[0]}}</td>
+                        <td class="w-25 text-center">{{result.report_type[1]}}</td>
                     </tr>
                     <tr>
                         <th class="w-25">Report Date</th>
-                        <td class="w-50">{{result.Date[0]}}</td>
-                        <td class="w-25">{{result.Date[1]}}</td>
+                        <td class="w-50" id='Date' (click) = "onEdit($event)">{{result.Date[0]}}</td>
+                        <td class="w-25 text-center">{{result.Date[1]}}</td>
                     </tr>
                     <tr>
                         <th class="w-25">Impression</th>
-                        <td class="w-50">{{result.Impression[0]}}</td>
-                        <td class="w-25">{{result.Impression[1]}}</td>
+                        <td class="w-50" id='Impression' (click) = "onEdit($event)">{{result.Impression[0]}}</td>
+                        <td class="w-25 text-center">{{result.Impression[1]}}</td>
                     </tr>
                     </tbody>
                 </table>
