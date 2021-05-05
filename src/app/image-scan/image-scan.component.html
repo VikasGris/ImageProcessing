@@ -1,5 +1,6 @@
 <body>
     <div class="row">
+    <!-- Show image larger and Zoom function -->
         <div class="col-md-5 col-lg-5 col-xs-12">
             <form [formGroup]="form" (submit)="onSubmit()" class="form">
                 <input 
@@ -12,7 +13,18 @@
                     (change)="onFileChange($event)" 
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf" width="50%"
-                    [disabled] = "fileDisable === true"
+                >
+                <input 
+                    #myInput
+                    *ngIf = "duplicate_browse"
+                    class="file"
+                    type="file" 
+                    name="file" 
+                    id="file" 
+                    (change)="onFileChange($event)" 
+                    formControlName="files" 
+                    accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                    disabled
                 >
             </form>
             <div *ngIf = "zoom" class="zoom">
@@ -29,6 +41,7 @@
                 </i-bs>
             </div>
         </div>
+    <!-- Show list of images -->
         <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
             <button class="btn btn-secondary btnAlign btn-md" (click) ="new()" disabled>Scan</button>
             <button class="btn btn-primary btnAlign btn-md" (click) = "onReset()">Reset</button>
@@ -41,6 +54,7 @@
                 </div>
             </div>
         </div>
+    <!-- Report type dropdown and displaying result -->
         <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12">
             <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
             <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
@@ -59,9 +73,12 @@
                         style="margin-top: 10px;margin-left: 26px;">Upload
                     </button>
                     <button *ngIf = "responseButton" class="btn btn-primary ml-2" type="button"  nbButton
-                        status="primary" >
-                        <span class="text-lowercase"> {{ seconds}}s</span>&nbsp; Estimated time
+                        status="primary" >    
+                    <countdown [config]="{leftTime: 15, format: 's'}"></countdown>&nbsp;&nbsp;Estimated time
                     </button>
+                    <div class="form-inline mb-2" style="margin-left: 144px;">
+                        <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
+                    </div>  
                     <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                         Server can't respond please contact your admin
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -94,13 +111,15 @@
                 </form>
             </div>
             <div class="scrollit" id="result">
-                <form class="form-inline" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit()">
+                <form class="form-inline edit_form" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit()">
                     <div class="form-group mx-sm-3 mb-2">
-                      <input type="text" class="form-control" value={{res}} (change)= "onEditData($event)">
+                      <input type="text"  class="form-control edit_input" value={{res}} (change)= "onEditData($event)">
                     </div>
-                    <button type="submit" class="btn btn-primary mb-2">Save</button>
+                    <button type="submit" class="btn btn-primary mb-2 save_button">Update</button>
+                    <button type="submit" class="btn btn-primary mb-2 save_button">Discard</button>
                 </form>
-                <table class="table table-hover table-striped" style="overflow-y: auto;">
+                <div class=table-wrapper>
+                <table class="table table-hover table-striped tableScroll" style="overflow-y: auto;">
                     <tbody style="overflow-y: auto;">
                     <tr>
                         <th></th>
@@ -135,12 +154,13 @@
                     </tbody>
                 </table>
             </div>
+            </div>
             <button 
             class="btn btn-primary" 
             type="submit" 
             (click)="onSubmitImage()" 
             style="margin-right: 10px;"
-            [disabled] = "!getResult">Mark for Review</button>
+            [disabled] = "!markForReview">Mark for Review</button>
             <button 
             class="btn btn-primary" 
             type="submit" 
