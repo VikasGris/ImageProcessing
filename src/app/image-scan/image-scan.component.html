@@ -14,15 +14,9 @@
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf" width="50%"
                 >
-                <input 
-                    #myInput
+                <input
                     *ngIf = "duplicate_browse"
-                    class="file"
                     type="file" 
-                    name="file" 
-                    id="file" 
-                    (change)="onFileChange($event)" 
-                    formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf" width="50%"
                     disabled
                 >
@@ -79,37 +73,55 @@
                     <div class="form-inline mb-2" style="margin-left: 144px;">
                         <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
                     </div>  
-                    <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        Server can't respond please contact your admin
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="text-center m-4">
-                        <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>   
-                    <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        Document ID Required
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        Please select file to upload
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        Please select document ID
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                 </form>
-                <ng-template #content let-modal>
+                <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Server can't respond please contact your admin
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="text-center m-4">
+                    <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>   
+                <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Document ID Required
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Please select file to upload
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Please select document ID
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "verifyDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Please verify the document ID
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "invalidDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Document ID is invalid
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "unKnownError"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    Unknown Error
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- <ng-template #content let-modal>
                     <div class="modal-header">
                       <h4 class="modal-title" id="modal-basic-title">Data Update</h4>
                       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -130,17 +142,21 @@
                       <button type="submit" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update</button>
                     </div>
                   </ng-template>
-                  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+                  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
 
             </div>
             <div class="scrollit" id="result">
-                <form class="form-inline edit_form" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit($event)">
+                <div *ngIf = "inputEnable" class="form-inline">
                     <div class="form-group mx-sm-3 mb-2">
-                      <input type="text"  class="form-control edit_input" value={{res}} (change)= "onEditData($event)">
-                    </div>
-                    <button id='update' type="submit" class="btn btn-primary mb-2 save_button">Update</button>
+                        <input type="text"  class="form-control edit_input" value={{res}} (change)= "onEditData($event)">
+                      </div>
+                      <button id='update' type="button" class="btn btn-primary mb-2 save_button" (click) ="changeEdit($event)">Update</button>
+                      <button id='discard' type="submit" class="btn btn-primary mb-2 save_button ml-3" (click) ="onDiscardChange()">Discard</button>
+                </div>
+                <!-- <form class="form-inline edit_form" *ngIf = "inputEnable" [formGroup]="form" (submit)="">
+                    
                     <button id='discard' type="submit" class="btn btn-primary mb-2 save_button" >Discard</button>
-                </form>
+                </form> -->
                 <div class=table-wrapper>
                 <table class="table table-hover table-striped tableScroll" style="overflow-y: auto;">
                     <tbody style="overflow-y: auto;">

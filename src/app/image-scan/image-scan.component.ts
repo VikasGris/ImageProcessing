@@ -1,8 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component,OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal ,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { CountdownComponent } from 'ngx-countdown';
-
 
 import { ResponseService } from '../response.service';
 
@@ -65,6 +64,9 @@ export class ImageScanComponent implements OnInit {
   endTime;
   gettime;
   closeResult;
+  verifyDocumentId:boolean = false;
+  invalidDocumentId:boolean = false;
+  unKnownError:boolean = false;
 
 
   //di = {'Patient Name':'Patient_Name','Scan Center':'scan_center_name',"Impression":'Impression'}
@@ -81,14 +83,14 @@ export class ImageScanComponent implements OnInit {
   }
 
 
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      console.log(content)
-    }, (reason) => {
+  // open(content) {
+  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  //     this.closeResult = `Closed with: ${result}`;
+  //     console.log(content)
+  //   }, (reason) => {
       
-    });
-  }
+  //   });
+  // }
 
 
   new():void{
@@ -166,6 +168,7 @@ export class ImageScanComponent implements OnInit {
   }
 
   onDiscardChange(event){
+    //this.res = this.result[this.resid][0]
     this.inputEnable = false;
   }
 
@@ -244,7 +247,10 @@ export class ImageScanComponent implements OnInit {
     this.form.reset();
     this.form.value.select = null;
     this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-    this.zoomIcon = false
+    this.zoomIcon = false;
+    this.inputEnable = false;
+    this.newDocumentInput = false;
+    this.markForReview = false;
     this.base64textString = [];
     this.result = {
       Patient_Name: [null, null],
@@ -257,7 +263,7 @@ export class ImageScanComponent implements OnInit {
   }
 
   onChangeTime(event){
-    this.countdown.restart();
+    
   }
 
 
@@ -276,7 +282,7 @@ export class ImageScanComponent implements OnInit {
     this.startTime = new Date().getTime();
     this.largeImage = false;
     this.duplicate_browse =true;
-    console.log(this.startTime)
+    //console.log(this.startTime)
     this.service.postTestResponse().subscribe(response =>{
       if(response.code === "success"){
         this.uploadButton = true;
@@ -291,6 +297,43 @@ export class ImageScanComponent implements OnInit {
         //console.log(params)
         this.service.postResponse(params).subscribe(response => {
           console.log(response.code) //20
+          if(response.code === 20){
+            this.verifyDocumentId = true
+            setTimeout(() =>{
+              this.verifyDocumentId = false;
+              
+            },5000)
+            this.isLoading = false;
+            this.responseButton = false;
+            this.disabledupload = true;
+            this.uploadButton = false;
+            this.getResult = false
+          }
+          else if(response.code === 2){
+            this.invalidDocumentId = true;
+            setTimeout(() =>{
+              this.invalidDocumentId = false;
+              
+            },5000)
+            this.isLoading = false;
+            this.responseButton = false;
+            this.disabledupload = true;
+            this.uploadButton = false;
+            this.getResult = false
+          }
+          else if(response.code === 0 || response.code === 5 || response.code === 10 || response.code === 15){
+            this.unKnownError = true;
+            setTimeout(() =>{
+              this.unKnownError = false;
+              
+            },5000)
+            this.isLoading = false;
+            this.responseButton = false;
+            this.disabledupload = true;
+            this.uploadButton = false;
+            this.getResult = false
+          }
+          else{
           this.result = response.response;
           this.isLoading = false;
           this.uploadButton = false;
@@ -308,36 +351,29 @@ export class ImageScanComponent implements OnInit {
           // }
           // //console.log(this.averageTime)
           this.endTime = new Date().getTime()
-          console.log(this.endTime)
+          //console.log(this.endTime)
           this.seconds = this.startTime - this.endTime;
           if(this.averageTime_Index>=5){
             this.averageTime_Index=0;
           }
           this.averageTime[this.averageTime_Index]=(this.seconds)
           this.averageTime_Index+=1;
-          console.log(this.averageTime)
+          //console.log(this.averageTime)
 
           for(var i=0;i<this.averageTime.length;i++){
             this.avgSeconds+=this.averageTime[i];
           }
           this.avgSeconds = Math.floor((this.avgSeconds/5 ))
-
-          
-        }, 
-        (error) => {
-          alert("Report error")
-          //console.log( error)
-          //console.log(error.defaultStatus)
-          this.error = true;
-              setTimeout(() =>{
-                this.error = false;
-              },5000)
-          this.isLoading = false;
-          this.uploadButton = false;
-          this.responseButton = false;
         }
-        )
-        
+        }, (error) => {
+          // this.error = true;
+          //     setTimeout(() =>{
+          //       this.error = false;
+          //     },5000)
+          // this.isLoading = false;
+          // this.uploadButton = false;
+          // this.responseButton = false;
+        })
       }
       
     },(error) =>{
@@ -433,7 +469,6 @@ export class ImageScanComponent implements OnInit {
       if(response.code === "success"){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
-
         this.duplicate_browse =false;
         this.largeImage = true;
         this.base64textString = [];
@@ -464,6 +499,5 @@ export class ImageScanComponent implements OnInit {
       this.errorAlert = true;
       //this.failedCount = this.failedCount + 1;
     })
-
   }
 }
