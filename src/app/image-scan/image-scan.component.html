@@ -74,7 +74,7 @@
                     </button>
                     <button *ngIf = "responseButton" class="btn btn-primary ml-2" type="button"  nbButton
                         status="primary" >    
-                    <countdown [config]="{leftTime: 15, format: 's'}"></countdown>&nbsp;&nbsp;Estimated time
+                    <countdown #cd [config]="{leftTime: avgSeconds, format: 's'}" (event) = "onChangeTime($event)"></countdown>&nbsp;&nbsp;Estimated time
                     </button>
                     <div class="form-inline mb-2" style="margin-left: 144px;">
                         <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
@@ -109,47 +109,70 @@
                         </button>
                     </div>
                 </form>
+                <ng-template #content let-modal>
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="modal-basic-title">Data Update</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class=""  [formGroup]="form" (submit)="changeEdit()">
+                            <div class="form-group">
+                            <label></label>
+                            <div class="input-group">
+                                <input type="text"  class="form-control edit_input" value={{res}} (change)= "onEditData($event)">
+                            </div>
+                            </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update</button>
+                    </div>
+                  </ng-template>
+                  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+
             </div>
             <div class="scrollit" id="result">
-                <form class="form-inline edit_form" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit()">
+                <form class="form-inline edit_form" *ngIf = "inputEnable" [formGroup]="form" (submit)="changeEdit($event)">
                     <div class="form-group mx-sm-3 mb-2">
                       <input type="text"  class="form-control edit_input" value={{res}} (change)= "onEditData($event)">
                     </div>
-                    <button type="submit" class="btn btn-primary mb-2 save_button">Update</button>
-                    <button type="submit" class="btn btn-primary mb-2 save_button">Discard</button>
+                    <button id='update' type="submit" class="btn btn-primary mb-2 save_button">Update</button>
+                    <button id='discard' type="submit" class="btn btn-primary mb-2 save_button" >Discard</button>
                 </form>
                 <div class=table-wrapper>
                 <table class="table table-hover table-striped tableScroll" style="overflow-y: auto;">
                     <tbody style="overflow-y: auto;">
                     <tr>
-                        <th></th>
-                        <td></td>
-                        <th>Confidence (%)</th>
+                        <th class="w-25"></th>
+                        <td class="w-50" ></td>
+                        <th class="w-25">Confidence (%)</th>
                     </tr>
                     <tr>
-                        <th class="w-25">Name of the scan centre</th>
-                        <td class="w-50" id='scan_center_name' (click) = "onEdit($event)">{{result.scan_center_name[0]}}</td>
-                        <td class="w-25 text-center">{{result.scan_center_name[1]}}</td>
+                        <th >Name of the scan centre</th>
+                        <td id='scan_center_name' (click) = "onEdit($event)">{{result.scan_center_name[0]}}</td>
+                        <td class="text-center">{{result.scan_center_name[1]}}</td>
                     </tr>
                     <tr>
-                        <th class="w-25">Name of the consultant</th>
-                        <td class="w-50" id='Patient_Name' (click) = "onEdit($event)">{{result.Patient_Name[0]}}</td> 
-                        <td class="w-25 text-center">{{result.Patient_Name[1]}}</td> 
+                        <th >Name of the consultant</th>
+                        <td id='Patient_Name' (click) = "onEdit($event)">{{result.Patient_Name[0]}}</td> 
+                        <td class=" text-center">{{result.Patient_Name[1]}}</td> 
                     </tr>
                     <tr>
-                        <th class="w-25">Report Type</th>
-                        <td class="w-50" id='report_type' (click) = "onEdit($event)">{{result.report_type[0]}}</td>
-                        <td class="w-25 text-center">{{result.report_type[1]}}</td>
+                        <th >Report Type</th>
+                        <td id='report_type' (click) = "onEdit($event)">{{result.report_type[0]}}</td>
+                        <td class=" text-center">{{result.report_type[1]}}</td>
                     </tr>
                     <tr>
-                        <th class="w-25">Report Date</th>
-                        <td class="w-50" id='Date' (click) = "onEdit($event)">{{result.Date[0]}}</td>
-                        <td class="w-25 text-center">{{result.Date[1]}}</td>
+                        <th >Report Date</th>
+                        <td id='Date' (click) = "onEdit($event)">{{result.Date[0]}}</td>
+                        <td class=" text-center">{{result.Date[1]}}</td>
                     </tr>
                     <tr>
-                        <th class="w-25">Impression</th>
-                        <td class="w-50" id='Impression' (click) = "onEdit($event)">{{result.Impression[0]}}</td>
-                        <td class="w-25 text-center">{{result.Impression[1]}}</td>
+                        <th >Impression</th>
+                        <td id='Impression' (click) = "onEdit($event)">{{result.Impression[0]}}</td>
+                        <td class=" text-center">{{result.Impression[1]}}</td>
                     </tr>
                     </tbody>
                 </table>

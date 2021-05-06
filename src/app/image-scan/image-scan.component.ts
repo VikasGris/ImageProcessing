@@ -1,7 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal ,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { CountdownComponent } from 'ngx-countdown';
+
 
 import { ResponseService } from '../response.service';
+
 
 @Component({
   selector: 'app-image-scan',
@@ -10,7 +14,10 @@ import { ResponseService } from '../response.service';
 })
 export class ImageScanComponent implements OnInit {
   @ViewChild('myInput') file;
+  @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
 
+
+//Variables declarations
   base64textString = [];
   listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics", "New_Document"];
   result:any = {
@@ -44,22 +51,26 @@ export class ImageScanComponent implements OnInit {
   failedCount = 0;
   uploadButton:boolean = false;
   responseButton:boolean = false;
-  averageTime = 15;
+  averageTime = [15,15,15,15,15];
   seconds = 0;
   averageTime_Index = 0;
-  avgSeconds = 0;
+  avgSeconds = 15;
   inputEnable = false;
   res = null;
   resid = null;
   newDocumentInput = false;
   duplicate_browse = false;
   markForReview = false;
+  startTime;
+  endTime;
+  gettime;
+  closeResult;
 
 
   //di = {'Patient Name':'Patient_Name','Scan Center':'scan_center_name',"Impression":'Impression'}
  di={}
 
-  constructor(private service: ResponseService) {
+  constructor(private service: ResponseService,private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -68,6 +79,17 @@ export class ImageScanComponent implements OnInit {
       select: new FormControl(null, Validators.required)
     }); 
   }
+
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      console.log(content)
+    }, (reason) => {
+      
+    });
+  }
+
 
   new():void{
     /* let di1={}
@@ -96,7 +118,7 @@ export class ImageScanComponent implements OnInit {
   
   }
 
-//Browse file
+//Functionality for select file from local storage
   onFileChange(event: any): void {
     this.closeIcon = true;
     var inputFile = event.target.files[0];
@@ -120,18 +142,21 @@ export class ImageScanComponent implements OnInit {
     this.image_view = this.base64textString[event.target.attributes.id.value]
   }
 
-//Edit displaying result
+//Functionality for edit option given to displaying result
   onEdit(event){
     this.resid= event.target.attributes[1].nodeValue;
     //console.log(this.resid);
     this.res = this.result[event.target.attributes[1].nodeValue][0];
     //console.log(this.res);
     this.inputEnable = true;
+
   }
 
   onEditData(e){
-    ////console.log(e)
+    console.log(e)
+    
     this.res = e.target.value;
+    console.log(this.res)
   }
 
   changeEdit(){
@@ -140,9 +165,9 @@ export class ImageScanComponent implements OnInit {
     this.inputEnable = false;
   }
 
-  // DiscardChange(event){
-    
-  // }
+  onDiscardChange(event){
+    this.inputEnable = false;
+  }
 
 //Remove  file from the list
   removeSelectedFile(index){
@@ -160,12 +185,14 @@ export class ImageScanComponent implements OnInit {
     }
   }
 
-//Zoom funtion
+//Image zoom funtion
   onClickZoom(){
     this.zoom = true;
     this.largeImage = false;
     //console.log(this.largeImage)
   }
+
+//Image zoomout function
   onZoomOut(i,event){
     this.zoom = false;
     this.largeImage = true;
@@ -198,17 +225,19 @@ export class ImageScanComponent implements OnInit {
     }
   }
 
+//Get report type from user
   onChangeReport(event){
     //console.log(event.target.value);
     this.selectDropdownId = event.target.value;
     //console.log(this.selectDropdownId)
   }
+  
 
   get f() {
     return this.form.controls;
   }
 
-//Reset the form
+//Reset form fields and some other fields
   onReset(){
     this.duplicate_browse =false;
     this.largeImage = true;
@@ -224,9 +253,13 @@ export class ImageScanComponent implements OnInit {
       scan_center_name: [null, null],
       report_type: [null, null],
     };
-    this.disabledupload = true;
-    
+    this.disabledupload = true; 
   }
+
+  onChangeTime(event){
+    this.countdown.restart();
+  }
+
 
   // onScanTest(){
   //   this.service.postTestResponse().subscribe(response =>{
@@ -240,8 +273,10 @@ export class ImageScanComponent implements OnInit {
 
 //Send request and get Response to show result
   onSubmit() {
+    this.startTime = new Date().getTime();
     this.largeImage = false;
     this.duplicate_browse =true;
+    console.log(this.startTime)
     this.service.postTestResponse().subscribe(response =>{
       if(response.code === "success"){
         this.uploadButton = true;
@@ -255,7 +290,8 @@ export class ImageScanComponent implements OnInit {
         };
         //console.log(params)
         this.service.postResponse(params).subscribe(response => {
-          this.result = response
+          console.log(response.code) //20
+          this.result = response.response;
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
@@ -271,6 +307,21 @@ export class ImageScanComponent implements OnInit {
           //   this.averageTime = 7
           // }
           // //console.log(this.averageTime)
+          this.endTime = new Date().getTime()
+          console.log(this.endTime)
+          this.seconds = this.startTime - this.endTime;
+          if(this.averageTime_Index>=5){
+            this.averageTime_Index=0;
+          }
+          this.averageTime[this.averageTime_Index]=(this.seconds)
+          this.averageTime_Index+=1;
+          console.log(this.averageTime)
+
+          for(var i=0;i<this.averageTime.length;i++){
+            this.avgSeconds+=this.averageTime[i];
+          }
+          this.avgSeconds = Math.floor((this.avgSeconds/5 ))
+
           
         }, 
         (error) => {
@@ -286,7 +337,9 @@ export class ImageScanComponent implements OnInit {
           this.responseButton = false;
         }
         )
+        
       }
+      
     },(error) =>{
       this.error = true;
         setTimeout(() =>{
