@@ -1,5 +1,5 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component,Input,OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NgControl, Validators } from '@angular/forms';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { CountdownComponent } from 'ngx-countdown';
 
@@ -14,8 +14,7 @@ import { ResponseService } from '../response.service';
 export class ImageScanComponent implements OnInit {
   @ViewChild('myInput') file;
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
-
-
+    
 //Variables declarations
   base64textString = [];
   listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics", "New_Document"];
@@ -67,12 +66,25 @@ export class ImageScanComponent implements OnInit {
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
   unKnownError:boolean = false;
+  editableInput1:boolean = false;
+  editableInput2:boolean = false;
+  editableInput3:boolean = false;
+  editableInput4:boolean = false;
+  editableInput5:boolean = false;
+  tableShow:boolean = false;
+  saveIconShow1:boolean = false;
+  saveIconShow2:boolean = false;
+  saveIconShow3:boolean = false;
+  saveIconShow4:boolean = false;
+  saveIconShow5:boolean = false;
+  isUpdate:boolean = true;
+  isEdit:boolean = false;
 
 
   //di = {'Patient Name':'Patient_Name','Scan Center':'scan_center_name',"Impression":'Impression'}
  di={}
 
-  constructor(private service: ResponseService,private modalService: NgbModal) {
+  constructor(private service: ResponseService,private modalService: NgbModal,private formBuilder: FormBuilder,) {
   }
 
   ngOnInit(): void {
@@ -80,9 +92,17 @@ export class ImageScanComponent implements OnInit {
       files: new FormControl(null,Validators.required),
       select: new FormControl(null, Validators.required)
     }); 
+    this.formTable.get('scanCenterName').disable();
+    alert(this.isEdit);
+
   }
 
+  
 
+  formTable = this.formBuilder.group({ scanCenterName: [""]});
+  get formTableControls() {
+    return this.formTable.controls;
+  }
   // open(content) {
   //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
   //     this.closeResult = `Closed with: ${result}`;
@@ -149,7 +169,7 @@ export class ImageScanComponent implements OnInit {
     this.resid= event.target.attributes[1].nodeValue;
     //console.log(this.resid);
     this.res = this.result[event.target.attributes[1].nodeValue][0];
-    //console.log(this.res);
+    console.log(this.res);
     this.inputEnable = true;
 
   }
@@ -165,6 +185,29 @@ export class ImageScanComponent implements OnInit {
     this.result[this.resid][0]= this.res;
     ////console.log(this.result);
     this.inputEnable = false;
+  }
+
+  openEditableInput1(event){
+    this.formTable.get('scanCenterName').enable();
+    this.isUpdate = false;
+    this.isEdit = true;
+    console.log(event)
+  }
+  openEditableInput2(){
+    this.editableInput2 = true;
+    this.saveIconShow2 = true;
+  }
+  openEditableInput3(){
+    this.editableInput3 = true;
+    this.saveIconShow3 = true;
+  }
+  openEditableInput4(){
+    this.editableInput4 = true;
+    this.saveIconShow4 = true;
+  }
+  openEditableInput5(){
+    this.editableInput5 = true;
+    this.saveIconShow5 = true;
   }
 
   onDiscardChange(event){
@@ -283,6 +326,7 @@ export class ImageScanComponent implements OnInit {
     this.largeImage = false;
     this.duplicate_browse =true;
     //console.log(this.startTime)
+    this.tableShow = true;
     this.service.postTestResponse().subscribe(response =>{
       if(response.code === "success"){
         this.uploadButton = true;
@@ -357,11 +401,11 @@ export class ImageScanComponent implements OnInit {
             this.averageTime_Index=0;
           }
           this.averageTime[this.averageTime_Index]=(this.seconds)
-          this.averageTime_Index+=1;
+          this.averageTime_Index=this.averageTime_Index + 1;
           //console.log(this.averageTime)
 
           for(var i=0;i<this.averageTime.length;i++){
-            this.avgSeconds+=this.averageTime[i];
+            this.avgSeconds =this.avgSeconds + this.averageTime[i];
           }
           this.avgSeconds = Math.floor((this.avgSeconds/5 ))
         }
