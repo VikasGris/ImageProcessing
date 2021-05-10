@@ -120,6 +120,9 @@ div.row{
     overflow-y: auto;
     display:inline-block;
   }
+  svg{
+      cursor: pointer;
+  }
 /* .edit_form{
     width: 317px;
     height: 79px;

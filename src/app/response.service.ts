@@ -18,7 +18,6 @@ export class ResponseService {
     console.log('service', formData);
     return this.http.post(this.configUrl + 'debug', formData);
   }
-
 //For to test server running or not
   postTestResponse(): Observable<any> {
     //console.log('service');

@@ -66,19 +66,12 @@ export class ImageScanComponent implements OnInit {
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
   unKnownError:boolean = false;
-  editableInput1:boolean = false;
-  editableInput2:boolean = false;
-  editableInput3:boolean = false;
-  editableInput4:boolean = false;
-  editableInput5:boolean = false;
   tableShow:boolean = false;
-  saveIconShow1:boolean = false;
-  saveIconShow2:boolean = false;
-  saveIconShow3:boolean = false;
-  saveIconShow4:boolean = false;
-  saveIconShow5:boolean = false;
-  isUpdate:boolean = true;
-  isEdit:boolean = false;
+  isUpdate1:boolean = true;
+  isUpdate2:boolean = true;
+  isUpdate3:boolean = true;
+  isUpdate4:boolean = true;
+  isUpdate5:boolean = true;
 
 
   //di = {'Patient Name':'Patient_Name','Scan Center':'scan_center_name',"Impression":'Impression'}
@@ -93,25 +86,33 @@ export class ImageScanComponent implements OnInit {
       select: new FormControl(null, Validators.required)
     }); 
     this.formTable.get('scanCenterName').disable();
-    alert(this.isEdit);
-
+    this.formTable.get('scanCenterName_Confidence').disable();
+    this.formTable.get('patientName').disable();
+    this.formTable.get('patientName_Confidence').disable();
+    this.formTable.get('reportType').disable();
+    this.formTable.get('reportType_Confidence').disable();
+    this.formTable.get('reportDate').disable();
+    this.formTable.get('reportDate_Confidence').disable();
+    this.formTable.get('impression').disable();
+    this.formTable.get('impression_Confidence').disable();
   }
 
-  
+  formTable = this.formBuilder.group({ 
+    scanCenterName: [""],
+    scanCenterName_Confidence:[""],
+    patientName:[""],
+    patientName_Confidence:[""],
+    reportType:[""],
+    reportType_Confidence:[""],
+    reportDate:[""],
+    reportDate_Confidence:[""],
+    impression:[""],
+    impression_Confidence:[""]
 
-  formTable = this.formBuilder.group({ scanCenterName: [""]});
+  });
   get formTableControls() {
     return this.formTable.controls;
   }
-  // open(content) {
-  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-  //     this.closeResult = `Closed with: ${result}`;
-  //     console.log(content)
-  //   }, (reason) => {
-      
-  //   });
-  // }
-
 
   new():void{
     /* let di1={}
@@ -165,49 +166,37 @@ export class ImageScanComponent implements OnInit {
   }
 
 //Functionality for edit option given to displaying result
-  onEdit(event){
-    this.resid= event.target.attributes[1].nodeValue;
-    //console.log(this.resid);
-    this.res = this.result[event.target.attributes[1].nodeValue][0];
-    console.log(this.res);
-    this.inputEnable = true;
 
+  onUpdate(){
+    console.log(this.formTable.get('scanCenterName').value);
   }
 
-  onEditData(e){
-    console.log(e)
-    
-    this.res = e.target.value;
-    console.log(this.res)
-  }
-
-  changeEdit(){
-    this.result[this.resid][0]= this.res;
-    ////console.log(this.result);
-    this.inputEnable = false;
-  }
-
-  openEditableInput1(event){
+  openEditableInput1(){
     this.formTable.get('scanCenterName').enable();
-    this.isUpdate = false;
-    this.isEdit = true;
-    console.log(event)
+    this.formTable.get('scanCenterName_Confidence').enable();
+    //this.isUpdate1 = false;
   }
   openEditableInput2(){
-    this.editableInput2 = true;
-    this.saveIconShow2 = true;
+    this.formTable.get('patientName').enable();
+    this.formTable.get('patientName_Confidence').enable();
+    //this.isUpdate2 = false;
   }
   openEditableInput3(){
-    this.editableInput3 = true;
-    this.saveIconShow3 = true;
+    this.formTable.get('reportType').enable();
+    this.formTable.get('reportType_Confidence').enable();
+    //this.isUpdate3 = false;
   }
+  
   openEditableInput4(){
-    this.editableInput4 = true;
-    this.saveIconShow4 = true;
+    this.formTable.get('reportDate').enable();
+    this.formTable.get('reportDate_Confidence').enable();
+    console.log(this.formTable.get('reportDate').value)
+    //this.isUpdate4 = false;
   }
   openEditableInput5(){
-    this.editableInput5 = true;
-    this.saveIconShow5 = true;
+    this.formTable.get('impression').enable();
+    this.formTable.get('impression_Confidence').enable();
+    //this.isUpdate5 = false;
   }
 
   onDiscardChange(event){
@@ -303,29 +292,19 @@ export class ImageScanComponent implements OnInit {
       report_type: [null, null],
     };
     this.disabledupload = true; 
+    this.formTable.reset();
+    this.tableShow = false;
   }
 
   onChangeTime(event){
     
   }
 
-
-  // onScanTest(){
-  //   this.service.postTestResponse().subscribe(response =>{
-  //     //console.log("test",response)
-  //   }, (error) =>{
-  //     //console.log(error)
-  //   })
-  // }
-
- 
-
 //Send request and get Response to show result
   onSubmit() {
     this.startTime = new Date().getTime();
     this.largeImage = false;
     this.duplicate_browse =true;
-    //console.log(this.startTime)
     this.tableShow = true;
     this.service.postTestResponse().subscribe(response =>{
       if(response.code === "success"){
@@ -333,14 +312,54 @@ export class ImageScanComponent implements OnInit {
         this.responseButton = true;
         this.isLoading = true;
         this.error = false;
-        //this.count();
         const params = {
           '_id': this.selectDropdownId,
           'page': this.base64textString,
         };
-        //console.log(params)
         this.service.postResponse(params).subscribe(response => {
-          console.log(response.code) //20
+          console.log(response.code)
+          this.result = response.response;
+          this.formTable.patchValue({
+            scanCenterName : this.result.scan_center_name[0],
+            scanCenterName_Confidence:this.result.scan_center_name[1],
+            patientName:this.result.Patient_Name[0],
+            patientName_Confidence:this.result.Patient_Name[1],
+            reportType:this.result.report_type[0],
+            reportType_Confidence:this.result.report_type[1],
+            reportDate:this.result.Date[0],
+            reportDate_Confidence:this.result.Date[1],
+            impression:this.result.Impression[0],
+            impression_Confidence:this.result.Impression[1]
+          });
+          console.log(this.result);
+          this.isLoading = false;
+          this.uploadButton = false;
+          this.responseButton = false;
+          this.getResult = true;
+          this.markForReview = true;
+          
+          this.closeIcon = false;
+          // this.averageTime = Math.floor((this.seconds ))
+          // if(this.seconds === 0){
+          //   alert("It's taking longer than expected..Please wait") 
+          // }
+          // if(this.averageTime < 4){
+          //   this.averageTime = 7
+          // }
+          // //console.log(this.averageTime)
+          this.endTime = new Date().getTime()
+          //console.log(this.endTime)
+          this.seconds = this.startTime - this.endTime;
+          if(this.averageTime_Index>=5){
+            this.averageTime_Index=0;
+          }
+          this.averageTime[this.averageTime_Index]=(this.seconds)
+          this.averageTime_Index=this.averageTime_Index + 1;
+          //console.log(this.averageTime)
+          for(var i=0;i<this.averageTime.length;i++){
+            this.avgSeconds =this.avgSeconds + this.averageTime[i];
+          }
+          this.avgSeconds = Math.floor((this.avgSeconds/5 ))
           if(response.code === 20){
             this.verifyDocumentId = true
             setTimeout(() =>{
@@ -377,38 +396,6 @@ export class ImageScanComponent implements OnInit {
             this.uploadButton = false;
             this.getResult = false
           }
-          else{
-          this.result = response.response;
-          this.isLoading = false;
-          this.uploadButton = false;
-          this.responseButton = false;
-          this.getResult = true;
-          this.markForReview = true;
-          
-          this.closeIcon = false;
-          // this.averageTime = Math.floor((this.seconds ))
-          // if(this.seconds === 0){
-          //   alert("It's taking longer than expected..Please wait") 
-          // }
-          // if(this.averageTime < 4){
-          //   this.averageTime = 7
-          // }
-          // //console.log(this.averageTime)
-          this.endTime = new Date().getTime()
-          //console.log(this.endTime)
-          this.seconds = this.startTime - this.endTime;
-          if(this.averageTime_Index>=5){
-            this.averageTime_Index=0;
-          }
-          this.averageTime[this.averageTime_Index]=(this.seconds)
-          this.averageTime_Index=this.averageTime_Index + 1;
-          //console.log(this.averageTime)
-
-          for(var i=0;i<this.averageTime.length;i++){
-            this.avgSeconds =this.avgSeconds + this.averageTime[i];
-          }
-          this.avgSeconds = Math.floor((this.avgSeconds/5 ))
-        }
         }, (error) => {
           // this.error = true;
           //     setTimeout(() =>{
@@ -443,6 +430,14 @@ export class ImageScanComponent implements OnInit {
 
 //Send data to database
   onSubmitImage() {
+    this.result = {
+      Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
+      Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
+      Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
+      scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
+      report_type: [this.formTable.get('reportType').value,this.formTable.get('reportType_Confidence').value]
+    };
+    console.log(this.result)
     const params = {
       'input':
       {
@@ -459,6 +454,8 @@ export class ImageScanComponent implements OnInit {
       this.success = response;
       if(response.code === "success"){
         this.successAlert = true;
+        this.formTable.reset();
+        this.tableShow = false;
         this.failedCount = this.failedCount + 1;
         this.duplicate_browse =false;
         this.largeImage = true;
@@ -496,6 +493,13 @@ export class ImageScanComponent implements OnInit {
 
 //Send data to database
   onSubmitText() {
+    this.result = {
+      Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
+      Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
+      Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
+      scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
+      report_type: [this.formTable.get('reportType').value,this.formTable.get('reportType_Confidence').value]
+    };
     const finalOutput = {
       'input':
       {
@@ -513,6 +517,8 @@ export class ImageScanComponent implements OnInit {
       if(response.code === "success"){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
+        this.formTable.reset();
+        this.tableShow = false;
         this.duplicate_browse =false;
         this.largeImage = true;
         this.base64textString = [];
