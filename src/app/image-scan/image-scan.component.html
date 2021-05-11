@@ -78,48 +78,46 @@
                         <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
                     </div>  
                 </form>
-                <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf='isLoading' class="spinner-border text-success text-center inline-block" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Server can't respond please contact your admin
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="text-center m-4">
-                    <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>   
-                <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Document ID Required
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please select file to upload
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please select document ID
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "verifyDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "verifyDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please verify the report type
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "invalidDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "invalidDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Document ID is invalid
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "unKnownError"  class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <div *ngIf = "unKnownError"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Unknown Error
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

@@ -85,7 +85,7 @@ export class ImageScanComponent implements OnInit {
     this.form = new FormGroup({
       files: new FormControl(null,Validators.required),
       select: new FormControl(null, Validators.required)
-    }); 
+    });
     this.formTable.get('scanCenterName').disable();
     this.formTable.get('scanCenterName_Confidence').disable();
     this.formTable.get('patientName').disable();
@@ -253,10 +253,6 @@ export class ImageScanComponent implements OnInit {
 
 //Select report type
   selectId(event) {
-
-
-
-
     if(this.form.value.select!=='Select Document'){
       this.selectDropdownId = this.form.value.select;
       this.disabledupload = false;
@@ -288,12 +284,6 @@ export class ImageScanComponent implements OnInit {
         this.DropdownId = false;
       },3000)
     } 
-
-    
-    
-    
-    
-    
   }
 
 //Get report type from user
@@ -337,11 +327,7 @@ export class ImageScanComponent implements OnInit {
     this.formTable.get('impression').disable();
     this.tableShow = false;
   }
-
-  onChangeTime(event){
-    
-  }
-
+  
 //Send request and get Response to show result
   onSubmit() {
     this.startTime = new Date().getTime();
