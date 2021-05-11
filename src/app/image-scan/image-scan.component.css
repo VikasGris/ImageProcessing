@@ -136,6 +136,13 @@ div.row{
 .save_button{
     margin-top: 10px;
 } */
+textarea{
+    resize: none;
+}
+textarea{
+    height: 135px;
+}
+
 @media only screen and   (min-width: 1200px) and (max-width: 1400px) {
     .zoomCloseIcon{
         position: absolute;

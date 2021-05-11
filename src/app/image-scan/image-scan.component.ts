@@ -63,6 +63,7 @@ export class ImageScanComponent implements OnInit {
   endTime;
   gettime;
   closeResult;
+  DocumentIdUploaded = '';
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
   unKnownError:boolean = false;
@@ -233,21 +234,10 @@ export class ImageScanComponent implements OnInit {
     this.largeImage = true;
   }
 
-//Select report type
-  selectId(event) {
-    if(this.form.value.select!=='Select Document'){
-      this.selectDropdownId = this.form.value.select;
-      this.disabledupload = false;
-    }
-    else{
-      this.disabledupload = true;
-      this.DropdownId = true;
-      setTimeout(() =>{
-        this.DropdownId = false;
-      },3000)
-    } 
 
-    if(this.selectDropdownId === "New_Document"){
+  fnnewdoc(s1) {
+    //this.selectDropdownId
+    if(s1 === "New_Document"){
       this.newDocumentInput = true;
       this.disabledupload = true;
       this.markForReview = true;
@@ -258,6 +248,52 @@ export class ImageScanComponent implements OnInit {
       this.markForReview = false;
       this.disabledupload = false;
     }
+  }
+
+
+//Select report type
+  selectId(event) {
+
+
+
+
+    if(this.form.value.select!=='Select Document'){
+      this.selectDropdownId = this.form.value.select;
+      this.disabledupload = false;
+      
+
+      if (this.DocumentIdUploaded !== '') {
+        
+        if (this.DocumentIdUploaded !== this.form.value.select) {
+          this.markForReview = false;
+          this.getResult = false;
+          this.fnnewdoc(this.selectDropdownId)
+        }
+        else {
+          
+          this.markForReview = true;
+          this.getResult = true;
+          this.fnnewdoc(this.selectDropdownId)
+        }
+      }
+      
+    }
+    else {
+      this.markForReview = false;
+      this.getResult = false;
+      this.newDocumentInput = false;
+      this.disabledupload = true;
+      this.DropdownId = true;
+      setTimeout(() =>{
+        this.DropdownId = false;
+      },3000)
+    } 
+
+    
+    
+    
+    
+    
   }
 
 //Get report type from user
@@ -283,6 +319,7 @@ export class ImageScanComponent implements OnInit {
     this.inputEnable = false;
     this.newDocumentInput = false;
     this.markForReview = false;
+    this.getResult = false;
     this.base64textString = [];
     this.result = {
       Patient_Name: [null, null],
@@ -293,6 +330,11 @@ export class ImageScanComponent implements OnInit {
     };
     this.disabledupload = true; 
     this.formTable.reset();
+    this.formTable.get('scanCenterName').disable();
+    this.formTable.get('patientName').disable();
+    this.formTable.get('reportType').disable();
+    this.formTable.get('reportDate').disable();
+    this.formTable.get('impression').disable();
     this.tableShow = false;
   }
 
@@ -307,7 +349,7 @@ export class ImageScanComponent implements OnInit {
     this.duplicate_browse =true;
     this.tableShow = true;
     this.service.postTestResponse().subscribe(response =>{
-      if(response.code === "success"){
+      if (response.code === "success") {
         this.uploadButton = true;
         this.responseButton = true;
         this.isLoading = true;
@@ -316,6 +358,8 @@ export class ImageScanComponent implements OnInit {
           '_id': this.selectDropdownId,
           'page': this.base64textString,
         };
+        this.DocumentIdUploaded = this.selectDropdownId;
+
         this.service.postResponse(params).subscribe(response => {
           console.log(response.code)
           this.result = response.response;
@@ -455,6 +499,11 @@ export class ImageScanComponent implements OnInit {
       if(response.code === "success"){
         this.successAlert = true;
         this.formTable.reset();
+        this.formTable.get('scanCenterName').disable();
+    this.formTable.get('patientName').disable();
+    this.formTable.get('reportType').disable();
+    this.formTable.get('reportDate').disable();
+    this.formTable.get('impression').disable();
         this.tableShow = false;
         this.failedCount = this.failedCount + 1;
         this.duplicate_browse =false;
@@ -518,6 +567,11 @@ export class ImageScanComponent implements OnInit {
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         this.formTable.reset();
+        this.formTable.get('scanCenterName').disable();
+    this.formTable.get('patientName').disable();
+    this.formTable.get('reportType').disable();
+    this.formTable.get('reportDate').disable();
+    this.formTable.get('impression').disable();
         this.tableShow = false;
         this.duplicate_browse =false;
         this.largeImage = true;

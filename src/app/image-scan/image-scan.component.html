@@ -168,75 +168,78 @@
                             <tr>
                                 <th class="w-25"></th>
                                 <td class="w-50" ></td>
+                                <th style="vertical-align: middle;">Edit</th>
                                 <th class="w-25">Confidence (%)</th>
-                                <th>Edit</th>
+                                
                             </tr>
                             <tr>
                                 <th >Name of the scan centre</th>
-                                <td id='scan_center_name'>
-                                    <input formControlName = "scanCenterName" class="form-control" type="text" ></td>
-                                <td class="text-center">
-                                    {{result.scan_center_name[1]}}
+                                <td id='scan_center_name' style="vertical-align: middle;">
+                                    <input formControlName = "scanCenterName" class="form-control" type="text" >
                                 </td>
-                                <th>
+                                <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput1()" *ngIf = "isUpdate1">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                     </svg>
                                 </th>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    {{result.scan_center_name[1]}}
+                                </td>
+                                
                             </tr>
                             <tr>
                                 <th >Name of the consultant</th>
-                                <td id='Patient_Name'>
+                                <td id='Patient_Name' style="vertical-align: middle;">
                                     <input formControlName = "patientName" class="form-control" type="text">
                                 </td> 
-                                <td class=" text-center">
-                                    {{result.Patient_Name[1]}}
-                                </td> 
-                                <th>
+                                <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput2()" *ngIf = "isUpdate2">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                     </svg>
                                 </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.Patient_Name[1]}}
+                                </td> 
+                                
                             </tr>
                             <tr>
                                 <th >Report Type</th>
-                                <td id='report_type'>
+                                <td id='report_type' style="vertical-align: middle;">
                                     <input formControlName = "reportType" class="form-control" type="text">
                                 </td>
-                                <td class=" text-center">
-                                    {{result.report_type[1]}}
-                                </td>
-                                <th>
+                                <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput3()" *ngIf = "isUpdate3">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                     </svg>
                                 </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.report_type[1]}}
+                                </td>
+                                
                             </tr>
                             <tr>
-                                <th >Report Date</th>
-                                <td id='Date'>
+                                <th style="vertical-align: middle;">Report Date</th>
+                                <td id='Date' style="vertical-align: middle;">
                                     <input formControlName = "reportDate" class="form-control" type="text">
                                 </td>
-                                <td class=" text-center">
-                                    {{result.Date[1]}}
-                                </td>
-                                <th>
+                                <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                     </svg>
                                 </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.Date[1]}}
+                                </td>
+                                
                             </tr>
                             <tr>
                                 <th >Impression</th>
                                 <td id='Impression'>
                                     <textarea formControlName = "impression" class="form-control" type="text"></textarea>
-                                </td>
-                                <td class=" text-center">
-                                    {{result.Impression[1]}}
                                 </td>
                                 <th>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput5()" *ngIf = "isUpdate5">
@@ -244,6 +247,10 @@
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                     </svg>
                                 </th>
+                                <td class=" text-center">
+                                    {{result.Impression[1]}}
+                                </td>
+                                
                             </tr>
                             </tbody>
                         </table>
