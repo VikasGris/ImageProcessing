@@ -58,10 +58,12 @@ export class ImageScanComponent implements OnInit {
   resid = null;
   newDocumentInput = false;
   duplicate_browse = false;
+  BrowseId='';
   markForReview = false;
   startTime;
   endTime;
   gettime;
+  bgColor='green';
   closeResult;
   DocumentIdUploaded = '';
   verifyDocumentId:boolean = false;
@@ -115,6 +117,29 @@ export class ImageScanComponent implements OnInit {
     return this.formTable.controls;
   }
 
+  fncolor(c){
+    if(c>=85){
+      return "green"
+    }
+    else if(c>=70 && c<85){
+      return "olive"
+    }
+    else if(c>=50 && c<70){
+      return "orange"
+    }
+    else if(c>=30 && c<50){
+      return "maroon"
+    }
+    else if(c<30){
+      return "red"
+    }
+    else{
+      //pass
+    }
+  }
+
+
+  
   new():void{
     /* let di1={}
     for (let resultkey in this.result){
@@ -224,60 +249,74 @@ export class ImageScanComponent implements OnInit {
 //Image zoom funtion
   onClickZoom(){
     this.zoom = true;
-    this.largeImage = false;
+    if(this.largeImage===true){
+      this.largeImage = false;
+    }
+    else if (this.duplicate_browse===true) {
+      this.duplicate_browse=false;
+      this.BrowseId='disabled';
+    }
+    else{
+      //pass
+    }
+    
+    
     //console.log(this.largeImage)
   }
 
 //Image zoomout function
   onZoomOut(i,event){
     this.zoom = false;
-    this.largeImage = true;
-  }
-
-
-  fnnewdoc(s1) {
-    //this.selectDropdownId
-    if(s1 === "New_Document"){
-      this.newDocumentInput = true;
-      this.disabledupload = true;
-      this.markForReview = true;
-
+    //this.largeImage = true;
+    //this.duplicate_browse=true;
+    if(this.BrowseId==='disabled'){
+      this.duplicate_browse=true;
     }
+     
     else{
-      this.newDocumentInput = false;
-      this.markForReview = false;
-      this.disabledupload = false;
+      this.largeImage = true;
     }
+      
   }
 
 
 //Select report type
   selectId(event) {
+    this.newDocumentInput = false;
     if(this.form.value.select!=='Select Document'){
       this.selectDropdownId = this.form.value.select;
       this.disabledupload = false;
       
 
-      if (this.DocumentIdUploaded !== '') {
-        
-        if (this.DocumentIdUploaded !== this.form.value.select) {
-          this.markForReview = false;
-          this.getResult = false;
-          this.fnnewdoc(this.selectDropdownId)
+      if(this.selectDropdownId==="New_Document"){
+        this.newDocumentInput = true;
+        this.disabledupload = true;
+        this.markForReview = true;
+      }
+      else{
+        //this.newDocumentInput = false;
+        this.markForReview = false;
+        //this.disabledupload = false;
+
+        if (this.DocumentIdUploaded !== '') {
+          if (this.DocumentIdUploaded !== this.form.value.select) {
+            this.markForReview = false;
+            this.getResult = false;
+          }
+          else {
+            
+            this.markForReview = true;
+            this.getResult = true;
+          }
         }
-        else {
-          
-          this.markForReview = true;
-          this.getResult = true;
-          this.fnnewdoc(this.selectDropdownId)
-        }
+
       }
       
     }
     else {
       this.markForReview = false;
       this.getResult = false;
-      this.newDocumentInput = false;
+      //this.newDocumentInput = false;
       this.disabledupload = true;
       this.DropdownId = true;
       setTimeout(() =>{

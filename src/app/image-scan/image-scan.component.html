@@ -161,12 +161,13 @@
                 </form> -->
                 <div class=table-wrapper *ngIf = "tableShow">
                     <form [formGroup]="formTable">
+                            
                         <table class="table table-hover table-striped tableScroll" style="overflow-y: auto;">
                             <tbody style="overflow-y: auto;">
                             <tr>
                                 <th class="w-25"></th>
                                 <td class="w-50" ></td>
-                                <th style="vertical-align: middle;">Edit</th>
+                                <th style="vertical-align: middle;"></th>
                                 <th class="w-25">Confidence (%)</th>
                                 
                             </tr>
@@ -202,7 +203,7 @@
                                 </td> 
                                 
                             </tr>
-                            <tr>
+                            <tr [ngStyle]="{'background-color': bgColor}">
                                 <th >Report Type</th>
                                 <td id='report_type' style="vertical-align: middle;">
                                     <input formControlName = "reportType" class="form-control" type="text">

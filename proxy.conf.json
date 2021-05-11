@@ -1,0 +1,11 @@
+{
+    "/api": {
+      "target": "https://tesseract.codingtown.com/",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/api": ""
+      }
+    }
+}
+
