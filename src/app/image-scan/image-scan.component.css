@@ -123,19 +123,6 @@ div.row{
   svg{
       cursor: pointer;
   }
-/* .edit_form{
-    width: 317px;
-    height: 79px;
-    background-color: black;
-    border-radius: 7px;
-    margin-bottom: 5px;
-}
-.edit_input{
-    margin-top: 10px;
-}
-.save_button{
-    margin-top: 10px;
-} */
 textarea{
     resize: none;
 }
@@ -143,7 +130,7 @@ textarea{
     height: 135px;
 }
 .above85{
-    background-color: green;
+    background-color: lightgreen;
 }
 .above70{
     background-color:olive;

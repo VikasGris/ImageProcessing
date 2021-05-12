@@ -195,7 +195,6 @@ export class ImageScanComponent implements OnInit {
       this.selectDropdownId = this.form.value.select;
       this.disabledupload = false;
       
-
       if(this.selectDropdownId==="New_Document"){
         this.newDocumentInput = true;
         this.disabledupload = true;
