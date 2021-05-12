@@ -57,6 +57,7 @@ export class ImageScanComponent implements OnInit {
   markForReview = false;
   closeResult;
   DocumentIdUploaded = '';
+  waitForResponse: boolean = false;
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
   unKnownError:boolean = false;
@@ -159,7 +160,7 @@ export class ImageScanComponent implements OnInit {
       this.uploadFileAlert = true;
       setTimeout (() =>{
         this.uploadFileAlert = false;
-      },5000)
+      },3000)
     }
   }
 
@@ -225,7 +226,7 @@ export class ImageScanComponent implements OnInit {
       this.DropdownId = true;
       setTimeout(() =>{
         this.DropdownId = false;
-      },5000)
+      },3000)
     } 
   }
 
@@ -260,6 +261,9 @@ export class ImageScanComponent implements OnInit {
       scan_center_name: [null, null],
       report_type: [null, null],
     };
+    this.isLoading = false
+    this.responseButton = false;
+    this.uploadButton = false;
     this.disabledupload = true; 
     this.formTable.reset();
     this.formTable.get('scanCenterName').disable();
@@ -314,7 +318,7 @@ export class ImageScanComponent implements OnInit {
           this.closeIcon = false;
           this.averageTime = Math.floor((this.seconds ))
           if(this.seconds <= 0){
-          alert("It's taking longer than expected..Please wait") 
+            this.waitForResponse = true;
           }
           if(this.averageTime < 4){
           this.averageTime = 7
@@ -324,19 +328,19 @@ export class ImageScanComponent implements OnInit {
             setTimeout(() =>{
               this.verifyDocumentId = false;
               
-            },5000)
+            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
             this.uploadButton = false;
-            this.getResult = false
+            //this.getResult = false
           }
           else if(response.code === 2){
             this.invalidDocumentId = true;
             setTimeout(() =>{
               this.invalidDocumentId = false;
               
-            },5000)
+            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
@@ -348,12 +352,12 @@ export class ImageScanComponent implements OnInit {
             setTimeout(() =>{
               this.unKnownError = false;
               
-            },5000)
+            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
             this.uploadButton = false;
-            this.getResult = false
+            //this.getResult = false
           }
         }, (error) => {
         })
@@ -363,7 +367,7 @@ export class ImageScanComponent implements OnInit {
       this.error = true;
         setTimeout(() =>{
           this.error = false;
-        },5000)
+        },3000)
     })
   }
 
@@ -434,7 +438,7 @@ export class ImageScanComponent implements OnInit {
         this.form.reset();
         setTimeout(() =>{
           this.successAlert = false;
-        },5000)
+        },3000)
       }
       else{
         this.errorAlert = true;
@@ -498,7 +502,7 @@ export class ImageScanComponent implements OnInit {
         this.form.reset();
         setTimeout(() =>{
           this.successAlert = false;
-        },5000)
+        },3000)
       }
       else{
         this.errorAlert = true;
