@@ -142,7 +142,21 @@ textarea{
 textarea{
     height: 135px;
 }
-
+.above85{
+    background-color: green;
+}
+.above70{
+    background-color:olive;
+}
+.above50{
+    background-color: orange;
+}
+.above30{
+    background-color: maroon;
+}
+.below30{
+    background-color: red;
+}
 @media only screen and   (min-width: 1200px) and (max-width: 1400px) {
     .zoomCloseIcon{
         position: absolute;
