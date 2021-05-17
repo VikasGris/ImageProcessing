@@ -16,6 +16,7 @@ export class ImageScanComponent implements OnInit {
   isLoading = false;
   hasFinishedReading = false;
   result;
+  finalResult;
 
   listOfDocuments: any = ["Deepam", "Clarity", "Aran", "Rasi", "New_Document"];
   
@@ -87,17 +88,14 @@ handleReaderLoaded(e) {
   }
 
   onSubmitText() {
-    this.result = {
-      'Name': 'P. Vikas',
-      'Age': '21'
-    };
+    this.finalResult = this.result;
     const finalOutput = [
       {
       '_id':this.form.value.select,
       'page': this.base64textString,
       },
       {
-        'text':this.result
+        'text': this.finalResult
       }
     ];
     this.service.postResponse(finalOutput).subscribe(response => {
