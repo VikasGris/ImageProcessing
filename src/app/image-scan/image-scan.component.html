@@ -13,6 +13,7 @@
                     (change)="onFileChange($event)" 
                     formControlName="files" 
                     accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                    multiple
                 >
                 <input
                     class="file"
@@ -235,7 +236,7 @@
                                     'zero':result.Date[1] === 0
                                    }"
                                 id='Date' style="vertical-align: middle;">
-                                    <input formControlName = "reportDate" class="form-control" type="date">
+                                    <input formControlName = "reportDate" class="form-control" type="date" placeholder="dd-mm-yyyy">
                                 </td>
                                 <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
@@ -307,6 +308,10 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <input type="date" name="begin" 
+        placeholder="dd-mm-yyyy" value=""
+        min="1997-01-01" max="2030-12-31">
         </div>
+        
     </div>
 </body>

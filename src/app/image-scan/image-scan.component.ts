@@ -120,10 +120,11 @@ export class ImageScanComponent implements OnInit {
   handleReaderLoaded(e) {
     this.upArrow = true;
     this.downArrow = true;
+    console.log(e.target.result)
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
-    console.log(this.base64textString)
+    //console.log(this.base64textString)
     
     if (this.base64textString.length ===1) {
       this.downArrow = false;
