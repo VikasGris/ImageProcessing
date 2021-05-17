@@ -69,6 +69,16 @@ div.row{
     font-weight: bold;
     font-size: xx-large;
 }
+.up_arrow{
+    position: absolute;
+    top: 21px;
+    right: 74px;
+}
+.down_arrow{
+    position: absolute;
+    top: 183px;
+    right: 74px;
+}
 .zoomInIcon{
     position: absolute;
     top: 65px;

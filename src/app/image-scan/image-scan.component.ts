@@ -17,7 +17,7 @@ export class ImageScanComponent implements OnInit {
     
 //Variables declarations
   base64textString = [];
-  listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics", "New_Document"];
+  listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics"];
   result:any = {
     Patient_Name: [null, null],
     Date:  [null, null],
@@ -57,6 +57,9 @@ export class ImageScanComponent implements OnInit {
   markForReview = false;
   closeResult;
   DocumentIdUploaded = '';
+  oldDate;
+  upArrow: boolean = true;
+  downArrow: boolean = true;
   waitForResponse: boolean = false;
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
@@ -69,7 +72,7 @@ export class ImageScanComponent implements OnInit {
   isUpdate5:boolean = true;
 
 //Constructor for using services
-  constructor(private service: ResponseService,private modalService: NgbModal,private formBuilder: FormBuilder,) {
+  constructor(private service: ResponseService,private modalService: NgbModal,private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -104,6 +107,7 @@ export class ImageScanComponent implements OnInit {
 //Functionality for select file from local storage
   onFileChange(event: any): void {
     this.closeIcon = true;
+    this.uploadFileAlert = false;
     var inputFile = event.target.files[0];
     if (inputFile) {
       const reader = new FileReader();
@@ -114,14 +118,65 @@ export class ImageScanComponent implements OnInit {
 
 //Store files in array
   handleReaderLoaded(e) {
+    this.upArrow = true;
+    this.downArrow = true;
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
+    console.log(this.base64textString)
+    
+    if (this.base64textString.length ===1) {
+      this.downArrow = false;
+      this.upArrow = false;
+    }
+    // if (this.base64textString.length === 2) {
+    //     if (this.base64textString[0]) {
+    //       this.upArrow = false;
+    //       this.downArrow = true;
+    //       console.log(this.upArrow,this.downArrow)
+    //     }
+    //     if (this.base64textString[1]) {
+    //       this.upArrow = true;
+    //       this.downArrow = false;
+    //       console.log(this.upArrow,this.downArrow)
+    //     }
+      
+    // }
+    // if (this.base64textString.length >= 3) {
+    //   if (this.base64textString[0]) {
+    //       this.upArrow = false;
+    //       this.downArrow = true;
+    //       console.log(this.upArrow,this.downArrow)
+    //     }
+    //     if (this.base64textString.length-1) {
+    //       this.upArrow = true;
+    //       this.downArrow = false;
+    //       console.log(this.upArrow,this.downArrow)
+    //     }
+    // }
+    
+  }
+  onUpImage(event) {
+    var id = parseInt(event.path[1]['id']);
+    var temp = this.base64textString[id];
+    this.base64textString[id] = this.base64textString[id - 1];
+    this.base64textString[id - 1] = temp
   }
 
+  onDownImage(event) {
+    var id = parseInt(event.path[1]['id']);
+    console.log(typeof(id))
+    var temp = this.base64textString[id];
+    //console.log(temp)
+    this.base64textString[id] = this.base64textString[id + 1];
+    //console.log(this.base64textString[event.path[1]['id']])
+    this.base64textString[id + 1] = temp
+    //console.log(this.base64textString[event.path[1]['id']+1])
+  }
   //Function for clicking image to show as large image
   onClick(event){
     this.image_view = this.base64textString[event.target.attributes.id.value]
+    console.log(this.image_view)
   }
 
 //Functionality for edit option given to displaying result
@@ -147,20 +202,18 @@ export class ImageScanComponent implements OnInit {
     this.formTable.get('impression').enable();
   }
 
+  
 //Remove  file from the list
   
-  removeSelectedFile(index){
+  removeSelectedFile(index) {
     this.base64textString.splice(index,1);
-    this.image_view = this.base64textString[this.base64textString.length-1];
+    this.image_view = this.base64textString[this.base64textString.length - 1];
     if(this.base64textString.length === 0){
       this.zoomIcon = false;
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
       this.file.nativeElement.value = "";
       this.disabledupload = true;
       this.uploadFileAlert = true;
-      setTimeout (() =>{
-        this.uploadFileAlert = false;
-      },3000)
     }
   }
 
@@ -192,6 +245,7 @@ export class ImageScanComponent implements OnInit {
   
   selectId(event) {
     this.newDocumentInput = false;
+    this.DropdownId = false;
     if(this.form.value.select!=='Select Document'){
       this.selectDropdownId = this.form.value.select;
       this.disabledupload = false;
@@ -215,7 +269,6 @@ export class ImageScanComponent implements OnInit {
             this.getResult = true;
           }
         }
-
       }
       
     }
@@ -224,9 +277,6 @@ export class ImageScanComponent implements OnInit {
       this.getResult = false;
       this.disabledupload = true;
       this.DropdownId = true;
-      setTimeout(() =>{
-        this.DropdownId = false;
-      },3000)
     } 
   }
 
@@ -242,8 +292,15 @@ export class ImageScanComponent implements OnInit {
 
 //Reset form fields and some other fields
   
-  onReset(){
-    this.duplicate_browse =false;
+  onReset() {
+    this.error = false;
+    this.uploadFileAlert = false;
+    this.waitForResponse = false;
+    this.duplicate_browse = false;
+    this.DropdownId = false;
+    this.verifyDocumentId = false;
+    this.invalidDocumentId = false;
+    this.unKnownError = false;
     this.largeImage = true;
     this.form.reset();
     this.form.value.select = null;
@@ -272,15 +329,21 @@ export class ImageScanComponent implements OnInit {
     this.formTable.get('reportDate').disable();
     this.formTable.get('impression').disable();
     this.tableShow = false;
+    this.DocumentIdUploaded = "";
   }
-  
+
 //Send request and get Response to show result
   
   onSubmit() {
+    this.error = false;
     this.largeImage = false;
     this.duplicate_browse =true;
     this.tableShow = true;
+    this.verifyDocumentId = false;
+    this.invalidDocumentId = false;
+    this.unKnownError = false;
     this.count();
+    //this.error = false;
     this.service.postTestResponse().subscribe(response =>{
       if (response.code === "success") {
         this.uploadButton = true;
@@ -294,8 +357,10 @@ export class ImageScanComponent implements OnInit {
         this.DocumentIdUploaded = this.selectDropdownId;
 
         this.service.postResponse(params).subscribe(response => {
-          console.log(response.code)
           this.result = response.response;
+          var date = this.result.Date[0]
+          var newDate = date.split("-").reverse().join("-")
+          this.result.Date[0] = newDate;
           this.formTable.patchValue({
             scanCenterName : this.result.scan_center_name[0],
             scanCenterName_Confidence:this.result.scan_center_name[1],
@@ -304,11 +369,19 @@ export class ImageScanComponent implements OnInit {
             reportType:this.result.report_type[0],
             reportType_Confidence:this.result.report_type[1],
             reportDate:this.result.Date[0],
+            //reportDate:"2021-10-12",
             reportDate_Confidence:this.result.Date[1],
             impression:this.result.Impression[0],
             impression_Confidence:this.result.Impression[1]
           });
-          console.log(this.result);
+            // var changeOld = this.result.Date[0]
+            // this.oldDate = changeOld.split("-").reverse().join("-")
+            // this.result.Date[0] = this.oldDate;
+            // console.log(this.oldDate)
+          var date = this.result.Date[0]
+          var newDate = date.split("-").reverse().join("-")
+          this.result.Date[0] = newDate;
+          //this.onChangeStringToDate(this.result.Date[0]);
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
@@ -325,10 +398,6 @@ export class ImageScanComponent implements OnInit {
         }
           if(response.code === 20){
             this.verifyDocumentId = true
-            setTimeout(() =>{
-              this.verifyDocumentId = false;
-              
-            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
@@ -337,10 +406,6 @@ export class ImageScanComponent implements OnInit {
           }
           else if(response.code === 2){
             this.invalidDocumentId = true;
-            setTimeout(() =>{
-              this.invalidDocumentId = false;
-              
-            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
@@ -349,10 +414,6 @@ export class ImageScanComponent implements OnInit {
           }
           else if(response.code === 0 || response.code === 5 || response.code === 10 || response.code === 15){
             this.unKnownError = true;
-            setTimeout(() =>{
-              this.unKnownError = false;
-              
-            },3000)
             this.isLoading = false;
             this.responseButton = false;
             this.disabledupload = true;
@@ -365,9 +426,9 @@ export class ImageScanComponent implements OnInit {
       
     },(error) =>{
       this.error = true;
-        setTimeout(() =>{
-          this.error = false;
-        },3000)
+        // setTimeout(() =>{
+        //   this.error = false;
+        // },3000)
     })
   }
 
@@ -375,8 +436,6 @@ export class ImageScanComponent implements OnInit {
   
   count() {
     this.seconds = this.averageTime;
-    console.log("Start");
-    console.log(this.averageTime , this.seconds);
    const timer = setInterval(() => {
      this.seconds = this.seconds - 1;
      if (!this.seconds) clearInterval(timer);
@@ -386,6 +445,8 @@ export class ImageScanComponent implements OnInit {
 //Send data to database
   
   onSubmitImage() {
+    //this.result.Date[0] = this.oldDate
+    this.successAlert = false;
     this.result = {
       Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
       Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
@@ -435,10 +496,10 @@ export class ImageScanComponent implements OnInit {
         this.uploadButton = false;
         this.disabledupload = true;
         this.newDocumentInput = false;
+        this.zoom = false;
+        this.duplicate_browse = false;
+        this.DocumentIdUploaded = "";
         this.form.reset();
-        setTimeout(() =>{
-          this.successAlert = false;
-        },3000)
       }
       else{
         this.errorAlert = true;
@@ -451,6 +512,7 @@ export class ImageScanComponent implements OnInit {
 
 //Send data to database
   onSubmitText() {
+    this.successAlert = false;
     this.result = {
       Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
       Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
@@ -499,10 +561,10 @@ export class ImageScanComponent implements OnInit {
         this.markForReview = false;
         this.uploadButton = false;
         this.disabledupload = true;
+        this.zoom = false;
+        this.duplicate_browse = false;
+        this.DocumentIdUploaded = "";
         this.form.reset();
-        setTimeout(() =>{
-          this.successAlert = false;
-        },3000)
       }
       else{
         this.errorAlert = true;

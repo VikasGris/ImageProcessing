@@ -46,6 +46,12 @@
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                     <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
+                    <svg *ngIf="upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                    </svg>
+                    <svg *ngIf="downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                      </svg>
                     <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)" *ngIf = "closeIcon">×</span>
                     </button>
@@ -139,9 +145,9 @@
                             <tbody style="overflow-y: auto;">
                             <tr>
                                 <th class="w-25"></th>
-                                <td class="w-50" ></td>
+                                <td class="w-65" ></td>
                                 <th style="vertical-align: middle;"></th>
-                                <th class="w-25">Confidence (%)</th>
+                                <th class="w-10" style="text-align: center;">C (%)</th>
                             </tr>
                             <tr
                                  >
@@ -229,7 +235,7 @@
                                     'zero':result.Date[1] === 0
                                    }"
                                 id='Date' style="vertical-align: middle;">
-                                    <input formControlName = "reportDate" class="form-control" type="text">
+                                    <input formControlName = "reportDate" class="form-control" type="date">
                                 </td>
                                 <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
@@ -270,8 +276,7 @@
                             </tbody>
                         </table>
                     </form>
-                
-            </div>
+                </div>
             </div>
             <button 
             class="btn btn-primary" 
