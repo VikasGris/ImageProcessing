@@ -509,7 +509,9 @@ export class ImageScanComponent implements OnInit {
 
 //Send data to database
   onSubmitText() {
+
     this.successAlert = false;
+
     this.result = {
       Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
       Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
