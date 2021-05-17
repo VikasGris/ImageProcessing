@@ -7,7 +7,6 @@ import { ImageScanComponent } from './image-scan/image-scan.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 import {CountdownModule} from 'ngx-countdown';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +19,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     HttpClientModule,
     CountdownModule,
-    NgbModule,
     NgxBootstrapIconsModule.pick(allIcons),
   ],
   providers: [],

@@ -17,7 +17,7 @@ export class ImageScanComponent implements OnInit {
     
 //Variables declarations
   base64textString = [];
-  listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics"];
+  listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics","Bioline"];
   result:any = {
     Patient_Name: [null, null],
     Date:  [null, null],
@@ -72,7 +72,7 @@ export class ImageScanComponent implements OnInit {
   isUpdate5:boolean = true;
 
 //Constructor for using services
-  constructor(private service: ResponseService,private modalService: NgbModal,private formBuilder: FormBuilder) {
+  constructor(private service: ResponseService,private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -167,11 +167,8 @@ export class ImageScanComponent implements OnInit {
     var id = parseInt(event.path[1]['id']);
     console.log(typeof(id))
     var temp = this.base64textString[id];
-    //console.log(temp)
     this.base64textString[id] = this.base64textString[id + 1];
-    //console.log(this.base64textString[event.path[1]['id']])
     this.base64textString[id + 1] = temp
-    //console.log(this.base64textString[event.path[1]['id']+1])
   }
   //Function for clicking image to show as large image
   onClick(event){
@@ -180,7 +177,6 @@ export class ImageScanComponent implements OnInit {
   }
 
 //Functionality for edit option given to displaying result
-
   onUpdate(){
     console.log(this.formTable.get('scanCenterName').value);
   }
