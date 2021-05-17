@@ -275,7 +275,13 @@
                             </tr>
                             <tr>
                                 <th></th>
-                                <td></td>
+                                <td>
+                                    <tr *ngFor = "let data of datas">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </td>
                                 <th></th>
                                 <td></td>
                             </tr>
@@ -308,9 +314,6 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <input type="date" name="begin" 
-        data-date-format="dd-mm-yyyy" value=""
-        min="1997-01-01" max="2030-12-31">
         </div>
         
     </div>

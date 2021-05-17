@@ -355,6 +355,8 @@ export class ImageScanComponent implements OnInit {
 
         this.service.postResponse(params).subscribe(response => {
           this.result = response.response;
+          //console.log(this.result["Test_Report"]['haematology-edta blood'][0][1])
+          let datas = this.result["Test_Report"]['haematology-edta blood']
           var date = this.result.Date[0]
           var newDate = date.split("-").reverse().join("-")
           this.result.Date[0] = newDate;
@@ -363,17 +365,17 @@ export class ImageScanComponent implements OnInit {
             scanCenterName_Confidence:this.result.scan_center_name[1],
             patientName:this.result.Patient_Name[0],
             patientName_Confidence:this.result.Patient_Name[1],
-            reportType:this.result.report_type[0],
-            reportType_Confidence:this.result.report_type[1],
+            //reportType:this.result.report_type[0],
+            //reportType_Confidence:this.result.report_type[1],
             reportDate:this.result.Date[0],
             //reportDate:"2021-10-12",
             reportDate_Confidence:this.result.Date[1],
-            impression:this.result.Impression[0],
-            impression_Confidence:this.result.Impression[1]
+            //impression:this.result.Impression[0],
+            //impression_Confidence:this.result.Impression[1]
           });
-            // var changeOld = this.result.Date[0]
-            // this.oldDate = changeOld.split("-").reverse().join("-")
-            // this.result.Date[0] = this.oldDate;
+             var changeOld = this.result.Date[0]
+            this.oldDate = changeOld.split("-").reverse().join("-")
+            this.result.Date[0] = this.oldDate;
             // console.log(this.oldDate)
           var date = this.result.Date[0]
           var newDate = date.split("-").reverse().join("-")
