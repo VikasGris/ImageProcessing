@@ -1,79 +1,302 @@
 <body>
-<div class="row">
-    <div class="col-md-5">
-        <form [formGroup]="form" (submit)="onSubmit()">
-            <input 
-            type="file" 
-            name="file" 
-            id="file" 
-            (change)="onFileChange($event)" 
-            formControlName="files" 
-            accept=".png, .jpg, .jpeg, .pdf">
-            <button class="btn btn-primary" [disabled]='!hasFinishedReading' type="submit">Upload</button>
-            <!-- <div *ngIf='error' class="alert alert-danger" role="alert">
-                {{error}}
+    <div class="row">
+    <!-- Show image larger and Zoom function -->
+        <div class="col-md-5 col-lg-5 col-xs-12">
+            <form [formGroup]="form" (submit)="onSubmit()" class="form">
+                <input 
+                    #myInput
+                    *ngIf = "largeImage"
+                    class="file"
+                    type="file" 
+                    name="file" 
+                    id="file" 
+                    (change)="onFileChange($event)" 
+                    formControlName="files" 
+                    accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                >
+                <input
+                    class="file"
+                    type="file" 
+                    name="file" 
+                    id="file" 
+                    *ngIf = "duplicate_browse"
+                    type="file" 
+                    accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                    disabled
+                >
+            </form>
+            <div *ngIf = "zoom" class="zoom">
+                <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" style="display: inline-block;position: relative;">
+                <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
             </div>
-            <div class="text-center m-4">
-                <div *ngIf='isLoading' class="spinner-border text-success text-center" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>   -->
-        </form>
-    </div>
-    <div class=" col-md-3 smallScanCard">
-        <button class="btn btn-primary btnAlign">Scan</button>
-        <button class="btn btn-primary btnAlign">Reset</button><br/>
-        <div class="closeIcon"></div>
-
-            <div class="image-container card1">
-                <img class="scanImage" *ngFor = "let item of base64textString" src={{item}} alt="" height="100%" width="100%">
+            <div class="image" id="image" [style.display]="zoom ? 'none' : 'inline-block'">
+                <img class="large_image img-responsive" src={{image_view}} style="display: inline-block;position: relative;">
+                <i-bs 
+                    name="zoom-in"
+                    *ngIf = "zoomIcon"
+                    width="40"
+                    height="40" style="cursor: pointer;" (click)= "onClickZoom()"  class="zoomInIcon">
+                </i-bs>
             </div>
-    </div>
-    <div  class="mt-3 col-md-4">
-        <div>
-            <form [formGroup]="form" (submit)="onSubmit()">
-            <select formControlName="select" class="form-control" (change)="selectId($event)">
-                <option disabled>Select Document</option>
-                <option>Choose Document_Id</option>
-                <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
-            </select>
-            <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger">
-                <div *ngIf = "f.select.errors.required">
-                    Document_id Required
-                </div>
-            </div>
-        </form>
         </div>
-
-        <div>
-            <table class="table">
-                <tr>
-                    <th>Patient Name</th>
-                    <th>Age</th>
-                    <th>Sex</th>
-                    <th>Date</th>
-                    <th>Impression</th>
-                </tr>
-                <tr>
-                    <!-- <td>{{result.Patient_Name }}</td>
-                    <td>{{result.Age }}</td>
-                    <td>{{result.Sex }}</td>
-                    <td>{{result.Date }}</td>
-                    <td>{{result.Impression }}</td> -->
-                </tr>
-            </table>
+    <!-- Show list of images -->
+        <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
+            <button class="btn btn-secondary btnAlign btn-md" disabled>Scan</button>
+            <button class="btn btn-primary btnAlign btn-md" (click) = "onReset()">Reset</button>
+            <div class="image-container card1" id="image1">
+                <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
+                    <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)" *ngIf = "closeIcon">×</span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit" (click) = "onSubmitImage()">Save As Image</button>
-        <button class="btn btn-primary" type="submit" (click) = "onSubmitText()">Save As Text</button>
+    <!-- Report type dropdown and displaying result -->
+        <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12">
+            <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
+            <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
+            <div>
+                <form [formGroup]="form" (submit)="onSubmit()" class="mt-3">
+                    <label for="">Select Report Type</label>&nbsp;&nbsp;
+                    <select formControlName="select" class="form-control w-auto" (change)="selectId($event)">
+                        <option>Select Document</option>
+                        <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
+                    </select> 
+                    <button 
+                        *ngIf = "!uploadButton"
+                        class="btn btn-primary upload" 
+                        [disabled]='disabledupload===true' 
+                        type="submit" 
+                        style="margin-top: 10px;margin-left: 26px;">Upload
+                    </button>
+                    <button *ngIf = "responseButton" class="btn btn-primary ml-2" type="button"  nbButton
+                        status="primary" >    
+                        <span class="text-lowercase"> {{ seconds}}s</span>&nbsp;&nbsp;Estimated time
+                    </button>
+                    <div class="form-inline mb-2" style="margin-left: 144px;">
+                        <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
+                    </div>  
+                </form>
+                <div class="text-center">
+                    <div *ngIf='isLoading' class="spinner-border text-success text-center inline-block" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Server can't respond please contact your admin
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Document ID Required
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Please select file to upload
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "waitForResponse"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    It's taking longer than expected..Please wait
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Please select document ID
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "verifyDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Please verify the report type
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "invalidDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Document ID is invalid
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf = "unKnownError"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Unknown Error
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="scrollit" id="result">
+                <div class=table-wrapper *ngIf = "tableShow">
+                    <form [formGroup]="formTable">
+                        <table class="table tableScroll" style="overflow-y: auto;">
+                            <tbody style="overflow-y: auto;">
+                            <tr>
+                                <th class="w-25"></th>
+                                <td class="w-50" ></td>
+                                <th style="vertical-align: middle;"></th>
+                                <th class="w-25">Confidence (%)</th>
+                            </tr>
+                            <tr
+                                 >
+                                <th >Name of the scan centre</th>
+                                <td  [ngClass] = "{
+                                    'above85':result.scan_center_name[1] >=85,
+                                    'above70':result.scan_center_name[1] >=70 &&  result.scan_center_name[1]<85,
+                                    'above50':result.scan_center_name[1] >=50 && result.scan_center_name[1] <70,
+                                    'above30':result.scan_center_name[1] >=30 && result.scan_center_name[1] <50,
+                                    'below30':result.scan_center_name[1] >0 && result.scan_center_name[1] <30,
+                                    'zero':result.scan_center_name[1] === 0
+                                   }"
+                                   id='scan_center_name' style="vertical-align: middle;">
+                                    <input formControlName = "scanCenterName" class="form-control" type="text" >
+                                </td>
+                                <th style="vertical-align: middle;">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput1()" *ngIf = "isUpdate1">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                </th>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    {{result.scan_center_name[1]}}
+                                </td>
+                                
+                            </tr>
+                            <tr >
+                                <th >Name of the consultant</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result.Patient_Name[1] >=85,
+                                    'above70':result.Patient_Name[1] >=70 &&  result.Patient_Name[1]<85,
+                                    'above50':result.Patient_Name[1] >=50 && result.Patient_Name[1] <70,
+                                    'above30':result.Patient_Name[1] >=30 && result.Patient_Name[1] <50,
+                                    'below30':result.Patient_Name[1] >0 && result.Patient_Name[1] <30,
+                                    'zero':result.Patient_Name[1] === 0
+                                   }"
+                                   
+                                id='Patient_Name' style="vertical-align: middle;">
+                                    <input formControlName = "patientName" class="form-control" type="text">
+                                </td> 
+                                <th style="vertical-align: middle;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput2()" *ngIf = "isUpdate2">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.Patient_Name[1]}}
+                                </td> 
+                            </tr>
+                            <tr >
+                                <th >Report Type</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result.report_type[1] >=85,
+                                    'above70':result.report_type[1] >=70 &&  result.report_type[1]<85,
+                                    'above50':result.report_type[1] >=50 && result.report_type[1] <70,
+                                    'above30':result.report_type[1] >=30 && result.report_type[1] <50,
+                                    'below30':result.report_type[1] >0 && result.report_type[1] <30,
+                                    'zero':result.report_type[1] === 0
+                                   }"
+                                id='report_type' style="vertical-align: middle;">
+                                    <input formControlName = "reportType" class="form-control" type="text">
+                                </td>
+                                <th style="vertical-align: middle;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput3()" *ngIf = "isUpdate3">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.report_type[1]}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="vertical-align: middle;">Report Date</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result.Date[1] >=85,
+                                    'above70':result.Date[1] >=70 &&  result.Date[1]<85,
+                                    'above50':result.Date[1] >=50 && result.Date[1] <70,
+                                    'above30':result.Date[1] >=30 && result.Date[1] <50,
+                                    'below30':result.Date[1] >0 && result.Date[1] <30,
+                                    'zero':result.Date[1] === 0
+                                   }"
+                                id='Date' style="vertical-align: middle;">
+                                    <input formControlName = "reportDate" class="form-control" type="text">
+                                </td>
+                                <th style="vertical-align: middle;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                </th>
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result.Date[1]}}
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <th >Impression</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result.Impression[1] >=85,
+                                    'above70':result.Impression[1] >=70 &&  result.Impression[1]<85,
+                                    'above50':result.Impression[1] >=50 && result.Impression[1] <70,
+                                    'above30':result.Impression[1] >=30 && result.Impression[1] <50,
+                                    'below30':result.Impression[1] >0 && result.Impression[1] <30,
+                                    'zero':result.Impression[1] === 0
+                                   }"
+                                id='Impression'>
+                                    <textarea formControlName = "impression" class="form-control" type="text"></textarea>
+                                </td>
+                                <th>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput5()" *ngIf = "isUpdate5">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                </th>
+                                <td class=" text-center">
+                                    {{result.Impression[1]}}
+                                </td>
+                                
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                
+            </div>
+            </div>
+            <button 
+            class="btn btn-primary" 
+            type="submit" 
+            (click)="onSubmitImage()" 
+            style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
+            [disabled] = "!markForReview">Mark for Review</button>
+            <button 
+            class="btn btn-primary" 
+            type="submit" 
+            (click)="onSubmitText()"
+            style="margin-top:27px"
+            [disabled] = "!getResult">Update Database</button>
+            <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                Data strored Successfully!!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            <strong>Error!</strong> Please try again
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        </div>
     </div>
-</div>
 </body>
-
-
-
-
-
-
-
-
- 
