@@ -47,10 +47,10 @@
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                     <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
-                    <svg *ngIf="upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                    <svg *ngIf="i!=0" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                         <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                     </svg>
-                    <svg *ngIf="downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                    <svg *ngIf="i!=base64textString.length-1" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
                       </svg>
                     <button type="button" class="close" aria-label="Close">
@@ -254,8 +254,9 @@
                             <tr>
                                <th>Test_Report</th> 
                             </tr>
+                            
                             <tr *ngFor = "let report of test_Report;let i = index">
-                                <td>{{i}}</td>
+                                <td>{{i+1}}</td>
                                 <td><input type="text" value={{report[1][0]}} class="form-control"></td>
                                 <td><input type="text" value={{report[1][1]}} class="form-control"></td>
                                 <th><input type="text" value={{report[1][2]}} class="form-control"></th>
@@ -263,9 +264,39 @@
                                 <!-- <td>bfkjsbdj</td> -->
                                 <!-- <td><input type="text" formControlName = "haematology_Confidence" class="form-control report"></td> -->
                             </tr>
+                            
                             </tbody>
                         </table>
                     </form>
+                    <table class="table table-hover table-fixed">
+                        <tbody>
+                            <!-- <tr>
+                                <th class="w-5">S.No</th>
+                                <th class="w-35">Test</th>
+                                <th class="w-35">Result</th>
+                                <th class="w-15">Units</th>
+                                <th class="w-10">C(%)</th>
+                            </tr>  -->
+                            <div  *ngFor = "let item of rdta | keyvalue">
+                               
+                                <tr>
+                                    <th class="w-5"></th>
+                                    <th class="w-35">{{item.key}}</th>
+                                    <th class="w-35"></th>
+                                    <th class="w-15"></th>
+                                    <th class="w-10"></th>
+                                </tr>
+                                
+                                <tr *ngFor = "let report of item.value;let i = index">
+                                    <td class="w-5">{{i+1}}</td>
+                                    <td class="w-35"><input type="text" value={{report[1][0]}} class="form-control"></td>
+                                    <td class="w-35"><input type="text" value={{report[1][1]}} class="form-control"></td>
+                                    <td class="w-10"><input type="text" value={{report[1][2]}} class="form-control"></td>
+                                    <td class="w-10">{{report[2]}}</td>
+                                </tr>
+                            </div> 
+                        </tbody>
+                    </table>
                     
                 </div>
             </div>

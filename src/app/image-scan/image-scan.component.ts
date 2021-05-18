@@ -59,6 +59,7 @@ export class ImageScanComponent implements OnInit {
   DocumentIdUploaded = '';
   oldDate;
   reportData;
+  rdta;
   test_Report;
   test_Report1;
   upArrow: boolean = true;
@@ -247,31 +248,32 @@ export class ImageScanComponent implements OnInit {
   selectId(event) {
     this.newDocumentInput = false;
     this.DropdownId = false;
-    if(this.form.value.select!=='Select Document'){
-      this.selectDropdownId = this.form.value.select;
-      this.disabledupload = false;
+    if (this.form.value.select !== 'Select Document') {
+      if (this.base64textString.length !== 0) {
+        this.selectDropdownId = this.form.value.select;
+        this.disabledupload = false;
       
-      if(this.selectDropdownId==="New_Document"){
-        this.newDocumentInput = true;
-        this.disabledupload = true;
-        this.markForReview = true;
-      }
-      else{
-        this.markForReview = false;
+        if (this.selectDropdownId === "New_Document") {
+          this.newDocumentInput = true;
+          this.disabledupload = true;
+          this.markForReview = true;
+        }
+        else {
+          this.markForReview = false;
 
-        if (this.DocumentIdUploaded !== '') {
-          if (this.DocumentIdUploaded !== this.form.value.select) {
-            this.markForReview = false;
-            this.getResult = false;
-          }
-          else {
+          if (this.DocumentIdUploaded !== '') {
+            if (this.DocumentIdUploaded !== this.form.value.select) {
+              this.markForReview = false;
+              this.getResult = false;
+            }
+            else {
             
-            this.markForReview = true;
-            this.getResult = true;
+              this.markForReview = true;
+              this.getResult = true;
+            }
           }
         }
       }
-      
     }
     else {
       this.markForReview = false;
@@ -361,6 +363,7 @@ export class ImageScanComponent implements OnInit {
         this.service.postResponse(params).subscribe(response => {
           this.result = response.response;
           this.reportData = this.result["Test_Report"]['haematology-edta blood']
+          this.rdta = this.result["Test_Report"]
            this.test_Report = this.reportData.map((test) => {
             return test
            });
