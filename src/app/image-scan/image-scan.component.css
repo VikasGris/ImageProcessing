@@ -133,11 +133,14 @@ div.row{
   svg{
       cursor: pointer;
   }
-textarea{
+textarea.impression{
     resize: none;
 }
-textarea{
+textarea.impression{
     height: 135px;
+}
+textarea.report{
+    white-space: nowrap;
 }
 .above85{
     background-color: lightgreen;

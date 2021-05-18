@@ -203,14 +203,6 @@
                             <tr >
                                 <th >Report Type</th>
                                 <td 
-                                [ngClass] = "{
-                                    'above85':result.report_type[1] >=85,
-                                    'above70':result.report_type[1] >=70 &&  result.report_type[1]<85,
-                                    'above50':result.report_type[1] >=50 && result.report_type[1] <70,
-                                    'above30':result.report_type[1] >=30 && result.report_type[1] <50,
-                                    'below30':result.report_type[1] >0 && result.report_type[1] <30,
-                                    'zero':result.report_type[1] === 0
-                                   }"
                                 id='report_type' style="vertical-align: middle;">
                                     <input formControlName = "reportType" class="form-control" type="text">
                                 </td>
@@ -221,22 +213,15 @@
                                     </svg>
                                 </th>
                                 <td class=" text-center" style="vertical-align: middle;">
-                                    {{result.report_type[1]}}
+                                    <!-- {{result.report_type[1]}} -->
                                 </td>
                             </tr>
                             <tr>
                                 <th style="vertical-align: middle;">Report Date</th>
                                 <td 
-                                [ngClass] = "{
-                                    'above85':result.Date[1] >=85,
-                                    'above70':result.Date[1] >=70 &&  result.Date[1]<85,
-                                    'above50':result.Date[1] >=50 && result.Date[1] <70,
-                                    'above30':result.Date[1] >=30 && result.Date[1] <50,
-                                    'below30':result.Date[1] >0 && result.Date[1] <30,
-                                    'zero':result.Date[1] === 0
-                                   }"
+                                
                                 id='Date' style="vertical-align: middle;">
-                                    <input formControlName = "reportDate" class="form-control" type="date" placeholder="dd-mm-yyyy">
+                                    <input formControlName = "reportDate" class="form-control" type="date" placeholder="">
                                 </td>
                                 <th style="vertical-align: middle;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
@@ -252,16 +237,9 @@
                             <tr>
                                 <th >Impression</th>
                                 <td 
-                                [ngClass] = "{
-                                    'above85':result.Impression[1] >=85,
-                                    'above70':result.Impression[1] >=70 &&  result.Impression[1]<85,
-                                    'above50':result.Impression[1] >=50 && result.Impression[1] <70,
-                                    'above30':result.Impression[1] >=30 && result.Impression[1] <50,
-                                    'below30':result.Impression[1] >0 && result.Impression[1] <30,
-                                    'zero':result.Impression[1] === 0
-                                   }"
+                                
                                 id='Impression'>
-                                    <textarea formControlName = "impression" class="form-control" type="text"></textarea>
+                                    <textarea formControlName = "impression" class="form-control impression" type="text"></textarea>
                                 </td>
                                 <th>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput5()" *ngIf = "isUpdate5">
@@ -270,24 +248,25 @@
                                     </svg>
                                 </th>
                                 <td class=" text-center">
-                                    {{result.Impression[1]}}
+                                    <!-- {{result.Impression[1]}} -->
                                 </td>
                             </tr>
                             <tr>
-                                <th></th>
-                                <td>
-                                    <tr *ngFor = "let data of datas">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </td>
-                                <th></th>
-                                <td></td>
+                               <th>Test_Report</th> 
+                            </tr>
+                            <tr *ngFor = "let report of test_Report;let i = index">
+                                <td>{{i}}</td>
+                                <td><input type="text" value={{report[1][0]}} class="form-control"></td>
+                                <td><input type="text" value={{report[1][1]}} class="form-control"></td>
+                                <th><input type="text" value={{report[1][2]}} class="form-control"></th>
+                                <td><input type="text" value={{report[2]}} class="form-control"></td>
+                                <!-- <td>bfkjsbdj</td> -->
+                                <!-- <td><input type="text" formControlName = "haematology_Confidence" class="form-control report"></td> -->
                             </tr>
                             </tbody>
                         </table>
                     </form>
+                    
                 </div>
             </div>
             <button 

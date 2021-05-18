@@ -1,6 +1,5 @@
 import { Component,Input,OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgControl, Validators } from '@angular/forms';
-import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { CountdownComponent } from 'ngx-countdown';
 
 import { ResponseService } from '../response.service';
@@ -24,6 +23,7 @@ export class ImageScanComponent implements OnInit {
     Impression:  [null, null],
     scan_center_name: [null, null],
     report_type: [null, null],
+    Test_Report:[null]
   };
   closeIcon = true;
   disabledupload=true;
@@ -58,13 +58,16 @@ export class ImageScanComponent implements OnInit {
   closeResult;
   DocumentIdUploaded = '';
   oldDate;
+  reportData;
+  test_Report;
+  test_Report1;
   upArrow: boolean = true;
   downArrow: boolean = true;
   waitForResponse: boolean = false;
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
   unKnownError:boolean = false;
-  tableShow:boolean = false;
+  tableShow: boolean = false;
   isUpdate1:boolean = true;
   isUpdate2:boolean = true;
   isUpdate3:boolean = true;
@@ -97,7 +100,9 @@ export class ImageScanComponent implements OnInit {
     reportDate:[""],
     reportDate_Confidence:[""],
     impression:[""],
-    impression_Confidence:[""]
+    impression_Confidence: [""],
+    haematology: [""]
+    
 
   });
   get formTableControls() {
@@ -120,7 +125,6 @@ export class ImageScanComponent implements OnInit {
   handleReaderLoaded(e) {
     this.upArrow = true;
     this.downArrow = true;
-    console.log(e.target.result)
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
@@ -239,7 +243,7 @@ export class ImageScanComponent implements OnInit {
   }
 
 //Select report type
-  
+
   selectId(event) {
     this.newDocumentInput = false;
     this.DropdownId = false;
@@ -339,6 +343,7 @@ export class ImageScanComponent implements OnInit {
     this.verifyDocumentId = false;
     this.invalidDocumentId = false;
     this.unKnownError = false;
+    this.closeIcon = false;
     this.count();
     //this.error = false;
     this.service.postTestResponse().subscribe(response =>{
@@ -355,10 +360,12 @@ export class ImageScanComponent implements OnInit {
 
         this.service.postResponse(params).subscribe(response => {
           this.result = response.response;
-          //console.log(this.result["Test_Report"]['haematology-edta blood'][0][1])
-          let datas = this.result["Test_Report"]['haematology-edta blood']
+          this.reportData = this.result["Test_Report"]['haematology-edta blood']
+           this.test_Report = this.reportData.map((test) => {
+            return test
+           });
           var date = this.result.Date[0]
-          var newDate = date.split("-").reverse().join("-")
+          var newDate = date.split("/").reverse().join("-")
           this.result.Date[0] = newDate;
           this.formTable.patchValue({
             scanCenterName : this.result.scan_center_name[0],
@@ -368,26 +375,19 @@ export class ImageScanComponent implements OnInit {
             //reportType:this.result.report_type[0],
             //reportType_Confidence:this.result.report_type[1],
             reportDate:this.result.Date[0],
-            //reportDate:"2021-10-12",
-            reportDate_Confidence:this.result.Date[1],
+            reportDate_Confidence: this.result.Date[1],
             //impression:this.result.Impression[0],
             //impression_Confidence:this.result.Impression[1]
           });
-             var changeOld = this.result.Date[0]
-            this.oldDate = changeOld.split("-").reverse().join("-")
-            this.result.Date[0] = this.oldDate;
-            // console.log(this.oldDate)
           var date = this.result.Date[0]
           var newDate = date.split("-").reverse().join("-")
           this.result.Date[0] = newDate;
-          //this.onChangeStringToDate(this.result.Date[0]);
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
           this.getResult = true;
           this.markForReview = true;
           
-          this.closeIcon = false;
           this.averageTime = Math.floor((this.seconds ))
           if(this.seconds <= 0){
             this.waitForResponse = true;
@@ -451,7 +451,8 @@ export class ImageScanComponent implements OnInit {
       Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
       Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
       scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
-      report_type: [this.formTable.get('reportType').value,this.formTable.get('reportType_Confidence').value]
+      report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
+      haematology:this.test_Report
     };
     console.log(this.result)
     const params = {
@@ -519,7 +520,8 @@ export class ImageScanComponent implements OnInit {
       Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
       Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
       scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
-      report_type: [this.formTable.get('reportType').value,this.formTable.get('reportType_Confidence').value]
+      report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
+      haematology:this.test_Report
     };
     const finalOutput = {
       'input':
