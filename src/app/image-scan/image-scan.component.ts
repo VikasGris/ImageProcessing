@@ -1,5 +1,5 @@
 import { Component,Input,OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgControl, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgControl, Validators } from '@angular/forms';
 import { CountdownComponent } from 'ngx-countdown';
 
 import { ResponseService } from '../response.service';
@@ -17,14 +17,26 @@ export class ImageScanComponent implements OnInit {
 //Variables declarations
   base64textString = [];
   listOfDocuments: any = ["Nalan Gastro Centre", "Pathway Diagnostics","Bioline"];
-  result:any = {
-    Patient_Name: [null, null],
-    Date:  [null, null],
-    Impression:  [null, null],
-    scan_center_name: [null, null],
-    report_type: [null, null],
-    Test_Report:[null]
-  };
+  // result:any = {
+  //   Patient_Name: [null, null],
+  //   Date:  [null, null],
+  //   Impression:  [null, null],
+  //   scan_center_name: [null, null],
+  //   report_type: [null, null],
+  //   Test_Report:[null]
+  // };
+  result = {};
+  result__keys =[];
+  result_testreport={};
+  result_imp=[];
+  result_date=null;
+  result_others = {};
+
+  result_date_show:boolean = false;
+  result_imp_show:boolean = false;
+  result_testreport_show:boolean = false;
+  upArrow:boolean = false;
+  downArrow:boolean = false;
   closeIcon = true;
   disabledupload=true;
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
@@ -46,24 +58,22 @@ export class ImageScanComponent implements OnInit {
   failedCount = 0;
   uploadButton:boolean = false;
   responseButton:boolean = false;
-  averageTime =15;
-  seconds = 0;
+  averageTime = 15;
+  seconds = 1;
   averageTime_Index = 0;
-  avgSeconds = 15;
-  inputEnable = false;
+  avgSeconds
   newDocumentInput = false;
   duplicate_browse = false;
   BrowseId='';
   markForReview = false;
   closeResult;
   DocumentIdUploaded = '';
-  oldDate;
   reportData;
   rdta;
+
+ 
   test_Report;
-  test_Report1;
-  upArrow: boolean = true;
-  downArrow: boolean = true;
+  input_Id;
   waitForResponse: boolean = false;
   verifyDocumentId:boolean = false;
   invalidDocumentId:boolean = false;
@@ -89,6 +99,7 @@ export class ImageScanComponent implements OnInit {
     this.formTable.get('reportType').disable();
     this.formTable.get('reportDate').disable();
     this.formTable.get('impression').disable();
+    
   }
 
   formTable = this.formBuilder.group({ 
@@ -102,10 +113,23 @@ export class ImageScanComponent implements OnInit {
     reportDate_Confidence:[""],
     impression:[""],
     impression_Confidence: [""],
-    haematology: [""]
+    heamatology_Confidence: [""],
+    // test_Name: [""],
+    // result: [""],
+    // units:[""],
+    //surgeries: this.formBuilder.array([]),
     
-
   });
+
+  // onAddGroup() {
+  //   const control = new FormGroup({
+  //     test_Name: new FormControl(""),
+  //     result: new FormControl(""),
+  //     units: new FormControl("")
+  //   });
+  //   (<FormArray>this.formTable.get('surgeries')).push(control);
+  // }
+
   get formTableControls() {
     return this.formTable.controls;
   }
@@ -124,44 +148,13 @@ export class ImageScanComponent implements OnInit {
 
 //Store files in array
   handleReaderLoaded(e) {
-    this.upArrow = true;
-    this.downArrow = true;
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
     //console.log(this.base64textString)
-    
-    if (this.base64textString.length ===1) {
-      this.downArrow = false;
-      this.upArrow = false;
-    }
-    // if (this.base64textString.length === 2) {
-    //     if (this.base64textString[0]) {
-    //       this.upArrow = false;
-    //       this.downArrow = true;
-    //       console.log(this.upArrow,this.downArrow)
-    //     }
-    //     if (this.base64textString[1]) {
-    //       this.upArrow = true;
-    //       this.downArrow = false;
-    //       console.log(this.upArrow,this.downArrow)
-    //     }
-      
-    // }
-    // if (this.base64textString.length >= 3) {
-    //   if (this.base64textString[0]) {
-    //       this.upArrow = false;
-    //       this.downArrow = true;
-    //       console.log(this.upArrow,this.downArrow)
-    //     }
-    //     if (this.base64textString.length-1) {
-    //       this.upArrow = true;
-    //       this.downArrow = false;
-    //       console.log(this.upArrow,this.downArrow)
-    //     }
-    // }
-    
   }
+  
+
   onUpImage(event) {
     var id = parseInt(event.path[1]['id']);
     var temp = this.base64textString[id];
@@ -248,6 +241,9 @@ export class ImageScanComponent implements OnInit {
   selectId(event) {
     this.newDocumentInput = false;
     this.DropdownId = false;
+    if (this.form.value.select === 'Nalan Gastro Centre') {
+      
+    }
     if (this.form.value.select !== 'Select Document') {
       if (this.base64textString.length !== 0) {
         this.selectDropdownId = this.form.value.select;
@@ -294,7 +290,7 @@ export class ImageScanComponent implements OnInit {
   }
 
 //Reset form fields and some other fields
-  
+
   onReset() {
     this.error = false;
     this.uploadFileAlert = false;
@@ -305,35 +301,156 @@ export class ImageScanComponent implements OnInit {
     this.invalidDocumentId = false;
     this.unKnownError = false;
     this.largeImage = true;
+    this.upArrow = false;
+    this.downArrow = false;
     this.form.reset();
     this.form.value.select = null;
     this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     this.zoomIcon = false;
-    this.inputEnable = false;
     this.newDocumentInput = false;
     this.markForReview = false;
     this.getResult = false;
     this.base64textString = [];
-    this.result = {
-      Patient_Name: [null, null],
-      Date:  [null, null],
-      Impression:  [null, null],
-      scan_center_name: [null, null],
-      report_type: [null, null],
-    };
+    this.result={};
+    this.result_testreport={};
+    this.result_imp=[];
+    this.result_date=null;
+    this.result_others = {};
+    this.result_date_show = false;
+    this.result_imp_show = false;
+    this.result_testreport_show = false;
+    // this.result = {
+    //   Patient_Name: [null, null],
+    //   Date:  [null, null],
+    //   Impression:  [null, null],
+    //   scan_center_name: [null, null],
+    //   report_type: [null, null],
+    // };
     this.isLoading = false
     this.responseButton = false;
     this.uploadButton = false;
     this.disabledupload = true; 
-    this.formTable.reset();
-    this.formTable.get('scanCenterName').disable();
-    this.formTable.get('patientName').disable();
-    this.formTable.get('reportType').disable();
-    this.formTable.get('reportDate').disable();
-    this.formTable.get('impression').disable();
+    // this.formTable.reset();
+    // this.formTable.get('scanCenterName').disable();
+    // this.formTable.get('patientName').disable();
+    // this.formTable.get('reportType').disable();
+    // this.formTable.get('reportDate').disable();
+    // this.formTable.get('impression').disable();
     this.tableShow = false;
     this.DocumentIdUploaded = "";
   }
+
+  onEdit() {
+    this.form.reset();
+    this.form.value.select = null;
+    this.error = false;
+    this.closeIcon = true;
+    this.largeImage = true;
+    this.upArrow = false;
+    this.downArrow = false;
+    this.duplicate_browse =false;
+    this.uploadFileAlert = false;
+    this.waitForResponse = false;
+    this.DropdownId = false;
+    this.verifyDocumentId = false;
+    this.invalidDocumentId = false;
+    this.unKnownError = false;
+    this.markForReview = false;
+    this.getResult = false;
+    this.result={};
+    this.result_testreport={};
+    this.result_imp=[];
+    this.result_date=null;
+    this.result_others = {};
+    this.result_date_show = false;
+    this.result_imp_show = false;
+    this.result_testreport_show = false;
+    // this.result = {
+    //   Patient_Name: [null, null],
+    //   Date:  [null, null],
+    //   Impression:  [null, null],
+    //   scan_center_name: [null, null],
+    //   report_type: [null, null],
+    // };
+    this.isLoading = false
+    this.responseButton = false;
+    this.uploadButton = false;
+    this.disabledupload = true; 
+    // this.formTable.reset();
+    // this.formTable.get('scanCenterName').disable();
+    // this.formTable.get('patientName').disable();
+    // this.formTable.get('reportType').disable();
+    // this.formTable.get('reportDate').disable();
+    // this.formTable.get('impression').disable();
+    this.tableShow = false;
+    this.DocumentIdUploaded = "";
+  }
+
+  onchangeInput_date(event) {
+    //var key = event.target.attributes.id.value;
+    this.result_date[0]=event.target.value;
+    console.log(this.result_date[0])
+  }
+  onchangeInput_imp(event) {
+    //var key = event.target.attributes.id.value;
+    this.result_imp[0]=event.target.value;
+  }
+  onchangeInput_others(event) {
+    var key = event.target.attributes.id.value;
+    this.result_others[key][0]=event.target.value;
+  }
+
+
+
+  onCreateInput(event) {
+    var key = event.target.attributes.id.value;
+    //var key = event.target.key;
+    //var len  = this.result['Test_Report'][key]
+    this.result_testreport[key].push([-1,["","",""],0])
+  }
+  onchangeInput_0(event) {
+   
+    //var _id = event.target.attributes.id.value;
+    var key = event.target.key;
+    var _id = event.target.row;
+    var value = event.target.value;
+    console.log(this.result_testreport[key][_id][1][0])
+    this.result_testreport[key][_id][1][0] = value;
+    console.log(this.result_testreport[key][_id][1][0])
+    //this.input_Id = value;
+    //console.log(this.input_Id)
+    //console.log(event.target.key)
+    //console.log(event)
+  }
+  onchangeInput_1(event) {
+   
+    //var _id = event.target.attributes.id.value;
+    var key = event.target.key;
+    var _id = event.target.row;
+    var value = event.target.value;
+    console.log(this.result_testreport[key][_id][1][1])
+    this.result_testreport[key][_id][1][1] = value;
+    console.log(this.result_testreport[key][_id][1][1])
+    //this.input_Id = value;
+    //console.log(this.input_Id)
+    //console.log(event.target.key)
+    //console.log(event)
+  }
+  onchangeInput_2(event) {
+   
+    //var _id = event.target.attributes.id.value;
+    var key = event.target.key;
+    var _id = event.target.row;
+    var value = event.target.value;
+    console.log(this.result_testreport[key][_id][1][2])
+    this.result_testreport[key][_id][1][2] = value;
+    console.log(this.result_testreport[key][_id][1][2])
+    //this.input_Id = value;
+    //console.log(this.input_Id)
+    //console.log(event.target.key)
+    //console.log(event)
+  }
+    
 
 //Send request and get Response to show result
   
@@ -346,7 +463,10 @@ export class ImageScanComponent implements OnInit {
     this.invalidDocumentId = false;
     this.unKnownError = false;
     this.closeIcon = false;
+    this.upArrow = true;
+    this.downArrow = true;
     this.count();
+    
     //this.error = false;
     this.service.postTestResponse().subscribe(response =>{
       if (response.code === "success") {
@@ -358,43 +478,67 @@ export class ImageScanComponent implements OnInit {
           '_id': this.selectDropdownId,
           'page': this.base64textString,
         };
+        
         this.DocumentIdUploaded = this.selectDropdownId;
-
         this.service.postResponse(params).subscribe(response => {
-          this.result = response.response;
-          this.reportData = this.result["Test_Report"]['haematology-edta blood']
-          this.rdta = this.result["Test_Report"]
-           this.test_Report = this.reportData.map((test) => {
-            return test
-           });
-          var date = this.result.Date[0]
-          var newDate = date.split("/").reverse().join("-")
-          this.result.Date[0] = newDate;
-          this.formTable.patchValue({
-            scanCenterName : this.result.scan_center_name[0],
-            scanCenterName_Confidence:this.result.scan_center_name[1],
-            patientName:this.result.Patient_Name[0],
-            patientName_Confidence:this.result.Patient_Name[1],
-            //reportType:this.result.report_type[0],
-            //reportType_Confidence:this.result.report_type[1],
-            reportDate:this.result.Date[0],
-            reportDate_Confidence: this.result.Date[1],
-            //impression:this.result.Impression[0],
-            //impression_Confidence:this.result.Impression[1]
-          });
-          var date = this.result.Date[0]
-          var newDate = date.split("-").reverse().join("-")
-          this.result.Date[0] = newDate;
+          //this.result = response.response;
+          //this.reportData = this.result["Test_Report"]['haematology-edta blood']
+          
+          this.result = {};
+          console.log(response.response)
+          this.result__keys = Object.keys(response.response);
+          console.log(this.result__keys)
+          for (var i = 0; i < this.result__keys.length; i++){
+            if (this.result__keys[i] === 'Test_Report') {
+              this.result_testreport_show= true;
+              this.result_testreport= response.response[this.result__keys[i]]
+            }
+            else if (this.result__keys[i] === 'Impression') {
+              this.result_imp_show = true;
+              this.result_imp = response.response[this.result__keys[i]]
+            }
+            else if (this.result__keys[i] === 'Date') {
+              this.result_date_show = true;
+              this.result_date = response.response[this.result__keys[i]]
+            }
+            else {
+              console.log(response.response[this.result__keys[i]])
+              
+              this.result_others[this.result__keys[i]] = response.response[this.result__keys[i]]
+              console.log(this.result_others[this.result__keys[i]])
+            }
+          }
+          //this.rdta = this.result["Test_Report"]
+          //  this.test_Report = this.reportData.map((test) => {
+          //   return test
+          //  });
+          var date = this.result_date[0]
+          this.result_date[0] = date.split("-").reverse().join("-")
+          //this.result.Date[0] = newDate;
+          // this.formTable.patchValue({
+          //   scanCenterName : this.result.scan_center_name[0],
+          //   scanCenterName_Confidence:this.result.scan_center_name[1],
+          //   patientName:this.result.Patient_Name[0],
+          //   patientName_Confidence:this.result.Patient_Name[1],
+          //   //reportType:this.result.report_type[0],
+          //   //reportType_Confidence:this.result.report_type[1],
+          //   reportDate:this.result.Date[0],
+          //   reportDate_Confidence: this.result.Date[1],
+          //   //impression:this.result.Impression[0],
+          //   //impression_Confidence:this.result.Impression[1]
+          //   // heamatology_Confidence:this.test_Report[0][2],
+          //   // test_Name: this.test_Report[0][1][0],
+          //   // result: this.test_Report[0][1][1],
+          //   // units:this.test_Report[0][1][2],
+          // });
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
           this.getResult = true;
           this.markForReview = true;
+          this.averageTime = Math.floor((this.seconds/this.base64textString.length ))
           
-          this.averageTime = Math.floor((this.seconds ))
-          if(this.seconds <= 0){
-            this.waitForResponse = true;
-          }
+          this.waitForResponse=false
           if(this.averageTime < 4){
           this.averageTime = 7
         }
@@ -437,27 +581,69 @@ export class ImageScanComponent implements OnInit {
 //Counter for get response
   
   count() {
-    this.seconds = this.averageTime;
-   const timer = setInterval(() => {
+    this.seconds = this.averageTime * this.base64textString.length;
+    this.waitForResponse = true;
+    const timer = setInterval(() => { 
      this.seconds = this.seconds - 1;
      if (!this.seconds) clearInterval(timer);
    }, 1000);
   };
 
+  test_button() {
+    for (var i = 0; i < this.result__keys.length; i++){
+      if (this.result__keys[i] === 'Test_Report') {
+        this.result[this.result__keys[i]] = this.result_testreport
+      }
+      else if (this.result__keys[i] === 'Impression') {
+        this.result[this.result__keys[i]] =  this.result_imp
+      }
+      else if (this.result__keys[i] === 'Date') {
+        this.result[this.result__keys[i]] = this.result_date
+      }
+      else {
+        // console.log(this.result[this.result__keys[i]])
+        
+        this.result[this.result__keys[i]]=this.result_others[this.result__keys[i]] 
+        //console.log(this.result_others[this.result__keys[i]])
+      }
+    }
+    console.log(this.result)
+
+
+  }
 //Send data to database
   
   onSubmitImage() {
     //this.result.Date[0] = this.oldDate
     this.successAlert = false;
-    this.result = {
-      Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
-      Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
-      Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
-      scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
-      report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
-      haematology:this.test_Report
-    };
-    console.log(this.result)
+    
+    for (var i = 0; i < this.result__keys.length; i++){
+      if (this.result__keys[i] === 'Test_Report') {
+        this.result[this.result__keys[i]] = this.result_testreport
+      }
+      else if (this.result__keys[i] === 'Impression') {
+        this.result[this.result__keys[i]] =  this.result_imp
+      }
+      else if (this.result__keys[i] === 'Date') {
+        this.result[this.result__keys[i]] = this.result_date
+      }
+      else {
+        // console.log(this.result[this.result__keys[i]])
+        
+        this.result[this.result__keys[i]]=this.result_others[this.result__keys[i]] 
+        //console.log(this.result_others[this.result__keys[i]])
+      }
+    }
+    
+    // this.result = {
+    //   Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
+    //   Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
+    //   Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
+    //   scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
+    //   report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
+    //   haematology:this.input_Id
+    // };
+    // console.log(this.result)
     const params = {
       'input':
       {
@@ -473,32 +659,41 @@ export class ImageScanComponent implements OnInit {
       this.success = response;
       if(response.code === "success"){
         this.successAlert = true;
-        this.formTable.reset();
-        this.formTable.get('scanCenterName').disable();
-        this.formTable.get('patientName').disable();
-        this.formTable.get('reportType').disable();
-        this.formTable.get('reportDate').disable();
-        this.formTable.get('impression').disable();
+        // this.formTable.reset();
+        // this.formTable.get('scanCenterName').disable();
+        // this.formTable.get('patientName').disable();
+        // this.formTable.get('reportType').disable();
+        // this.formTable.get('reportDate').disable();
+        // this.formTable.get('impression').disable();
         this.tableShow = false;
         this.failedCount = this.failedCount + 1;
         this.duplicate_browse =false;
         this.largeImage = true;
         this.base64textString = [];
-        this.result = {
-          Patient_Name: [null, null],
-          Date:  [null, null],
-          Impression:  [null, null],
-          scan_center_name: [null, null],
-          report_type: [null, null],
-        };
+        // this.result = {
+        //   Patient_Name: [null, null],
+        //   Date:  [null, null],
+        //   Impression:  [null, null],
+        //   scan_center_name: [null, null],
+        //   report_type: [null, null],
+        // };
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.zoomIcon = false
         this.form.value.select = null;
+        this.result = {};
+        this.result_testreport={};
+        this.result_imp=[];
+        this.result_date=null;
+        this.result_others = {};
+        this.result_date_show = false;
+        this.result_imp_show = false;
+        this.result_testreport_show = false;
         this.getResult = false;
         this.markForReview = false;
         this.uploadButton = false;
         this.disabledupload = true;
         this.newDocumentInput = false;
+        this.waitForResponse = false;
         this.zoom = false;
         this.duplicate_browse = false;
         this.DocumentIdUploaded = "";
@@ -518,14 +713,32 @@ export class ImageScanComponent implements OnInit {
 
     this.successAlert = false;
 
-    this.result = {
-      Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
-      Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
-      Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
-      scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
-      report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
-      haematology:this.test_Report
-    };
+    for (var i = 0; i < this.result__keys.length; i++){
+      if (this.result__keys[i] === 'Test_Report') {
+        this.result[this.result__keys[i]] = this.result_testreport
+      }
+      else if (this.result__keys[i] === 'Impression') {
+        this.result[this.result__keys[i]] =  this.result_imp
+      }
+      else if (this.result__keys[i] === 'Date') {
+        this.result[this.result__keys[i]] = this.result_date
+      }
+      else {
+        // console.log(this.result[this.result__keys[i]])
+        
+        this.result[this.result__keys[i]]=this.result_others[this.result__keys[i]] 
+        //console.log(this.result_others[this.result__keys[i]])
+      }
+    }
+
+    // this.result = {
+    //   Patient_Name: [this.formTable.get('patientName').value,this.formTable.get('patientName_Confidence').value],
+    //   Date:  [this.formTable.get('reportDate').value,this.formTable.get('reportDate_Confidence').value],
+    //   Impression:  [this.formTable.get('impression').value,this.formTable.get('impression_Confidence').value],
+    //   scan_center_name: [this.formTable.get('scanCenterName').value,this.formTable.get('scanCenterName_Confidence').value],
+    //   report_type: [this.formTable.get('reportType').value, this.formTable.get('reportType_Confidence').value],
+    //   haematology:this.test_Report
+    // };
     const finalOutput = {
       'input':
       {
@@ -543,31 +756,40 @@ export class ImageScanComponent implements OnInit {
       if(response.code === "success"){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
-        this.formTable.reset();
-        this.formTable.get('scanCenterName').disable();
-        this.formTable.get('patientName').disable();
-        this.formTable.get('reportType').disable();
-        this.formTable.get('reportDate').disable();
-        this.formTable.get('impression').disable();
+        // this.formTable.reset();
+        // this.formTable.get('scanCenterName').disable();
+        // this.formTable.get('patientName').disable();
+        // this.formTable.get('reportType').disable();
+        // this.formTable.get('reportDate').disable();
+        // this.formTable.get('impression').disable();
         this.tableShow = false;
         this.duplicate_browse =false;
         this.largeImage = true;
         this.base64textString = [];
-        this.result = {
-          Patient_Name: [null, null],
-          Date:  [null, null],
-          Impression:  [null, null],
-          scan_center_name: [null, null],
-          report_type: [null, null],
-        };
+        // this.result = {
+        //   Patient_Name: [null, null],
+        //   Date:  [null, null],
+        //   Impression:  [null, null],
+        //   scan_center_name: [null, null],
+        //   report_type: [null, null],
+        // };
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.zoomIcon = false
         this.form.value.select = null;
         this.getResult = false;
+        this.result = {};
+        this.result_testreport={};
+        this.result_imp=[];
+        this.result_date=null;
+        this.result_others = {};
+        this.result_date_show = false;
+        this.result_imp_show = false;
+        this.result_testreport_show = false;
         this.markForReview = false;
         this.uploadButton = false;
         this.disabledupload = true;
         this.zoom = false;
+        this.waitForResponse = false;
         this.duplicate_browse = false;
         this.DocumentIdUploaded = "";
         this.form.reset();

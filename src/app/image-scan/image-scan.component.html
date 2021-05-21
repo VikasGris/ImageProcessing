@@ -42,15 +42,15 @@
         </div>
     <!-- Show list of images -->
         <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
-            <button class="btn btn-secondary btnAlign btn-md" disabled>Scan</button>
+            <button class="btn btn-secondary btnAlign btn-md" (click) ="onEdit()">Edit</button>
             <button class="btn btn-primary btnAlign btn-md" (click) = "onReset()">Reset</button>
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                     <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
-                    <svg *ngIf="i!=0" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                    <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                         <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                     </svg>
-                    <svg *ngIf="i!=base64textString.length-1" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
                       </svg>
                     <button type="button" class="close" aria-label="Close">
@@ -96,19 +96,24 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "f.select.touched && f.select.invalid"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Document ID Required
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <!-- di = {"uploadFileAlert":[" Please select file to upload",False],
+                        "" }
+                        di["uploadFileAlert"][1]
+                di[key][1]===True
+                di_status=True -->
                 <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please select file to upload
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "waitForResponse"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div *ngIf = "(seconds<=0) && waitForResponse"  class="alert alert-danger alert-dismissible fade show" role="alert">
                     It's taking longer than expected..Please wait
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -141,7 +146,7 @@
             </div>
             <div class="scrollit" id="result">
                 <div class=table-wrapper *ngIf = "tableShow">
-                    <form [formGroup]="formTable">
+                    <!-- <form [formGroup]="formTable">
                         <table class="table tableScroll" style="overflow-y: auto;">
                             <tbody style="overflow-y: auto;">
                             <tr>
@@ -213,13 +218,19 @@
                                     </svg>
                                 </th>
                                 <td class=" text-center" style="vertical-align: middle;">
-                                    <!-- {{result.report_type[1]}} -->
+                                    {{result.report_type[1]}}
                                 </td>
                             </tr>
                             <tr>
                                 <th style="vertical-align: middle;">Report Date</th>
-                                <td 
-                                
+                                <td [ngClass] = "{
+                                    'above85':result.Date[1] >=85,
+                                    'above70':result.Date[1] >=70 &&  result.Date[1]<85,
+                                    'above50':result.Date[1] >=50 && result.Date[1] <70,
+                                    'above30':result.Date[1] >=30 && result.Date[1] <50,
+                                    'below30':result.Date[1] >0 && result.Date[1] <30,
+                                    'zero':result.Date[1] === 0
+                                   }"
                                 id='Date' style="vertical-align: middle;">
                                     <input formControlName = "reportDate" class="form-control" type="date" placeholder="">
                                 </td>
@@ -248,55 +259,176 @@
                                     </svg>
                                 </th>
                                 <td class=" text-center">
-                                    <!-- {{result.Impression[1]}} -->
+                                    {{result.Impression[1]}}
                                 </td>
                             </tr>
+                            
                             <tr>
-                               <th>Test_Report</th> 
+                        <th>Test_Report</th> 
+                        </tr>
+                        </tbody>
+                        </table> 
+                    </form>-->
+                    
+
+                        <table class="table tableScroll" style="overflow-y: auto;">
+                            <tbody style="overflow-y: auto;">
+                            <tr>
+                                <th class="w-25"></th>
+                                <td class="w-65" ></td>
+                                <th class="w-10" style="text-align: center;">C (%)</th>
                             </tr>
-                            
-                            <tr *ngFor = "let report of test_Report;let i = index">
-                                <td>{{i+1}}</td>
-                                <td><input type="text" value={{report[1][0]}} class="form-control"></td>
-                                <td><input type="text" value={{report[1][1]}} class="form-control"></td>
-                                <th><input type="text" value={{report[1][2]}} class="form-control"></th>
-                                <td><input type="text" value={{report[2]}} class="form-control"></td>
-                                <!-- <td>bfkjsbdj</td> -->
-                                <!-- <td><input type="text" formControlName = "haematology_Confidence" class="form-control report"></td> -->
+                            <tr *ngFor = "let item of result_others | keyvalue">
+
+                                <th>{{item.key.split('_').join(' ') | titlecase}}</th>
+                                <td
+                                    style="vertical-align: middle;"
+                                    [ngClass] = "{
+                                        'above85':item.value[1] >=85,
+                                        'above70':item.value[1] >=70 &&  item.value[1]<85,
+                                        'above50':item.value[1] >=50 && item.value[1] <70,
+                                        'above30':item.value[1] >=30 && item.value[1] <50,
+                                        'below30':item.value[1] >0 && item.value[1] <30,
+                                        'zero':item.value[1] === 0
+                                    }" 
+                                   ><input type="text"  
+                                   value={{item.value[0]}} id={{item.key}}
+                                   class="form-control" 
+                                   (change) = "onchangeInput_others($event)"
+                               >
+                                </td>
+                                
+                                <td  class=" text-center" style="vertical-align: middle;">
+                                    {{item.value[1]}}
+                                </td>
+
                             </tr>
-                            
+
+                            <tr *ngIf = "result_date_show">
+                                <th style="vertical-align: middle;">Report Date</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result_date[1] >=85,
+                                    'above70':result_date[1] >=70 &&  result_date[1]<85,
+                                    'above50':result_date[1] >=50 && result_date[1] <70,
+                                    'above30':result_date[1] >=30 && result_date[1] <50,
+                                    'below30':result_date[1] >0 && result_date[1] <30,
+                                    'zero':result_date[1] === 0
+                                   }"
+                                 style="vertical-align: middle;"
+                                 >
+                                <input value = {{result_date[0]}} id='Date'
+                                class="form-control" 
+                                type='date' placeholder="" (change) = "onchangeInput_date($event)">
+                                </td>
+                                
+                                <td class=" text-center" style="vertical-align: middle;">
+                                    {{result_date[1]}}
+                                </td>
+                                
+                            </tr>
+                            <tr *ngIf = "result_imp_show">
+                                <th >Impression</th>
+                                <td 
+                                [ngClass] = "{
+                                    'above85':result_imp[1] >=85,
+                                    'above70':result_imp[1] >=70 &&  result_imp[1]<85,
+                                    'above50':result_imp[1] >=50 && result_imp[1] <70,
+                                    'above30':result_imp[1] >=30 && result_imp[1] <50,
+                                    'below30':result_imp[1] >0 && result_imp[1] <30,
+                                    'zero':result_imp[1] === 0
+                                   }">
+                                <textarea 
+                                value={{result_imp[0]}} 
+                                id='Impression'
+                                class="form-control impression" 
+                                type="text"
+                                (change) = "onchangeInput_imp($event)"
+                                >
+                                </textarea>
+                                </td>
+                                
+                                <td class=" text-center">
+                                    {{result_imp[1]}}
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <table *ngIf = "result_testreport_show" class="table">
+                            <tbody>
+                                <tr class="d-flex">
+                                    <th class="col-1">S.No</th>
+                                    <th class="col-4">Test</th>
+                                    <th class="col-3">Result</th>
+                                    <th class="col-3">Units</th>
+                                    <th class="col-1">C(%)</th>
+                                </tr> 
+                                <p  *ngFor = "let item of result_testreport | keyvalue">
+                                    <tr class="d-flex">
+                                        <th class="col-1"></th>
+                                        <th class="col-5">{{item.key.replace("-"," - ") | titlecase}}</th>
+                                        <th class="col-2"></th>
+                                        <th class="col-3"></th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex">
+                                        <td class="col-1">{{i+1}}</td>
+                                        <td 
+                                            [ngClass] = "{
+                                                'above85':report[2] >=85,
+                                                'above70':report[2] >=70 &&  report[2]<85,
+                                                'above50':report[2] >=50 && report[2] <70,
+                                                'above30':report[2] >=30 && report[2] <50,
+                                                'below30':report[2] >0 && report[2] <30,
+                                                'zero':report[2] === 0
+                                            }"
+                                            class="col-4">
+                                            <input type="text"  
+                                                value={{report[1][0]}} row={{i}} key={{item.key}}
+                                                class="form-control" 
+                                                (change) = "onchangeInput_0($event)"
+                                            >
+                                        </td>
+
+                                        <td 
+                                            [ngClass] = "{
+                                                'above85':report[2] >=85,
+                                                'above70':report[2] >=70 &&  report[2]<85,
+                                                'above50':report[2] >=50 && report[2] <70,
+                                                'above30':report[2] >=30 && report[2] <50,
+                                                'below30':report[2] >0 && report[2] <30,
+                                                'zero':report[2] === 0
+                                            }"
+                                            class="col-3">
+                                            <input type="text"  
+                                            value={{report[1][1]}} row={{i}} key={{item.key}}
+                                            class="form-control"
+                                            (change) = "onchangeInput_1($event)"
+                                            >
+                                        </td>
+
+                                        <td 
+                                        [ngClass] = "{
+                                            'above85':report[2] >=85,
+                                            'above70':report[2] >=70 &&  report[2]<85,
+                                            'above50':report[2] >=50 && report[2] <70,
+                                            'above30':report[2] >=30 && report[2] <50,
+                                            'below30':report[2] >0 && report[2] <30,
+                                            'zero':report[2] === 0
+                                        }"
+                                        class="col-3">
+                                        <input type="text" row={{i}} key={{item.key}}
+                                         value={{report[1][2]}} 
+                                         class="form-control"
+                                         (change) = "onchangeInput_2($event)">
+                                        </td>
+                                        <td class="col-1">{{report[2]}}</td>
+                                    </tr>
+                                    <button class="btn btn-success" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
+                                    </p> 
                             </tbody>
                         </table>
-                    </form>
-                    <table class="table table-hover table-fixed">
-                        <tbody>
-                            <!-- <tr>
-                                <th class="w-5">S.No</th>
-                                <th class="w-35">Test</th>
-                                <th class="w-35">Result</th>
-                                <th class="w-15">Units</th>
-                                <th class="w-10">C(%)</th>
-                            </tr>  -->
-                            <div  *ngFor = "let item of rdta | keyvalue">
-                               
-                                <tr>
-                                    <th class="w-5"></th>
-                                    <th class="w-35">{{item.key}}</th>
-                                    <th class="w-35"></th>
-                                    <th class="w-15"></th>
-                                    <th class="w-10"></th>
-                                </tr>
-                                
-                                <tr *ngFor = "let report of item.value;let i = index">
-                                    <td class="w-5">{{i+1}}</td>
-                                    <td class="w-35"><input type="text" value={{report[1][0]}} class="form-control"></td>
-                                    <td class="w-35"><input type="text" value={{report[1][1]}} class="form-control"></td>
-                                    <td class="w-10"><input type="text" value={{report[1][2]}} class="form-control"></td>
-                                    <td class="w-10">{{report[2]}}</td>
-                                </tr>
-                            </div> 
-                        </tbody>
-                    </table>
                     
                 </div>
             </div>
@@ -312,6 +444,7 @@
             (click)="onSubmitText()"
             style="margin-top:27px"
             [disabled] = "!getResult">Update Database</button>
+            <!-- <button (click) = "test_button()">check</button> -->
             <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 Data strored Successfully!!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
