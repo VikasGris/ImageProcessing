@@ -126,10 +126,16 @@ div.row{
 }
 .table-wrapper {
     width: 100%;
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: auto;
     display:inline-block;
   }
+  .button {
+    position: absolute;
+    bottom: 26px;
+    left: 30%;
+    margin-left: -104.5px; /*104.5px is half of the button's width*/
+}
   svg{
       cursor: pointer;
   }

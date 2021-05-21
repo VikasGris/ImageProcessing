@@ -60,7 +60,7 @@
             </div>
         </div>
     <!-- Report type dropdown and displaying result -->
-        <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12">
+        <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12 button-position">
             <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
             <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
             <div>
@@ -425,7 +425,7 @@
                                         </td>
                                         <td class="col-1">{{report[2]}}</td>
                                     </tr>
-                                    <button class="btn btn-success" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
+                                    <button id={{item.key}} (click) = "onCreateInput($event)">Add</button>
                                     </p> 
                             </tbody>
                         </table>
@@ -433,13 +433,13 @@
                 </div>
             </div>
             <button 
-            class="btn btn-primary" 
+            class="btn btn-primary button" 
             type="submit" 
             (click)="onSubmitImage()" 
             style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
             [disabled] = "!markForReview">Mark for Review</button>
             <button 
-            class="btn btn-primary" 
+            class="btn btn-primary button" 
             type="submit" 
             (click)="onSubmitText()"
             style="margin-top:27px"
