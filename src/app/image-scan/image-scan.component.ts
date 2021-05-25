@@ -483,7 +483,7 @@ export class ImageScanComponent implements OnInit {
         this.service.postResponse(params).subscribe(response => {
           //this.result = response.response;
           //this.reportData = this.result["Test_Report"]['haematology-edta blood']
-          
+          console.log(this.result);
           this.result = {};
           console.log(response.response)
           this.result__keys = Object.keys(response.response);

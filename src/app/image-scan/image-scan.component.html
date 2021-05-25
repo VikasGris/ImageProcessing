@@ -373,7 +373,7 @@
                                         <th class="col-1"></th>
                                     </tr>
                                     <tr *ngFor = "let report of item.value;let i = index" class="d-flex">
-                                        <td class="col-1">{{i+1}}</td>
+                                        <td class="col-1 text-center" style="vertical-align: bottom;">{{i+1}}</td>
                                         <td 
                                             [ngClass] = "{
                                                 'above85':report[2] >=85,
@@ -423,9 +423,9 @@
                                          class="form-control"
                                          (change) = "onchangeInput_2($event)">
                                         </td>
-                                        <td class="col-1">{{report[2]}}</td>
+                                        <td class="col-1 text-center" style="vertical-align: middle;">{{report[2]}}</td>
                                     </tr>
-                                    <button id={{item.key}} (click) = "onCreateInput($event)">Add</button>
+                                    <button class="btn btn-primary" style="background-color: #007bff;" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
                                     </p> 
                             </tbody>
                         </table>

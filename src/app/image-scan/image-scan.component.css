@@ -48,6 +48,12 @@ div.row{
     margin-left: 32px;
     margin-bottom: 15px;
 }
+.btn-primary{
+    border-color: white
+}
+.btn-secondary{
+    border-color: white
+}
 .scanImage {
     border-radius: 4px;
     padding: 3px;
