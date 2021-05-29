@@ -66,7 +66,7 @@
             <div>
                 <form [formGroup]="form" (submit)="onSubmit()" class="mt-3">
                     <label for="">Select Report Type</label>&nbsp;&nbsp;
-                    <select formControlName="select" class="form-control w-auto" (change)="selectId($event)">
+                    <select formControlName="select" class="form-control w-auto" id="dropdown" (change)="selectId($event)">
                         <option>Select Document</option>
                         <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
                     </select> 
@@ -114,7 +114,7 @@
                     </button>
                 </div>
                 <div *ngIf = "(seconds<=0) && waitForResponse"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    It's taking longer than expected..Please wait
+                    It's taking longer than expected.Please wait...!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -146,131 +146,6 @@
             </div>
             <div class="scrollit" id="result">
                 <div class=table-wrapper *ngIf = "tableShow">
-                    <!-- <form [formGroup]="formTable">
-                        <table class="table tableScroll" style="overflow-y: auto;">
-                            <tbody style="overflow-y: auto;">
-                            <tr>
-                                <th class="w-25"></th>
-                                <td class="w-65" ></td>
-                                <th style="vertical-align: middle;"></th>
-                                <th class="w-10" style="text-align: center;">C (%)</th>
-                            </tr>
-                            <tr
-                                 >
-                                <th >Name of the scan centre</th>
-                                <td  [ngClass] = "{
-                                    'above85':result.scan_center_name[1] >=85,
-                                    'above70':result.scan_center_name[1] >=70 &&  result.scan_center_name[1]<85,
-                                    'above50':result.scan_center_name[1] >=50 && result.scan_center_name[1] <70,
-                                    'above30':result.scan_center_name[1] >=30 && result.scan_center_name[1] <50,
-                                    'below30':result.scan_center_name[1] >0 && result.scan_center_name[1] <30,
-                                    'zero':result.scan_center_name[1] === 0
-                                   }"
-                                   id='scan_center_name' style="vertical-align: middle;">
-                                    <input formControlName = "scanCenterName" class="form-control" type="text" >
-                                </td>
-                                <th style="vertical-align: middle;">
-                                    <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput1()" *ngIf = "isUpdate1">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </th>
-                                <td class="text-center" style="vertical-align: middle;">
-                                    {{result.scan_center_name[1]}}
-                                </td>
-                                
-                            </tr>
-                            <tr >
-                                <th >Name of the consultant</th>
-                                <td 
-                                [ngClass] = "{
-                                    'above85':result.Patient_Name[1] >=85,
-                                    'above70':result.Patient_Name[1] >=70 &&  result.Patient_Name[1]<85,
-                                    'above50':result.Patient_Name[1] >=50 && result.Patient_Name[1] <70,
-                                    'above30':result.Patient_Name[1] >=30 && result.Patient_Name[1] <50,
-                                    'below30':result.Patient_Name[1] >0 && result.Patient_Name[1] <30,
-                                    'zero':result.Patient_Name[1] === 0
-                                   }"
-                                   
-                                id='Patient_Name' style="vertical-align: middle;">
-                                    <input formControlName = "patientName" class="form-control" type="text">
-                                </td> 
-                                <th style="vertical-align: middle;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput2()" *ngIf = "isUpdate2">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </th>
-                                <td class=" text-center" style="vertical-align: middle;">
-                                    {{result.Patient_Name[1]}}
-                                </td> 
-                            </tr>
-                            <tr >
-                                <th >Report Type</th>
-                                <td 
-                                id='report_type' style="vertical-align: middle;">
-                                    <input formControlName = "reportType" class="form-control" type="text">
-                                </td>
-                                <th style="vertical-align: middle;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput3()" *ngIf = "isUpdate3">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </th>
-                                <td class=" text-center" style="vertical-align: middle;">
-                                    {{result.report_type[1]}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="vertical-align: middle;">Report Date</th>
-                                <td [ngClass] = "{
-                                    'above85':result.Date[1] >=85,
-                                    'above70':result.Date[1] >=70 &&  result.Date[1]<85,
-                                    'above50':result.Date[1] >=50 && result.Date[1] <70,
-                                    'above30':result.Date[1] >=30 && result.Date[1] <50,
-                                    'below30':result.Date[1] >0 && result.Date[1] <30,
-                                    'zero':result.Date[1] === 0
-                                   }"
-                                id='Date' style="vertical-align: middle;">
-                                    <input formControlName = "reportDate" class="form-control" type="date" placeholder="">
-                                </td>
-                                <th style="vertical-align: middle;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput4()" *ngIf = "isUpdate4">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </th>
-                                <td class=" text-center" style="vertical-align: middle;">
-                                    {{result.Date[1]}}
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <th >Impression</th>
-                                <td 
-                                
-                                id='Impression'>
-                                    <textarea formControlName = "impression" class="form-control impression" type="text"></textarea>
-                                </td>
-                                <th>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" (click) = "openEditableInput5()" *ngIf = "isUpdate5">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </th>
-                                <td class=" text-center">
-                                    {{result.Impression[1]}}
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                        <th>Test_Report</th> 
-                        </tr>
-                        </tbody>
-                        </table> 
-                    </form>-->
-                    
-
                         <table class="table tableScroll" style="overflow-y: auto;">
                             <tbody style="overflow-y: auto;">
                             <tr>
@@ -280,7 +155,7 @@
                             </tr>
                             <tr *ngFor = "let item of result_others | keyvalue">
 
-                                <th>{{item.key.split('_').join(' ') | titlecase}}</th>
+                                <th style="vertical-align: middle;">{{item.key.split('_').join(' ') | titlecase}}</th>
                                 <td
                                     style="vertical-align: middle;"
                                     [ngClass] = "{
@@ -352,10 +227,8 @@
                                     {{result_imp[1]}}
                                 </td>
                             </tr>
-
-
                         </table>
-                        <table *ngIf = "result_testreport_show" class="table">
+                        <table *ngIf = "result_testreport_show" class="table row-border">
                             <tbody>
                                 <tr class="d-flex">
                                     <th class="col-1">S.No</th>
@@ -367,13 +240,16 @@
                                 <p  *ngFor = "let item of result_testreport | keyvalue">
                                     <tr class="d-flex">
                                         <th class="col-1"></th>
-                                        <th class="col-5">{{item.key.replace("-"," - ") | titlecase}}</th>
+                                        <th class="col-5">
+                                            <!-- {{item.key.replace("-"," - ") | titlecase}} -->
+                                            {{item.key.indexOf("_") !== -1 ? item.key.replace("_"," ") : item.key.replace("-"," - ") }}
+                                        </th>
                                         <th class="col-2"></th>
                                         <th class="col-3"></th>
                                         <th class="col-1"></th>
                                     </tr>
-                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex">
-                                        <td class="col-1 text-center" style="vertical-align: bottom;">{{i+1}}</td>
+                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex" style="align-items: center;">
+                                        <td class="col-1 row-border" >{{i+1}}</td>
                                         <td 
                                             [ngClass] = "{
                                                 'above85':report[2] >=85,
@@ -400,7 +276,7 @@
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
                                             }"
-                                            class="col-3">
+                                            class="col-3 row-border">
                                             <input type="text"  
                                             value={{report[1][1]}} row={{i}} key={{item.key}}
                                             class="form-control"
@@ -417,13 +293,13 @@
                                             'below30':report[2] >0 && report[2] <30,
                                             'zero':report[2] === 0
                                         }"
-                                        class="col-3">
+                                        class="col-3 row-border">
                                         <input type="text" row={{i}} key={{item.key}}
                                          value={{report[1][2]}} 
                                          class="form-control"
                                          (change) = "onchangeInput_2($event)">
                                         </td>
-                                        <td class="col-1 text-center" style="vertical-align: middle;">{{report[2]}}</td>
+                                        <td class="col-1 row-border" style="vertical-align: middle;">{{report[2]}}</td>
                                     </tr>
                                     <button class="btn btn-primary" style="background-color: #007bff;" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
                                     </p> 
@@ -435,29 +311,61 @@
             <button 
             class="btn btn-primary button" 
             type="submit" 
-            (click)="onSubmitImage()" 
+            data-toggle="modal" 
+            data-target="#myModal"
             style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
             [disabled] = "!markForReview">Mark for Review</button>
             <button 
             class="btn btn-primary button" 
             type="submit" 
-            (click)="onSubmitText()"
+            data-toggle="modal" 
+            data-target="#myModal1"
             style="margin-top:27px"
             [disabled] = "!getResult">Update Database</button>
-            <!-- <button (click) = "test_button()">check</button> -->
             <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                Data strored Successfully!!
+                Data stored Successfully!!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-            <strong>Error!</strong> Please try again
+            <strong>Error!</strong> Please try again...
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         </div>
-        
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" #closebutton class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" #closebutton id="closeModal"  (click)="onSubmitImage()">Yes</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" #closebutton1 class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" #closebutton1 id="closeModal"  (click)="onSubmitText()">Yes</button>
+            </div>
+          </div>
+        </div>
     </div>
 </body>

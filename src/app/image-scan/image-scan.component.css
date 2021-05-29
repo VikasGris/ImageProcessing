@@ -85,6 +85,7 @@ div.row{
     top: 183px;
     right: 74px;
 }
+
 .zoomInIcon{
     position: absolute;
     top: 65px;
@@ -142,8 +143,8 @@ div.row{
     left: 30%;
     margin-left: -104.5px; /*104.5px is half of the button's width*/
 }
-  svg{
-      cursor: pointer;
+svg{
+    cursor: pointer;
   }
 textarea.impression{
     resize: none;
@@ -153,6 +154,12 @@ textarea.impression{
 }
 textarea.report{
     white-space: nowrap;
+}
+table > input {
+    background-color: brown;
+}
+.row-border{
+    border: none;
 }
 .above85{
     background-color: lightgreen;
@@ -178,6 +185,21 @@ textarea.report{
     background-color: #D8D3D6;
     border-radius: 4px;
 }
+.form-control{
+    background-color: #dee2e6;
+}
+#dropdown{
+    background-color: white;
+}
+input[type=text]:focus{
+    background-color: white;   /* oranges! yey */
+}
+input[type=date]:focus{
+    background-color: white;   /* oranges! yey */
+}
+textarea:focus{
+    background-color: white;   /* oranges! yey */
+  }
 @media only screen and   (min-width: 1200px) and (max-width: 1400px) {
     .zoomCloseIcon{
         position: absolute;
