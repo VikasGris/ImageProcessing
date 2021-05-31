@@ -45,7 +45,7 @@ div.row{
 }
 .btnAlign{
     margin-top: 23px;
-    margin-left: 32px;
+    margin-left: 77px;
     margin-bottom: 15px;
 }
 .btn-primary{
@@ -136,8 +136,20 @@ div.row{
     max-height: 350px;
     overflow-y: auto;
     display:inline-block;
-  }
-  .button {
+}
+tr.border_bottom td {
+    border-bottom: 1px solid #dee2e6;
+}
+tr.border_top td {
+    border-top: 1px solid #dee2e6;
+}
+tr.border_top th {
+    border-top: 1px solid #dee2e6;
+}
+tr.border_bottom th {
+    border-bottom: 1px solid #dee2e6;
+}
+.button {
     position: absolute;
     bottom: 26px;
     left: 30%;
@@ -145,7 +157,12 @@ div.row{
 }
 svg{
     cursor: pointer;
-  }
+    background-color: #007bff;
+    color: white;
+}
+svg:hover{
+    background-color: #0069d9;
+}
 textarea.impression{
     resize: none;
 }
@@ -161,12 +178,18 @@ table > input {
 .row-border{
     border: none;
 }
+/* th {
+    border: none !important; 
+} */
+/* .table>:not(caption)>*>* {
+    padding: 0;
+} */
 .above85{
     background-color: lightgreen;
     border-radius: 4px;
 }
 .above70{
-    background-color:#DBE1F1;
+    background-color:#b3ed6e;
     border-radius: 4px;
 }
 .above50{
@@ -182,11 +205,11 @@ table > input {
     border-radius: 4px;
 }
 .zero{
-    background-color: #D8D3D6;
+    background-color: #bb5f65;
     border-radius: 4px;
 }
 .form-control{
-    background-color: #dee2e6;
+    background-color: #f1f1f1;
 }
 #dropdown{
     background-color: white;
@@ -199,7 +222,14 @@ input[type=date]:focus{
 }
 textarea:focus{
     background-color: white;   /* oranges! yey */
-  }
+}
+
+/* .reset_modal_body{
+    justify-content: center;
+} */
+.footer {
+      justify-content: flex-start;
+}
 @media only screen and   (min-width: 1200px) and (max-width: 1400px) {
     .zoomCloseIcon{
         position: absolute;

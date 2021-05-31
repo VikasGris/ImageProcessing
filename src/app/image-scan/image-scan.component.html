@@ -42,17 +42,23 @@
         </div>
     <!-- Show list of images -->
         <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
-            <button class="btn btn-secondary btnAlign btn-md" (click) ="onEdit()">Edit</button>
-            <button class="btn btn-primary btnAlign btn-md" (click) = "onReset()">Reset</button>
+            <button class="btn btn-danger btnAlign btn-md" data-toggle="modal" 
+            data-target="#myModal2" >Reset</button>
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                     <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
-                    <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                    <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                         <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                    </svg> -->
+                    <svg  *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-square up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                     </svg>
-                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-square down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                    </svg>
+                    <!-- <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
-                      </svg>
+                      </svg> -->
                     <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)" *ngIf = "closeIcon">×</span>
                     </button>
@@ -228,28 +234,28 @@
                                 </td>
                             </tr>
                         </table>
-                        <table *ngIf = "result_testreport_show" class="table row-border">
+                        <br>
+                        <table *ngIf = "result_testreport_show" class="table table-borderless">
                             <tbody>
-                                <tr class="d-flex">
-                                    <th class="col-1">S.No</th>
-                                    <th class="col-4">Test</th>
-                                    <th class="col-3">Result</th>
-                                    <th class="col-3">Units</th>
-                                    <th class="col-1">C(%)</th>
+                                <tr class="d-flex border_bottom border_top" >
+                                    <th class="col-1" style="text-align: center;">S.No</th>
+                                    <th class="col-4" style="text-align: center;">Test</th>
+                                    <th class="col-3" style="text-align: center;">Result</th>
+                                    <th class="col-3" style="text-align: center;">Units</th>
+                                    <th class="col-1" style="text-align: center;">C(%)</th>
                                 </tr> 
-                                <p  *ngFor = "let item of result_testreport | keyvalue">
-                                    <tr class="d-flex">
+                                <div  *ngFor = "let item of result_testreport | keyvalue">
+                                    <tr class="d-flex border_bottom" style="padding: 0%;">
                                         <th class="col-1"></th>
                                         <th class="col-5">
-                                            <!-- {{item.key.replace("-"," - ") | titlecase}} -->
-                                            {{item.key.indexOf("_") !== -1 ? item.key.replace("_"," ") : item.key.replace("-"," - ") }}
+                                            {{item.key.split('_').join(' ') | titlecase }}
                                         </th>
                                         <th class="col-2"></th>
                                         <th class="col-3"></th>
                                         <th class="col-1"></th>
                                     </tr>
-                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex" style="align-items: center;">
-                                        <td class="col-1 row-border" >{{i+1}}</td>
+                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex border_bottom" style="padding: 0%;">
+                                        <td class="col-1" style="padding: 12px;">{{i+1}}</td>
                                         <td 
                                             [ngClass] = "{
                                                 'above85':report[2] >=85,
@@ -266,7 +272,6 @@
                                                 (change) = "onchangeInput_0($event)"
                                             >
                                         </td>
-
                                         <td 
                                             [ngClass] = "{
                                                 'above85':report[2] >=85,
@@ -276,14 +281,13 @@
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
                                             }"
-                                            class="col-3 row-border">
+                                            class="col-3">
                                             <input type="text"  
                                             value={{report[1][1]}} row={{i}} key={{item.key}}
                                             class="form-control"
                                             (change) = "onchangeInput_1($event)"
                                             >
                                         </td>
-
                                         <td 
                                         [ngClass] = "{
                                             'above85':report[2] >=85,
@@ -293,35 +297,35 @@
                                             'below30':report[2] >0 && report[2] <30,
                                             'zero':report[2] === 0
                                         }"
-                                        class="col-3 row-border">
+                                        class="col-3">
                                         <input type="text" row={{i}} key={{item.key}}
                                          value={{report[1][2]}} 
                                          class="form-control"
                                          (change) = "onchangeInput_2($event)">
                                         </td>
-                                        <td class="col-1 row-border" style="vertical-align: middle;">{{report[2]}}</td>
+                                        <td class="col-1" style="padding: 12px;">{{report[2]}}</td>
                                     </tr>
-                                    <button class="btn btn-primary" style="background-color: #007bff;" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
-                                    </p> 
+                                    <button class="btn btn-primary" style="background-color: #007bff;margin: 5px;border-color: white;" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
+                                    <mat-divider></mat-divider>
+                                </div> 
                             </tbody>
                         </table>
-                    
                 </div>
             </div>
             <button 
+            style="margin-left: -60px;"
             class="btn btn-primary button" 
             type="submit" 
             data-toggle="modal" 
             data-target="#myModal"
-            style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
-            [disabled] = "!markForReview">Mark for Review</button>
+            [disabled] = "!markForReview || !tableShow">Mark for Review</button>
             <button 
             class="btn btn-primary button" 
             type="submit" 
             data-toggle="modal" 
             data-target="#myModal1"
-            style="margin-top:27px"
-            [disabled] = "!getResult">Update Database</button>
+            style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
+            [disabled] = "!getResult || !tableShow">Update Database</button>
             <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 Data stored Successfully!!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -347,7 +351,8 @@
               <p>Are you sure you want to proceed?</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" #closebutton id="closeModal"  (click)="onSubmitImage()">Yes</button>
+              <button type="button" class="btn btn-primary" #closebutton id="closeModal"  (click)="onSubmitImage()">Yes</button>
+              <button type="button" #closebutton class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
           </div>
         </div>
@@ -363,7 +368,28 @@
               <p>Are you sure you want to proceed?</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" #closebutton1 id="closeModal"  (click)="onSubmitText()">Yes</button>
+              <button type="button" class="btn btn-primary" #closebutton1 id="closeModal"  (click)="onSubmitText()">Yes</button>
+              <button type="button" #closebutton1 class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" #closebutton2 class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body reset_modal_body">
+              <p>Are you sure you want to proceed?</p>
+              <button type="button" style="margin-left: 128px;margin-right: 10px;" class="btn btn-primary" #closebutton2 id="closeModal"  (click) ="onEdit()">Partial Reset</button>
+              <button type="button" style="border: white;" class="btn btn-danger" #closebutton2 id="closeModal"  (click)="onReset()">Reset</button>
+            </div>
+            <div class="modal-footer footer">
+                <p><b>Note:</b>&nbsp;&nbsp;&nbsp;</p><br>
+                <p><b style="color: #007bff;">Partial Reset : </b>This will delete everything <b>except images.</b></p>
+                <p><b style="color: #dc3545;">Reset : </b>This will delete everything.</p>
             </div>
           </div>
         </div>

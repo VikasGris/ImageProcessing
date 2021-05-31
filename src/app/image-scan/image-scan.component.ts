@@ -1,6 +1,5 @@
 import { Component,OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CountdownComponent } from 'ngx-countdown';
 import { ResponseService } from '../response.service';
 
 
@@ -13,7 +12,7 @@ export class ImageScanComponent implements OnInit {
   @ViewChild('myInput') file;
   @ViewChild('closebutton') closebutton;
   @ViewChild('closebutton1') closebutton1;
-  @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
+  @ViewChild('closebutton2') closebutton2;
     
 //Variables declarations
   base64textString = [];
@@ -50,7 +49,7 @@ export class ImageScanComponent implements OnInit {
   failedCount = 0;
   uploadButton:boolean = false;
   responseButton:boolean = false;
-  averageTime = 15;
+  averageTime = 10;
   seconds = 1;
   averageTime_Index = 0;
   avgSeconds
@@ -117,7 +116,7 @@ export class ImageScanComponent implements OnInit {
     this.closeIcon = true;
     this.uploadFileAlert = false;
     var inputFile = event.target.files;
-    // //console.log(inputFile);
+    console.log(inputFile);
     for (var i = 0; i < inputFile.length; i++){
        if (inputFile[i]) {
         const reader = new FileReader();
@@ -132,20 +131,19 @@ export class ImageScanComponent implements OnInit {
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.zoomIcon = true;
-    //console.log(this.base64textString)
+    console.log(this.base64textString)
   }
   
 
   onUpImage(event) {
-    var id = parseInt(event.path[1]['id']);
+    var id = parseInt(event.target.attributes[7].value);
     var temp = this.base64textString[id];
     this.base64textString[id] = this.base64textString[id - 1];
     this.base64textString[id - 1] = temp
   }
 
   onDownImage(event) {
-    var id = parseInt(event.path[1]['id']);
-    //console.log(typeof(id))
+    var id = parseInt(event.target.attributes[7].value);
     var temp = this.base64textString[id];
     this.base64textString[id] = this.base64textString[id + 1];
     this.base64textString[id + 1] = temp
@@ -273,6 +271,7 @@ export class ImageScanComponent implements OnInit {
 //Reset form fields and some other fields
 
   onReset() {
+    this.closebutton2.nativeElement.click();
     this.error = false;
     this.uploadFileAlert = false;
     this.waitForResponse = false;
@@ -309,6 +308,7 @@ export class ImageScanComponent implements OnInit {
   }
 
   onEdit() {
+    this.closebutton2.nativeElement.click();
     this.form.reset();
     this.form.value.select = null;
     this.error = false;
@@ -339,6 +339,11 @@ export class ImageScanComponent implements OnInit {
     this.disabledupload = true; 
     this.tableShow = false;
     this.DocumentIdUploaded = "";
+    if (this.tableShow) {
+      console.log(this.tableShow)
+      this.getResult = false;
+      this.markForReview = false;
+    }
   }
 
   onchangeInput_date(event) {
@@ -350,6 +355,7 @@ export class ImageScanComponent implements OnInit {
   }
   onchangeInput_others(event) {
     var key = event.target.attributes.id.value;
+    var value = event.target.value;
     this.result_others[key][0]=event.target.value;
   }
 
@@ -384,6 +390,7 @@ export class ImageScanComponent implements OnInit {
   onSubmit() {
     this.error = false;
     this.largeImage = false;
+    this.zoom = false;
     this.duplicate_browse =true;
     this.tableShow = true;
     this.verifyDocumentId = false;
@@ -393,6 +400,8 @@ export class ImageScanComponent implements OnInit {
     this.upArrow = true;
     this.downArrow = true;
     this.count();
+    console.log("Before")
+    console.log(this.result_testreport,this.result_date,this.result_imp,this.result_others)
     this.service.postTestResponse().subscribe(response =>{
       if (response.code === "success") {
         this.uploadButton = true;
@@ -403,11 +412,18 @@ export class ImageScanComponent implements OnInit {
           '_id': this.selectDropdownId,
           'page': this.base64textString,
         };
-        
         this.DocumentIdUploaded = this.selectDropdownId;
         this.service.postResponse(params).subscribe(response => {
           //console.log(response);
+          this.result_testreport = {};
+          this.result_date = [];
+          this.result_imp = [];
+          this.result_others = {};
           this.result = {};
+          this.result__keys = [];
+          this.result_testreport_show= false;
+          this.result_imp_show = false;
+          this.result_date_show = false;
           //console.log(response.response)
           this.result__keys = Object.keys(response.response);
           ////console.log(this.result__keys)
@@ -428,7 +444,9 @@ export class ImageScanComponent implements OnInit {
               this.result_others[this.result__keys[i]] = response.response[this.result__keys[i]]
             }
           }
-          ////console.log(this.result_others)
+          console.log("After")
+          console.log(this.result_testreport,this.result_date,this.result_imp,this.result_others)
+          console.log(this.result_others)
           var date = this.result_date[0]
           this.result_date[0] = date.split("-").reverse().join("-")
           this.isLoading = false;
@@ -471,7 +489,6 @@ export class ImageScanComponent implements OnInit {
       
     },(error) =>{
       this.error = true;
-        
     })
   }
 
@@ -509,6 +526,8 @@ export class ImageScanComponent implements OnInit {
   
   public onSubmitImage() {
     this.successAlert = false;
+    this.getResult = false;
+    this.markForReview = false;
     for (var i = 0; i < this.result__keys.length; i++){
       if (this.result__keys[i] === 'Test_Report') {
         this.result[this.result__keys[i]] = this.result_testreport
