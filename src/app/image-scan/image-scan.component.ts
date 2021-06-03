@@ -25,6 +25,7 @@ export class ImageScanComponent implements OnInit {
   result_date:any[]=[];
   result_others = {};
   showFileName: boolean = false;
+  noOfFilesShow: boolean = true;
   result_date_show:boolean = false;
   result_imp_show:boolean = false;
   result_testreport_show:boolean = false;
@@ -182,26 +183,30 @@ export class ImageScanComponent implements OnInit {
 //Image zoom funtion
   onClickZoom(){
     this.zoom = true;
-    if(this.largeImage===true){
-      this.largeImage = false;
-      this.BrowseId='';
-    }
-    else if (this.duplicate_browse===true) {
-      this.duplicate_browse=false;
-      this.BrowseId='disabled';
-    }
+    this.noOfFilesShow = false;
+    this.largeImage = false;
+    // if(this.largeImage===true){
+    //   this.largeImage = false;
+    //   this.BrowseId='';
+    // }
+    // else if (this.duplicate_browse===true) {
+    //   this.duplicate_browse=false;
+    //   this.BrowseId='disabled';
+    // }
   }
 
 //Image zoomout function
   
   onZoomOut(i,event){
     this.zoom = false;
-    if(this.BrowseId==='disabled'){
-      this.duplicate_browse=true;
-    }
-    else{
-      this.largeImage = true;
-    }
+    this.noOfFilesShow = true;
+    this.largeImage = true;
+    // if(this.BrowseId==='disabled'){
+    //   this.duplicate_browse=true;
+    // }
+    // else{
+    //   this.largeImage = true;
+    // }
   }
 
 //Select report type
