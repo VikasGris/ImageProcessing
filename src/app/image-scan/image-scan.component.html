@@ -1,59 +1,50 @@
 <body>
     <div class="row">
-    <!-- Show image larger and Zoom function -->
+        <!-- Show image larger and Zoom function -->
         <div class="col-md-5 col-lg-5 col-xs-12">
             <form [formGroup]="form" (submit)="onSubmit()" class="form">
-                <input 
-                    #myInput
-                    *ngIf = "largeImage"
+                <input #myInput *ngIf="largeImage" class="file" title="" type="file" name="file" id="file" (change)="onFileChange($event)" formControlName="files" accept=".png, .jpg, .jpeg" multiple>
+                <label for="file" id="choose_file" style="cursor: pointer;">Choose file</label>
+                <span style="margin-top: 6px;margin-left: 10px;" (mouseover)="fileNameShow()" (mouseout)="fileNameNotShow()"> {{base64textString.length}} files</span>
+                <div class="card" *ngIf="showFileName">
+                    <p *ngFor="let fileName of fileNames">
+                        {{fileName}}
+                    </p>
+                </div>
+                <!-- <input
                     class="file"
                     type="file" 
                     name="file" 
-                    id="file" 
-                    (change)="onFileChange($event)" 
-                    formControlName="files" 
-                    accept=".png, .jpg, .jpeg, .pdf" width="50%"
-                    multiple
-                >
-                <input
-                    class="file"
-                    type="file" 
-                    name="file" 
-                    id="file" 
+                    id="file1" 
                     *ngIf = "duplicate_browse"
                     type="file" 
-                    accept=".png, .jpg, .jpeg, .pdf" width="50%"
+                    accept=".png, .jpg, .jpeg" width="50%"
                     disabled
-                >
+                > -->
             </form>
-            <div *ngIf = "zoom" class="zoom">
+            <div *ngIf="zoom" class="zoom">
                 <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" style="display: inline-block;position: relative;">
-                <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
+                <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click)="onZoomOut(i,$event)" style="cursor: pointer;">×</span>
             </div>
             <div class="image" id="image" [style.display]="zoom ? 'none' : 'inline-block'">
                 <img class="large_image img-responsive" src={{image_view}} style="display: inline-block;position: relative;">
-                <i-bs 
-                    name="zoom-in"
-                    *ngIf = "zoomIcon"
-                    width="40"
-                    height="40" style="cursor: pointer;" (click)= "onClickZoom()"  class="zoomInIcon">
+                <i-bs name="zoom-in" *ngIf="zoomIcon" width="40" height="40" style="cursor: pointer;" (click)="onClickZoom()" class="zoomInIcon">
                 </i-bs>
             </div>
         </div>
-    <!-- Show list of images -->
+        <!-- Show list of images -->
         <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
-            <button class="btn btn-danger btnAlign btn-md" data-toggle="modal" 
-            data-target="#myModal2" >Reset</button>
+            <button class="btn btn-danger btnAlign btn-md" data-toggle="modal" data-target="#myModal2">Reset</button>
             <div class="image-container card1" id="image1">
                 <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
-                    <img class="scanImage"  id = {{i}} src={{item}} alt="" (click) = "onClick($event)">
+                    <img class="scanImage" id={i}} src={{item}} alt="" (click)="onClick($event)">
                     <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                         <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                     </svg> -->
-                    <svg  *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-square up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                    <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-square up_arrow" viewBox="0 0 16 16" (click)="onUpImage($event)">
                         <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                     </svg>
-                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-square down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-square down_arrow" viewBox="0 0 16 16" (click)="onDownImage($event)">
                         <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
                     </svg>
                     <!-- <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
@@ -65,7 +56,7 @@
                 </div>
             </div>
         </div>
-    <!-- Report type dropdown and displaying result -->
+        <!-- Report type dropdown and displaying result -->
         <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12 button-position">
             <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
             <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
@@ -73,38 +64,32 @@
                 <form [formGroup]="form" (submit)="onSubmit()" class="mt-3">
                     <label for="">Select Report Type</label>&nbsp;&nbsp;
                     <select formControlName="select" class="form-control w-auto" id="dropdown" (change)="selectId($event)">
-                        <option>Select Document</option>
-                        <option *ngFor="let listOfDocument of listOfDocuments">{{listOfDocument}}</option>
-                    </select> 
-                    <button 
-                        *ngIf = "!uploadButton"
-                        class="btn btn-primary upload" 
-                        [disabled]='disabledupload===true' 
-                        type="submit" 
-                        style="margin-top: 10px;margin-left: 26px;">Upload
+                        <option [disabled]='Select_document_disabled' [hidden]="Select_document_disabled" [selected]="!Select_document_disabled" >Select Document</option>                        
+                        <option *ngFor="let listOfDocument of listOfDocuments" >{{listOfDocument}}</option>
+                    </select>
+                    <button *ngIf="!uploadButton" class="btn btn-primary upload" [disabled]='disabledupload' type="submit" style="margin-top: 10px;margin-left: 26px;">Upload
                     </button>
-                    <button *ngIf = "responseButton" class="btn btn-primary ml-2" type="button"  nbButton
-                        status="primary" >    
+                    <button *ngIf="responseButton" class="btn btn-primary ml-2" type="button" nbButton status="primary">    
                         <span class="text-lowercase"> {{ seconds}}s</span>&nbsp;&nbsp;Estimated time
                     </button>
                     <div class="form-inline mb-2" style="margin-left: 144px;">
-                        <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf = "newDocumentInput" (change) = "onChangeReport($event)">
-                    </div>  
+                        <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf="newDocumentInput" (change)="onChangeReport($event)">
+                    </div>
                 </form>
                 <div class="text-center">
                     <div *ngIf='isLoading' class="spinner-border text-success text-center inline-block" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div *ngIf = "error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Server can't respond please contact your admin
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "f.select.touched && f.select.invalid" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div *ngIf="f.select.touched && f.select.invalid" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Document ID Required
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -113,105 +98,92 @@
                         di["uploadFileAlert"][1]
                 di[key][1]===True
                 di_status=True -->
-                <div *ngIf = "uploadFileAlert"  class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div *ngIf="uploadFileAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please select file to upload
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "(seconds<=0) && waitForResponse"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    It's taking longer than expected.Please wait...!
+                <div *ngIf="(seconds<=0) && waitForResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    It's taking longer than expected.Please wait...
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "DropdownId"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Please select document ID
+                <div *ngIf="DropdownId" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Please select a valid report type.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "verifyDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Please verify the report type
+                <div *ngIf="verifyDocumentId" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Please verify the report type.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "invalidDocumentId"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Document ID is invalid
+                <div *ngIf="invalidDocumentId" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Invalid report type.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf = "unKnownError"  class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Unknown Error
+                <div *ngIf="unKnownError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    An unexpected error occurred. Contact your system administrator.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             </div>
             <div class="scrollit" id="result">
-                <div class=table-wrapper *ngIf = "tableShow">
-                        <table class="table tableScroll" style="overflow-y: auto;">
-                            <tbody style="overflow-y: auto;">
+                <div class=table-wrapper *ngIf="tableShow">
+                    <table class="table tableScroll" style="overflow-y: auto;">
+                        <tbody style="overflow-y: auto;">
                             <tr>
                                 <th class="w-25"></th>
-                                <td class="w-65" ></td>
+                                <td class="w-65"></td>
                                 <th class="w-10" style="text-align: center;">C (%)</th>
                             </tr>
-                            <tr *ngFor = "let item of result_others | keyvalue">
+                            <tr *ngFor="let item of result_others | keyvalue">
 
                                 <th style="vertical-align: middle;">{{item.key.split('_').join(' ') | titlecase}}</th>
-                                <td
-                                    style="vertical-align: middle;"
-                                    [ngClass] = "{
+                                <td style="vertical-align: middle;" [ngClass]="{
                                         'above85':item.value[1] >=85,
                                         'above70':item.value[1] >=70 &&  item.value[1]<85,
                                         'above50':item.value[1] >=50 && item.value[1] <70,
                                         'above30':item.value[1] >=30 && item.value[1] <50,
                                         'below30':item.value[1] >0 && item.value[1] <30,
                                         'zero':item.value[1] === 0
-                                    }" 
-                                   ><input type="text"  
-                                   value={{item.value[0]}} id={{item.key}}
-                                   class="form-control" 
-                                   (change) = "onchangeInput_others($event)"
-                               >
+                                    }"><input type="text" value={{item.value[0]}} id={{item.key}} class="form-control" (change)="onchangeInput_others($event)">
                                 </td>
-                                
-                                <td  class=" text-center" style="vertical-align: middle;">
+
+                                <td class=" text-center" style="vertical-align: middle;">
                                     {{item.value[1]}}
                                 </td>
 
                             </tr>
 
-                            <tr *ngIf = "result_date_show">
+                            <tr *ngIf="result_date_show">
                                 <th style="vertical-align: middle;">Report Date</th>
-                                <td 
-                                [ngClass] = "{
+                                <td [ngClass]="{
                                     'above85':result_date[1] >=85,
                                     'above70':result_date[1] >=70 &&  result_date[1]<85,
                                     'above50':result_date[1] >=50 && result_date[1] <70,
                                     'above30':result_date[1] >=30 && result_date[1] <50,
                                     'below30':result_date[1] >0 && result_date[1] <30,
                                     'zero':result_date[1] === 0
-                                   }"
-                                 style="vertical-align: middle;"
-                                 >
-                                <input value = {{result_date[0]}} id='Date'
-                                class="form-control" 
-                                type='date' placeholder="" (change) = "onchangeInput_date($event)">
+                                   }" style="vertical-align: middle;">
+                                    <input value={ {result_date[0]}} id='Date' class="form-control" type='date' placeholder="" (change)="onchangeInput_date($event)">
                                 </td>
-                                
+
                                 <td class=" text-center" style="vertical-align: middle;">
                                     {{result_date[1]}}
                                 </td>
-                                
+
                             </tr>
-                            <tr *ngIf = "result_imp_show">
-                                <th >Impression</th>
-                                <td 
-                                [ngClass] = "{
+                            <tr *ngIf="result_imp_show">
+                                <th>Impression</th>
+                                <td [ngClass]="{
                                     'above85':result_imp[1] >=85,
                                     'above70':result_imp[1] >=70 &&  result_imp[1]<85,
                                     'above50':result_imp[1] >=50 && result_imp[1] <70,
@@ -219,179 +191,144 @@
                                     'below30':result_imp[1] >0 && result_imp[1] <30,
                                     'zero':result_imp[1] === 0
                                    }">
-                                <textarea 
-                                value={{result_imp[0]}} 
-                                id='Impression'
-                                class="form-control impression" 
-                                type="text"
-                                (change) = "onchangeInput_imp($event)"
-                                >
+                                    <textarea value={{result_imp[0]}} id='Impression' class="form-control impression" type="text" (change)="onchangeInput_imp($event)">
                                 </textarea>
                                 </td>
-                                
+
                                 <td class=" text-center">
                                     {{result_imp[1]}}
                                 </td>
                             </tr>
-                        </table>
-                        <br>
-                        <table *ngIf = "result_testreport_show" class="table table-borderless">
-                            <tbody>
-                                <tr class="d-flex border_bottom border_top" >
-                                    <th class="col-1" style="text-align: center;">S.No</th>
-                                    <th class="col-4" style="text-align: center;">Test</th>
-                                    <th class="col-3" style="text-align: center;">Result</th>
-                                    <th class="col-3" style="text-align: center;">Units</th>
-                                    <th class="col-1" style="text-align: center;">C(%)</th>
-                                </tr> 
-                                <div  *ngFor = "let item of result_testreport | keyvalue">
-                                    <tr class="d-flex border_bottom" style="padding: 0%;">
-                                        <th class="col-1"></th>
-                                        <th class="col-5">
-                                            {{item.key.split('_').join(' ') | titlecase }}
-                                        </th>
-                                        <th class="col-2"></th>
-                                        <th class="col-3"></th>
-                                        <th class="col-1"></th>
-                                    </tr>
-                                    <tr *ngFor = "let report of item.value;let i = index" class="d-flex border_bottom" style="padding: 0%;">
-                                        <td class="col-1" style="padding: 12px;">{{i+1}}</td>
-                                        <td 
-                                            [ngClass] = "{
+                    </table>
+                    <br>
+                    <table *ngIf="result_testreport_show" class="table table-borderless">
+                        <tbody>
+                            <tr class="d-flex border_bottom border_top">
+                                <th class="col-1" style="text-align: center;">S.No</th>
+                                <th class="col-4" style="text-align: center;">Test</th>
+                                <th class="col-3" style="text-align: center;">Result</th>
+                                <th class="col-3" style="text-align: center;">Units</th>
+                                <th class="col-1" style="text-align: center;">C(%)</th>
+                            </tr>
+                            <div *ngFor="let item of result_testreport | keyvalue">
+                                <tr class="d-flex border_bottom" style="padding: 0%;">
+                                    <th class="col-1"></th>
+                                    <th class="col-5">
+                                        {{item.key.split('_').join(' ') | titlecase }}
+                                    </th>
+                                    <th class="col-2"></th>
+                                    <th class="col-3"></th>
+                                    <th class="col-1"></th>
+                                </tr>
+                                <tr *ngFor="let report of item.value;let i = index" class="d-flex border_bottom" style="padding: 0%;">
+                                    <td class="col-1" style="padding: 12px;">{{i+1}}</td>
+                                    <td [ngClass]="{
                                                 'above85':report[2] >=85,
                                                 'above70':report[2] >=70 &&  report[2]<85,
                                                 'above50':report[2] >=50 && report[2] <70,
                                                 'above30':report[2] >=30 && report[2] <50,
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
-                                            }"
-                                            class="col-4">
-                                            <input type="text"  
-                                                value={{report[1][0]}} row={{i}} key={{item.key}}
-                                                class="form-control" 
-                                                (change) = "onchangeInput_0($event)"
-                                            >
-                                        </td>
-                                        <td 
-                                            [ngClass] = "{
+                                            }" class="col-4">
+                                        <input type="text" value={{report[1][0]}} row={{i}} key={{item.key}} class="form-control" (change)="onchangeInput_0($event)">
+                                    </td>
+                                    <td [ngClass]="{
                                                 'above85':report[2] >=85,
                                                 'above70':report[2] >=70 &&  report[2]<85,
                                                 'above50':report[2] >=50 && report[2] <70,
                                                 'above30':report[2] >=30 && report[2] <50,
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
-                                            }"
-                                            class="col-3">
-                                            <input type="text"  
-                                            value={{report[1][1]}} row={{i}} key={{item.key}}
-                                            class="form-control"
-                                            (change) = "onchangeInput_1($event)"
-                                            >
-                                        </td>
-                                        <td 
-                                        [ngClass] = "{
+                                            }" class="col-3">
+                                        <input type="text" value={{report[1][1]}} row={{i}} key={{item.key}} class="form-control" (change)="onchangeInput_1($event)">
+                                    </td>
+                                    <td [ngClass]="{
                                             'above85':report[2] >=85,
                                             'above70':report[2] >=70 &&  report[2]<85,
                                             'above50':report[2] >=50 && report[2] <70,
                                             'above30':report[2] >=30 && report[2] <50,
                                             'below30':report[2] >0 && report[2] <30,
                                             'zero':report[2] === 0
-                                        }"
-                                        class="col-3">
-                                        <input type="text" row={{i}} key={{item.key}}
-                                         value={{report[1][2]}} 
-                                         class="form-control"
-                                         (change) = "onchangeInput_2($event)">
-                                        </td>
-                                        <td class="col-1" style="padding: 12px;">{{report[2]}}</td>
-                                    </tr>
-                                    <button class="btn btn-primary" style="background-color: #007bff;margin: 5px;border-color: white;" id={{item.key}} (click) = "onCreateInput($event)">Add</button>
-                                    <mat-divider></mat-divider>
-                                </div> 
-                            </tbody>
-                        </table>
+                                        }" class="col-3">
+                                        <input type="text" row={{i}} key={{item.key}} value={{report[1][2]}} class="form-control" (change)="onchangeInput_2($event)">
+                                    </td>
+                                    <td class="col-1" style="padding: 12px;">{{report[2]}}</td>
+                                </tr>
+                                <button class="btn btn-primary" style="background-color: #007bff;margin: 5px;border-color: white;" id={{item.key}} (click)="onCreateInput($event)">Add</button>
+                                <mat-divider></mat-divider>
+                            </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <button 
-            style="margin-left: -60px;"
-            class="btn btn-primary button" 
-            type="submit" 
-            data-toggle="modal" 
-            data-target="#myModal"
-            [disabled] = "!markForReview || !tableShow">Mark for Review</button>
-            <button 
-            class="btn btn-primary button" 
-            type="submit" 
-            data-toggle="modal" 
-            data-target="#myModal1"
-            style="margin-right: 10px;margin-left: 123px;margin-top: 27px;"
-            [disabled] = "!getResult || !tableShow">Update Database</button>
+            <button style="margin-left: -60px;" class="btn btn-primary button" type="submit" data-toggle="modal" data-target="#myModal" [disabled]="!markForReview || !tableShow">Mark for Review</button>
+            <button class="btn btn-primary button" type="submit" data-toggle="modal" data-target="#myModal1" style="margin-right: 10px;margin-left: 123px;margin-top: 27px;" [disabled]="!getResult || !tableShow">Update Database</button>
             <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 Data stored Successfully!!
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </div>
-        <div *ngIf = "errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-            <strong>Error!</strong> Please try again...
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            </div>
+            <div *ngIf="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                <strong>Error!</strong> Please try again...
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" #closebutton class="close" data-dismiss="modal">&times;</button>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" #closebutton class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" #closebutton id="closeModal" (click)="onSubmitImage()">Yes</button>
+                    <button type="button" #closebutton class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
             </div>
-            <div class="modal-body">
-              <p>Are you sure you want to proceed?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" #closebutton id="closeModal"  (click)="onSubmitImage()">Yes</button>
-              <button type="button" #closebutton class="btn btn-danger" data-dismiss="modal">No</button>
-            </div>
-          </div>
         </div>
     </div>
     <div class="modal fade" id="myModal1" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" #closebutton1 class="close" data-dismiss="modal">&times;</button>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" #closebutton1 class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" #closebutton1 id="closeModal" (click)="onSubmitText()">Yes</button>
+                    <button type="button" #closebutton1 class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
             </div>
-            <div class="modal-body">
-              <p>Are you sure you want to proceed?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" #closebutton1 id="closeModal"  (click)="onSubmitText()">Yes</button>
-              <button type="button" #closebutton1 class="btn btn-danger" data-dismiss="modal">No</button>
-            </div>
-          </div>
         </div>
     </div>
     <div class="modal fade" id="myModal2" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" #closebutton2 class="close" data-dismiss="modal">&times;</button>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" #closebutton2 class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body reset_modal_body">
+                    <p>Are you sure you want to proceed?</p>
+                    <button type="button" style="margin-left: 128px;margin-right: 10px;" class="btn btn-primary" #closebutton2 id="closeModal" (click)="onEdit()">Partial Reset</button>
+                    <button type="button" style="border: white;" class="btn btn-danger" #closebutton2 id="closeModal" (click)="onReset()">Reset</button>
+                </div>
+                <div class="modal-footer footer">
+                    <p><b>Note:</b>&nbsp;&nbsp;&nbsp;</p><br>
+                    <p><b style="color: #007bff;">Partial Reset : </b>This will delete everything <b>except images.</b></p>
+                    <p><b style="color: #dc3545;">Reset : </b>This will delete everything.</p>
+                </div>
             </div>
-            <div class="modal-body reset_modal_body">
-              <p>Are you sure you want to proceed?</p>
-              <button type="button" style="margin-left: 128px;margin-right: 10px;" class="btn btn-primary" #closebutton2 id="closeModal"  (click) ="onEdit()">Partial Reset</button>
-              <button type="button" style="border: white;" class="btn btn-danger" #closebutton2 id="closeModal"  (click)="onReset()">Reset</button>
-            </div>
-            <div class="modal-footer footer">
-                <p><b>Note:</b>&nbsp;&nbsp;&nbsp;</p><br>
-                <p><b style="color: #007bff;">Partial Reset : </b>This will delete everything <b>except images.</b></p>
-                <p><b style="color: #dc3545;">Reset : </b>This will delete everything.</p>
-            </div>
-          </div>
         </div>
     </div>
 </body>

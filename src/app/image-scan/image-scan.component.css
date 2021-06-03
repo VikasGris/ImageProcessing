@@ -1,13 +1,35 @@
-body{
+body {
     overflow: hidden;
 }
-div.row{
+
+#file {
+    display: none;
+}
+
+#choose_file {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    border-radius: 2px;
+    margin-left: 15px;
+    margin-top: 6px;
+    width: 100px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.row {
     height: 646px;
 }
-.table td, .table th{
+
+.table td,
+.table th {
     padding: 5px;
 }
-.image{
+
+.image {
     background-color: rgba(230, 230, 243, 0.986);
     width: 540px;
     height: 554px;
@@ -15,85 +37,103 @@ div.row{
     margin-left: 10px;
     margin-top: 32px;
 }
-.form{
+
+.form {
     display: flex;
 }
-.mt-3{
+
+.mt-3 {
     margin-top: 1.2rem!important;
 }
-.smallScanCard{
+
+.smallScanCard {
     height: 600px;
     margin-left: -20px;
 }
-.form-control{
+
+.form-control {
     display: inline-block;
 }
-.file{
+
+.file {
     margin-left: 30px;
     margin-top: 6px;
 }
-.mt-2, .my-2 {
+
+.mt-2,
+.my-2 {
     margin-top: 0.9rem!important;
 }
-.upload{
+
+.upload {
     margin-left: 20px;
     margin-bottom: 15px;
 }
-.image-container{
+
+.image-container {
     margin-top: 10px;
     margin-left: 20px;
 }
-.btnAlign{
+
+.btnAlign {
     margin-top: 23px;
     margin-left: 77px;
     margin-bottom: 15px;
 }
-.btn-primary{
+
+.btn-primary {
     border-color: white
 }
-.btn-secondary{
+
+.btn-secondary {
     border-color: white
 }
+
 .scanImage {
     border-radius: 4px;
     padding: 3px;
-    margin:3px;
+    margin: 3px;
     width: 160px;
     height: 210px;
     margin-top: 8px;
 }
-.zoom{
+
+.zoom {
     background-color: black;
     width: 778px;
     height: 646px;
     margin-left: 10px;
 }
-.closeIcon{
+
+.closeIcon {
     position: absolute;
     top: -6px;
     right: -2px;
     font-weight: bold;
     font-size: xx-large;
 }
-.up_arrow{
+
+.up_arrow {
     position: absolute;
-    top: 21px;
-    right: 74px;
-}
-.down_arrow{
-    position: absolute;
-    top: 183px;
+    top: 16px;
     right: 74px;
 }
 
-.zoomInIcon{
+.down_arrow {
+    position: absolute;
+    top: 185px;
+    right: 74px;
+}
+
+.zoomInIcon {
     position: absolute;
     top: 65px;
     right: 22px;
     font-weight: bold;
     font-size: xx-large;
 }
-.zoomCloseIcon{
+
+.zoomCloseIcon {
     position: absolute;
     top: -23px;
     right: -224px;
@@ -102,7 +142,8 @@ div.row{
     font-size: xxx-large;
     z-index: 1;
 }
-.ZoomImage{
+
+.ZoomImage {
     width: 769px;
     height: 638px;
     margin-top: 4px;
@@ -112,6 +153,7 @@ div.row{
     display: inline-block;
     z-index: 1;
 }
+
 .large_image {
     border-radius: 4px;
     padding: 3px;
@@ -120,10 +162,12 @@ div.row{
     margin-top: 0px;
     margin-left: 1px;
 }
+
 .scanImage:hover {
     box-shadow: 0 0 5px 2px rgba(4, 186, 247, 0.5);
 }
-.card1{
+
+.card1 {
     width: 93%;
     height: 92%;
     background-color: white;
@@ -131,107 +175,142 @@ div.row{
     margin-bottom: 25px;
     overflow-y: auto;
 }
+
 .table-wrapper {
     width: 100%;
     max-height: 350px;
     overflow-y: auto;
-    display:inline-block;
+    display: inline-block;
 }
+
 tr.border_bottom td {
     border-bottom: 1px solid #dee2e6;
 }
+
 tr.border_top td {
     border-top: 1px solid #dee2e6;
 }
+
 tr.border_top th {
     border-top: 1px solid #dee2e6;
 }
+
 tr.border_bottom th {
     border-bottom: 1px solid #dee2e6;
 }
+
 .button {
     position: absolute;
     bottom: 26px;
     left: 30%;
-    margin-left: -104.5px; /*104.5px is half of the button's width*/
+    margin-left: -104.5px;
+    /*104.5px is half of the button's width*/
 }
-svg{
+
+svg {
     cursor: pointer;
     background-color: #007bff;
     color: white;
 }
-svg:hover{
+
+svg:hover {
     background-color: #0069d9;
 }
-textarea.impression{
+
+textarea.impression {
     resize: none;
 }
-textarea.impression{
+
+textarea.impression {
     height: 135px;
 }
-textarea.report{
+
+textarea.report {
     white-space: nowrap;
 }
-table > input {
+
+table>input {
     background-color: brown;
 }
-.row-border{
+
+.row-border {
     border: none;
 }
+
+
 /* th {
     border: none !important; 
 } */
+
+
 /* .table>:not(caption)>*>* {
     padding: 0;
 } */
-.above85{
+
+.above85 {
     background-color: lightgreen;
     border-radius: 4px;
 }
-.above70{
-    background-color:#b3ed6e;
+
+.above70 {
+    background-color: #b3ed6e;
     border-radius: 4px;
 }
-.above50{
+
+.above50 {
     background-color: #EDDD6E;
     border-radius: 4px;
 }
-.above30{
-    background-color:  #F8FD89;
+
+.above30 {
+    background-color: #F8FD89;
     border-radius: 4px;
 }
-.below30{
+
+.below30 {
     background-color: #E0A6AA;
     border-radius: 4px;
 }
-.zero{
+
+.zero {
     background-color: #bb5f65;
     border-radius: 4px;
 }
-.form-control{
+
+.form-control {
     background-color: #f1f1f1;
 }
-#dropdown{
+
+#dropdown {
     background-color: white;
 }
-input[type=text]:focus{
-    background-color: white;   /* oranges! yey */
+
+input[type=text]:focus {
+    background-color: white;
+    /* oranges! yey */
 }
-input[type=date]:focus{
-    background-color: white;   /* oranges! yey */
+
+input[type=date]:focus {
+    background-color: white;
+    /* oranges! yey */
 }
-textarea:focus{
-    background-color: white;   /* oranges! yey */
+
+textarea:focus {
+    background-color: white;
+    /* oranges! yey */
 }
+
 
 /* .reset_modal_body{
     justify-content: center;
 } */
+
 .footer {
-      justify-content: flex-start;
+    justify-content: flex-start;
 }
-@media only screen and   (min-width: 1200px) and (max-width: 1400px) {
-    .zoomCloseIcon{
+
+@media only screen and (min-width: 1200px) and (max-width: 1400px) {
+    .zoomCloseIcon {
         position: absolute;
         top: -23px;
         right: -224px;
@@ -240,5 +319,4 @@ textarea:focus{
         font-size: xxx-large;
         z-index: 1;
     }
-  }
-
+}
