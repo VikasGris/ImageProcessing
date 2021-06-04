@@ -7,6 +7,7 @@ pre {
     color: #212529;
     font-family: inherit;
     font-size: inherit;
+    overflow-x: hidden;
 }
 /* width */
 ::-webkit-scrollbar {
