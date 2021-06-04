@@ -1,11 +1,11 @@
-<body style="height:100%;width:100%;padding:0px;">
+<body style="height:100%;width:100%;position:absolute;top:0%;bottom:0%;left:10px;right:5px;overflow-x: hidden;">
     <!-- page left block -->
-    <div style="height:100%;width:58%;padding:0px;" class="">
+    <div style="height:100%;width:50%;position:absolute;top:0%;bottom:0%;left:0%;right:50%;" class="">
 
         <!-- left top block -->
-        <div style="width:100%;height:50px;padding:0px" class="d-flex">
+        <div style="width:100%;height:50px;position:absolute;top:10px;bottom:0px;left:0%;right:42%;" class="d-flex">
             <!-- file upload -->
-            <div style="width:70%;height:50px;padding:0px" >
+            <div style="width:70%;height:50px;position:absolute;top:0px;bottom:0px;left:0%;right:25%;" >
                 <form [formGroup]="form" (submit)="onSubmit()" class="form">
                     <input style="display:none;"
                             type="file" 
@@ -41,42 +41,43 @@
                 </form>
             </div>
             <!-- reset -->
-            <div style="width:40px;height:50px;padding:0px">
+            <div style="width:40px;height:50px;position:absolute;top:0px;bottom:0px;left:calc(100% - 120px);right:0%;">
                 <button class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Reset</button>
             </div>
         </div>
         <!-- Show image larger and Zoom function -->
-        <div style="width:100%;padding:0px" class="d-flex">
+        <div style="width:100%;height:calc(100% - 60px);
+            position:absolute;top:60px;bottom:0%;left:0%;right:0%;" 
+            class="">
             <!-- img block -->
-            <div  style="width:75%;padding:0px" class="d-flex">
-                
-                <div>
-                    <div class="" 
-                    style="flex-grow: 1;background-color: rgba(230, 230, 243, 0.986);position:relative;
-                    height:90%;width:100%;
-                    border: 5px solid black;"
-                    id="image" [style.display]="zoom ? 'none' : 'inline-block'">
-                        <img class="img-responsive"   src={{image_view}} 
-                            style="display: inline-flex;position: relative;width:100%;height: 90%;background-repeat: no-repeat;
-                            background-size: contain;
-                            border: 5px solid red;">
-                        <i-bs name="zoom-in" *ngIf="zoomIcon" width="40" height="40" style="cursor: pointer;" (click)="onClickZoom()" class="zoomInIcon">
-                        </i-bs>
-
-                        
-                    </div>
-                    <div *ngIf="zoom" class="">
-                        <img src={{image_view}} alt="" id={{i}} class="" style="display: inline-block;position: relative;">
-                        <span aria-hidden="true" class="" id={{i}} (click)="onZoomOut(i,$event)" style="cursor: pointer;">×</span>
-                    </div>
-                    
-                </div>
+            <div class="" id="image" [style.display]="zoom ? 'none' : 'inline-flex'"
+                style="background-color: rgba(230, 230, 243, 0.986);
+                position: absolute;left:0px;right:160px ;top:0%;bottom:1%;">
+                <img class="img-responsive" src={{image_view}} 
+                    style="display: inline-flex;position: absolute;
+                            width:100% ;height:100%">
+                <i-bs 
+                    name="zoom-in"
+                    *ngIf = "zoomIcon"
+                    width="40"
+                    height="40" style="cursor: pointer;" (click)= "onClickZoom()" 
+                     class="zoomInIcon">
+                </i-bs>
             </div>
+            <div *ngIf = "zoom" class="zoom">
+                <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" style="display: inline-block;position: relative;">
+                <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
+            </div>
+            
+            
+           
             <!-- list img -->
-            <div style="width:25%;padding:0px">
-                <div class="image-container card1" id="image1">
+            <div
+                 style="height:100%;width:150px;position: absolute;top: 0%;left: calc(100% - 150px);
+            right:0%;bottom: 0%;">
+                <div class="card2" id="image1">
                     <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
-                        <img class="scanImage" id={i}} src={{item}} alt="" (click)="onClick($event)">
+                        <img class="scanImage" id={{i}} src={{item}} alt="" (click)="onClick($event)">
                         <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                             <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                         </svg> -->
@@ -96,31 +97,70 @@
                 </div>
             </div>
         </div>
+    </div>
         <!-- Show list of images -->
         <!-- <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
             
         </div> -->
-    </div>
-        <!-- Report type dropdown and displaying result -->
-        <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12 button-position">
-            <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
-            <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
-            <div>
-                <form [formGroup]="form" (submit)="onSubmit()" class="mt-3">
-                    <label for="" class="inline-block">Select Report Type</label>&nbsp;&nbsp;
-                    <select formControlName="select" class="form-select w-auto" id="dropdown" (change)="selectId($event)">
-                        <option [disabled]='Select_document_disabled' [hidden]="Select_document_disabled" [selected]="!Select_document_disabled" >Select Document</option>                        
+    
+        <!-- Right block     class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12 button-position"-->
+        <div style="width:calc(50% - 10px);height:100%;position:absolute;left:calc(50% + 10px);
+                    top:10px;right:0%;bottom:1%;">
+            <!-- Counters -->
+            <div style="overflow:hidden;width:100%;height:50px;position:absolute;left:10px;top:0px;right:0%;" 
+                class="d-flex">
+                <div style="width:250px;height:50px;position:absolute;left:calc(50% - 250px);right:250px;">
+                    <pre style="overflow:hidden;">Operations Succeeded  <button class="btn btn-primary1" disabled>{{successCount}}</button></pre>
+                </div>
+                <div style="width:250px;height:50px;position:absolute;left:calc(50%);right:calc(10%);">
+                    <pre style="overflow:hidden;">Operations Failed  <button class="btn btn-primary1" disabled>{{failedCount}}</button></pre>
+                </div>
+            </div>
+            <!-- Report type dropdown and displaying result -->
+            <div style="width:100%;height:50px;position:absolute;left:10px;top:50px;right:0%;" 
+                class="d-flex">
+                <form [formGroup]="form" (submit)="onSubmit()" class="">
+                    <button for="" disabled  class="btn btn-outline-primary"
+                        style="white-space: nowrap;border-color: white;color:black;opacity: 0.88;
+                        position: absolute;width:20%;left:0%;right:80%">Select Report
+                    </button>
+                    <select formControlName="select" style="position: absolute;width:40%;left:20%;right: 40%;"
+                     class="form-select" id="dropdown" 
+                            (change)="selectId($event)"> 
+                            <!-- Select_document_disabled  replace with false-->
+                        <option [disabled]='false' [hidden]="false"
+                                 [selected]="!Select_document_disabled" >Select Document</option>                        
                         <option *ngFor="let listOfDocument of listOfDocuments" >{{listOfDocument}}</option>
                     </select>
-                    <button *ngIf="!uploadButton" class="btn btn-primary upload" [disabled]='disabledupload' type="submit" style="margin-top: 10px;margin-left: 26px;">Upload
+                    <button style="position: absolute;vertical-align: inherit;width:25%;left:calc(60% + 5px);right:15%;" *ngIf="!uploadButton" class="btn btn-primary" 
+                        [disabled]='disabledupload' 
+                        type="submit" >Upload
                     </button>
-                    <button *ngIf="responseButton" class="btn btn-primary ml-2" type="button" nbButton status="primary">    
-                        <span class="text-lowercase"> {{ seconds}}s</span>&nbsp;&nbsp;Estimated time
+                    <button style="white-space: nowrap;position: absolute;vertical-align: inherit;
+                        width:25%;left:calc(60% + 5px);right: 15%;" *ngIf="responseButton" class="btn btn-primary" 
+                        type="button" nbButton status="primary">    
+                        <span style="font-size: 8;">{{seconds}}s Estimated time</span>
                     </button>
-                    <div class="form-inline mb-2" style="margin-left: 144px;">
-                        <input type="text" class="form-control" placeholder="Enter Report ID" *ngIf="newDocumentInput" (change)="onChangeReport($event)">
-                    </div>
+                    <!-- <div class="form-inline" style="margin-left: 144px;">
+                        <input type="text" class="form-control" placeholder="Enter Report ID" 
+                        *ngIf="newDocumentInput" (change)="onChangeReport($event)">
+                    </div> -->
                 </form>
+            </div>
+            <div style="overflow-y: hidden;width:82%;height:55px;position:absolute;left:5%;top:95px;right:10%;">
+                <div *ngIf="successAlert" 
+                    class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                        Data stored Successfully!!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                        <strong>Error!</strong> Please try again...
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="text-center">
                     <div *ngIf='isLoading' class="spinner-border text-success text-center inline-block" role="status">
                         <span class="sr-only">Loading...</span>
@@ -180,7 +220,8 @@
                     </button>
                 </div>
             </div>
-            <div class="scrollit" id="result">
+            <div style="width:95%;height:100%;position:absolute;left:10px;top:150px;right:1%;"
+            class="scrollit" id="result">
                 <div class=table-wrapper *ngIf="tableShow">
                     <table class="table tableScroll" style="overflow-y: auto;">
                         <tbody style="overflow-y: auto;">
@@ -306,20 +347,22 @@
                     </table>
                 </div>
             </div>
-            <button style="margin-left: -60px;" class="btn btn-primary button" type="submit" data-toggle="modal" data-target="#myModal" [disabled]="!markForReview || !tableShow">Mark for Review</button>
-            <button class="btn btn-primary button" type="submit" data-toggle="modal" data-target="#myModal1" style="margin-right: 10px;margin-left: 123px;margin-top: 27px;" [disabled]="!getResult || !tableShow">Update Database</button>
-            <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                Data stored Successfully!!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div style="white-space: nowrap;width:100%;height:50px;position:absolute;left:50%;bottom:0.8%;right:0%;" class="d-flex">
+                <div style="width:15%;position: fixed;left:60%;" >
+                    <button 
+                    style="width:100%;"
+                    class="btn btn-primary" type="submit" data-toggle="modal" 
+                    data-target="#myModal" [disabled]="!markForReview || !tableShow">Mark for Review</button>
+                </div>
+                <div style="width:15%;position: fixed;left:75%;">
+                    <button
+                    style="width:100%;" class="btn btn-primary" type="submit" 
+                    data-toggle="modal" data-target="#myModal1" 
+                    
+                    [disabled]="!getResult || !tableShow">Update Database</button>
+                </div>
             </div>
-            <div *ngIf="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                <strong>Error!</strong> Please try again...
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
+            
         </div>
     
     <div class="modal fade" id="myModal" role="dialog">

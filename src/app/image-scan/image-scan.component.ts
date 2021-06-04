@@ -178,6 +178,7 @@ export class ImageScanComponent implements OnInit {
   }
   //Function for clicking image to show as large image
   onClick(event){
+    console.warn(event)
     this.image_view = this.base64textString[event.target.attributes.id.value]
     //console.log(this.image_view)
   }
