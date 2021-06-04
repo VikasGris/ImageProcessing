@@ -1,102 +1,113 @@
-<body>
-    <div class="row">
-        
-        <!-- Show image larger and Zoom function -->
-        <div class="col-md-5 col-lg-5 col-xs-12">
-        
-            <form [formGroup]="form" (submit)="onSubmit()" class="form">
-                <!-- <div class="upload-button button" (click)="file.click()">
-                    Upload
-                    <input style="display: none;" type="file" #file>
-                  </div> -->
-   
-    
-                <input *ngIf="largeImage" title="" 
-                    type="file" 
-                    name="fileup"
-                    (change)="onFileChange($event)"
-                    id="file"
-                    formControlName="files"
-                    accept=".png, .jpg, .jpeg" multiple
-                    #file >
-                
+<body style="height:100%;width:100%;padding:0px;">
+    <!-- page left block -->
+    <div style="height:100%;width:58%;padding:0px;" class="">
 
-            
-
-                  
-                <!-- <button *ngIf="largeImage" for="myInput" id="choose_file" >
-                    Choose file
-                </button> -->
-                <!-- <span [hidden]="!largeImage" style="margin-top: 6px;margin-left: 10px;" (mouseover)="fileNameShow()" (mouseout)="fileNameNotShow()"> 
-                    {{base64textString.length}} files
-                    style="cursor: pointer;"
-                </span> -->
-                <!-- <div class="card" *ngIf="showFileName">
-                    <p *ngFor="let fileName of fileNames">
-                        {{fileName}}
-                    </p>
-                </div> -->
-                <ng-template #popContent>
-                    <span *ngFor="let fileName of fileNames">{{fileName}}<br></span>
-                </ng-template>
-                <p                
-                [hidden]="!largeImage"
-                [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
-                >
-                {{base64textString.length}} files
-                </p>
-                <!-- <input
-                    class="file"
-                    type="file" 
-                    name="file" 
-                    id="file1" 
-                    *ngIf = "duplicate_browse"
-                    type="file" 
-                    accept=".png, .jpg, .jpeg" width="50%"
-                    disabled
-                > -->
-            </form>
-            <div *ngIf="zoom" class="zoom">
-                <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" style="display: inline-block;position: relative;">
-                <span aria-hidden="true" class="zoomCloseIcon" id={{i}} (click)="onZoomOut(i,$event)" style="cursor: pointer;">×</span>
+        <!-- left top block -->
+        <div style="width:100%;height:50px;padding:0px" class="d-flex">
+            <!-- file upload -->
+            <div style="width:70%;height:50px;padding:0px" >
+                <form [formGroup]="form" (submit)="onSubmit()" class="form">
+                    <input style="display:none;"
+                            type="file" 
+                            name="fileup"
+                            (change)="onFileChange($event)"
+                            id="file"
+                            formControlName="files"
+                            accept=".png, .jpg, .jpeg" multiple
+                            #file >
+                        
+                            <label  *ngIf="largeImage" for="file" 
+                            class="btn btn-primary" 
+                            >Choose files</label>
+                    
+                            <ng-template #popContent>
+                                <span *ngFor="let fileName of fileNames">{{fileName}}<br></span>
+                            </ng-template>
+                            <pre
+                                class="my-auto"             
+                                [hidden]="!largeImage"
+                                [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
+                            > {{fileMessage(base64textString.length)}}</pre>
+                    <!-- <input
+                        class="file"
+                        type="file" 
+                        name="file" 
+                        id="file1" 
+                        *ngIf = "duplicate_browse"
+                        type="file" 
+                        accept=".png, .jpg, .jpeg" width="50%"
+                        disabled
+                    > -->
+                </form>
             </div>
-            <div class="image" id="image" [style.display]="zoom ? 'none' : 'inline-block'">
-                <img class="large_image img-responsive" src={{image_view}} style="display: inline-block;position: relative;">
-                <i-bs name="zoom-in" *ngIf="zoomIcon" width="40" height="40" style="cursor: pointer;" (click)="onClickZoom()" class="zoomInIcon">
-                </i-bs>
+            <!-- reset -->
+            <div style="width:40px;height:50px;padding:0px">
+                <button class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Reset</button>
             </div>
         </div>
-        <!-- Show list of images -->
-        <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
-            <button class="btn btn-danger btnAlign btn-md" data-toggle="modal" data-target="#myModal2">Reset</button>
-            <div class="image-container card1" id="image1">
-                <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
-                    <img class="scanImage" id={i}} src={{item}} alt="" (click)="onClick($event)">
-                    <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
-                        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-                    </svg> -->
-                    <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-square up_arrow" viewBox="0 0 16 16" (click)="onUpImage($event)">
-                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-                    </svg>
-                    <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-square down_arrow" viewBox="0 0 16 16" (click)="onDownImage($event)">
-                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
-                    </svg>
-                    <!-- <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
-                      </svg> -->
-                    <button type="button" class="close" aria-label="Close">
-                        <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)" *ngIf = "closeIcon">×</span>
-                    </button>
+        <!-- Show image larger and Zoom function -->
+        <div style="width:100%;padding:0px" class="d-flex">
+            <!-- img block -->
+            <div  style="width:75%;padding:0px" class="d-flex">
+                
+                <div>
+                    <div class="" 
+                    style="flex-grow: 1;background-color: rgba(230, 230, 243, 0.986);position:relative;
+                    height:90%;width:100%;
+                    border: 5px solid black;"
+                    id="image" [style.display]="zoom ? 'none' : 'inline-block'">
+                        <img class="img-responsive"   src={{image_view}} 
+                            style="display: inline-flex;position: relative;width:100%;height: 90%;background-repeat: no-repeat;
+                            background-size: contain;
+                            border: 5px solid red;">
+                        <i-bs name="zoom-in" *ngIf="zoomIcon" width="40" height="40" style="cursor: pointer;" (click)="onClickZoom()" class="zoomInIcon">
+                        </i-bs>
+
+                        
+                    </div>
+                    <div *ngIf="zoom" class="">
+                        <img src={{image_view}} alt="" id={{i}} class="" style="display: inline-block;position: relative;">
+                        <span aria-hidden="true" class="" id={{i}} (click)="onZoomOut(i,$event)" style="cursor: pointer;">×</span>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- list img -->
+            <div style="width:25%;padding:0px">
+                <div class="image-container card1" id="image1">
+                    <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
+                        <img class="scanImage" id={i}} src={{item}} alt="" (click)="onClick($event)">
+                        <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
+                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                        </svg> -->
+                        <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-square up_arrow" viewBox="0 0 16 16" (click)="onUpImage($event)">
+                            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                        </svg>
+                        <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-square down_arrow" viewBox="0 0 16 16" (click)="onDownImage($event)">
+                            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                        </svg>
+                        <!-- <svg *ngIf="(i!=base64textString.length-1) && !upArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-circle-fill down_arrow" viewBox="0 0 16 16" (click) ="onDownImage($event)">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                          </svg> -->
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true" class="closeIcon" id= {{i}} (click)="removeSelectedFile(i,$event)" *ngIf = "closeIcon">×</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Show list of images -->
+        <!-- <div class="col-md-2 col-lg-2  col-xs-12 smallScanCard" style="margin-top: -16px;">
+            
+        </div> -->
+    </div>
         <!-- Report type dropdown and displaying result -->
         <div class="mt-2 col-md-5 col-lg-5 ml-3 col-xs-12 button-position">
             <span>Operations Succeeded&nbsp;&nbsp;<span class="border rounded p-2">{{successCount}}</span></span>&nbsp;&nbsp;&nbsp;
             <span style="margin-left: 45px;">Operations Failed&nbsp;&nbsp;<span class="border rounded p-2">{{failedCount}}</span></span>
             <div>
                 <form [formGroup]="form" (submit)="onSubmit()" class="mt-3">
-                    <label for="">Select Report Type</label>&nbsp;&nbsp;
+                    <label for="" class="inline-block">Select Report Type</label>&nbsp;&nbsp;
                     <select formControlName="select" class="form-select w-auto" id="dropdown" (change)="selectId($event)">
                         <option [disabled]='Select_document_disabled' [hidden]="Select_document_disabled" [selected]="!Select_document_disabled" >Select Document</option>                        
                         <option *ngFor="let listOfDocument of listOfDocuments" >{{listOfDocument}}</option>
@@ -310,7 +321,7 @@
             </button>
             </div>
         </div>
-    </div>
+    
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->

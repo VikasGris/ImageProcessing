@@ -109,7 +109,18 @@ export class ImageScanComponent implements OnInit {
   get formTableControls() {
     return this.formTable.controls;
   }
+  fileMessage(e) {
+    if (e === 0) {
+      return "No file chosen."
+    }
+    else if (e === 1) {
+      return (this.fileNames[0])
 
+    }
+    else {
+      return e + " files"
+    }
+  }
 //Functionality for select file from local storage
   onFileChange(event: any): void {
     this.closeIcon = true;
@@ -149,15 +160,21 @@ export class ImageScanComponent implements OnInit {
   onUpImage(event) {
     var id = parseInt(event.target.attributes[7].value);
     var temp = this.base64textString[id];
+    var temp1 = this.fileNames[id];
     this.base64textString[id] = this.base64textString[id - 1];
+    this.fileNames[id] = this.fileNames[id - 1];
     this.base64textString[id - 1] = temp
+    this.fileNames[id - 1] = temp1;
   }
 
   onDownImage(event) {
     var id = parseInt(event.target.attributes[7].value);
     var temp = this.base64textString[id];
+    var temp1 = this.fileNames[id];
     this.base64textString[id] = this.base64textString[id + 1];
-    this.base64textString[id + 1] = temp
+    this.fileNames[id] = this.fileNames[id + 1];
+    this.base64textString[id + 1] = temp;
+    this.fileNames[id + 1] = temp1;
   }
   //Function for clicking image to show as large image
   onClick(event){
