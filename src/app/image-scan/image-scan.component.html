@@ -128,7 +128,7 @@
                      class="form-select" id="dropdown" 
                             (change)="selectId($event)"> 
                             <!-- Select_document_disabled  replace with false-->
-                        <option [disabled]='false' [hidden]="false"
+                        <option [disabled]='Select_document_disabled' [hidden]="Select_document_disabled"
                                  [selected]="!Select_document_disabled" >Select Document</option>                        
                         <option *ngFor="let listOfDocument of listOfDocuments" >{{listOfDocument}}</option>
                     </select>
@@ -259,7 +259,7 @@
                                     'below30':result_date[1] >0 && result_date[1] <30,
                                     'zero':result_date[1] === 0
                                    }" style="vertical-align: middle;">
-                                    <input value={ {result_date[0]}} id='Date' class="form-control" type='date' placeholder="" (change)="onchangeInput_date($event)">
+                                    <input value={{result_date[0]}} id='Date' class="form-control" type='date' placeholder="" (change)="onchangeInput_date($event)">
                                 </td>
 
                                 <td class=" text-center" style="vertical-align: middle;">
