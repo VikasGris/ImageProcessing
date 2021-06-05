@@ -12,6 +12,7 @@ pre {
 /* width */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 10px;
 }
 
 /* Track */
@@ -31,6 +32,49 @@ pre {
     background: #0003b3; 
 }
 
+/* For mozilla scroll bar */
+.mozilla_scroll {
+    scrollbar-color: #002fff silver !important;
+    scrollbar-width: thin !important;
+}
+
+.card2 {
+    width: 100%;
+    height: 99%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    
+}
+/* .alert-dismissible .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: .75rem 1.25rem;
+    color: inherit;
+} */
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 0.5;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+
+.alert {
+    position: absolute;
+    padding: .5rem 1.5rem;
+    margin-bottom: 0rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    width: 82%;
+}
 
 .file-input{
     display: none;
@@ -120,8 +164,8 @@ pre {
 }
 .btn-primary1 {
     background-color: white;
-    border-color: black;   
-    color: brown;
+    border-color: #b3b5b7;   
+    color: black;
 }
 
 .btn-secondary {
@@ -131,7 +175,7 @@ pre {
 .scanImage {
     border-radius: 0px;
     padding: 4px;
-    margin: 0px;
+    margin: -2px;
     width: 130px;
     height: 170px;
     margin-top: 10px;
@@ -147,8 +191,8 @@ pre {
 
 .closeIcon {
     position: absolute;
-    top: -6px;
-    right: -2px;
+    top: 5px;
+    left: 119px;
     font-weight: bold;
     font-size: xx-large;
 }
@@ -156,13 +200,13 @@ pre {
 .up_arrow {
     position: absolute;
     top: 16px;
-    right: 55px;
+    left: 58px;
 }
 
 .down_arrow {
     position: absolute;
     top: 146px;
-    right: 55px;
+    left: 58px;
 }
 
 .zoomInIcon {
@@ -172,16 +216,30 @@ pre {
     font-weight: bold;
     font-size: xx-large;
 }
-
 .zoomCloseIcon {
     position: absolute;
-    top: -80px;
+    top: -75px;
     right: 5px;
     color: brown;
     font-weight: bold;
-    font-size: xxx-large;
+    font-size: xx-large;
     z-index: 1;
 }
+
+/* @media only screen and (min-width: 1200px) and (max-width: 1400px){
+    .zoomCloseIcon {
+        position: absolute;
+        top: -75px;
+        right: 0px;
+        color: brown;
+        font-weight: bold;
+        font-size: xxx-large;
+        z-index: 1;
+    }
+} */
+
+
+
 
 .ZoomImage {
     position:absolute;
@@ -216,15 +274,7 @@ pre {
     margin-bottom: 25px;
     overflow-y: auto;
 }
-.card2 {
-    width: 100%;
-    height: 99%;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin-bottom: 0px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
+
 .form-select{
     display:inline-block;
 }
@@ -362,14 +412,3 @@ textarea:focus {
     justify-content: flex-start;
 }
 
-@media only screen and (min-width: 1200px) and (max-width: 1400px) {
-    .zoomCloseIcon {
-        position: absolute;
-        top: -23px;
-        right: -224px;
-        color: brown;
-        font-weight: bold;
-        font-size: xxx-large;
-        z-index: 1;
-    }
-}

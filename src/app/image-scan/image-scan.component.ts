@@ -158,7 +158,7 @@ export class ImageScanComponent implements OnInit {
   
 
   onUpImage(event) {
-    var id = parseInt(event.target.attributes[7].value);
+    var id = parseInt(event.target.attributes["id"].value);
     var temp = this.base64textString[id];
     var temp1 = this.fileNames[id];
     this.base64textString[id] = this.base64textString[id - 1];
@@ -168,7 +168,9 @@ export class ImageScanComponent implements OnInit {
   }
 
   onDownImage(event) {
-    var id = parseInt(event.target.attributes[7].value);
+    
+    //console.warn(event.target.attributes["id"].value);
+    var id = parseInt(event.target.attributes["id"].value);
     var temp = this.base64textString[id];
     var temp1 = this.fileNames[id];
     this.base64textString[id] = this.base64textString[id + 1];
