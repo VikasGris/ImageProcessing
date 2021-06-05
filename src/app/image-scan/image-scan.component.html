@@ -80,7 +80,7 @@
                 <div class="card2 mozilla_scroll" id="image1">
                     <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
                         <img class="scanImage" id={{i}} src={{item}} alt="" (click)="onClick($event)">
-                        
+
                         <!-- <svg *ngIf="(i!=0) && !downArrow" id={{i}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-circle-fill up_arrow" viewBox="0 0 16 16" (click) = "onUpImage($event)">
                             <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                         </svg> -->
@@ -179,7 +179,7 @@
                     </button>
                 </div>
                 <div *ngIf="f.select.touched && f.select.invalid" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Document ID Required
+                    Report type is required.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -195,12 +195,13 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div *ngIf="(seconds<=0) && waitForResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <!-- TODO: fix alignment along with loading/spinner icon. -->
+                <!-- <div *ngIf="(seconds<=0) && waitForResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
                     It's taking longer than expected.Please wait...
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
+                </div> -->
                 <div *ngIf="DropdownId" class="alert alert-danger alert-dismissible fade show" role="alert">
                     Please select a valid report type.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
