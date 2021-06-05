@@ -9,23 +9,25 @@
                 <form [formGroup]="form" (submit)="onSubmit()" class="form">
                     <input style="display:none;"
                             type="file" 
-                            name="fileup"
+                            name="file"
                             (change)="onFileChange($event)"
                             id="file"
                             formControlName="files"
                             accept=".png, .jpg, .jpeg" multiple
                             #file >
-                        
-                            <label  *ngIf="largeImage" for="file" 
+                        <!-- *ngIf="largeImage && !uploadByteLimit" -->
+                            <label id="choose_file_label"   
+                            for="file" 
                             class="btn btn-primary" 
                             >Choose files</label>
                     
                             <ng-template #popContent>
                                 <span *ngFor="let fileName of fileNames">{{fileName}}<br></span>
                             </ng-template>
+                            <!-- [hidden]="!largeImage" -->
                             <pre style="overflow: hidden;"
                                 class="my-auto"             
-                                [hidden]="!largeImage"
+                                
                                 [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
                             > {{fileMessage(base64textString.length)}}</pre>
                     <!-- <input
@@ -50,10 +52,44 @@
             position:absolute;top:60px;bottom:0%;left:0%;right:0%;" 
             class="">
             <!-- img block -->
-            <div class="" id="image" [style.display]="zoom ? 'none' : 'inline-flex'"
+
+            <div class="" id="image_scene" [style.display]="zoom ? 'none' : 'inline-flex'"
                 style="background-color: rgba(230, 230, 243, 0.986);
                 position: absolute;left:0px;right:160px ;top:0%;bottom:1%;">
-                <img class="img-responsive" src={{image_view}} 
+                  <svg  style="position:absolute;width:100%;height:100%;left:0%;background-color:transparent">
+                    <!-- this is the draggable root -->
+                        
+                    
+                         <image width="100%" height="100%" id="scene" transform="matrix(1 0 0 1 0 0)" 
+                         [attr.xlink:href]="image_view" />
+                        
+                  </svg>
+
+                  <svg class="zoomInIcon button_hover" width="150" height="150" 
+                  
+                  transform="scale(0.25)" 
+                   fill-rule='evenodd' clip-rule="evenodd" 
+                  xmlns="http://www.w3.org/2000/svg" (click)="onClickHome()">
+
+                    <g >
+                      <g id="svg_1">
+                       <path id="svg_2" d="m61.44,0c33.93,0 61.44,27.51 61.44,61.44c0,33.93 -27.51,61.44 -61.44,61.44c-33.93,0 -61.44,-27.51 -61.44,-61.44c0,-33.93 27.51,-61.44 61.44,-61.44l0,0zm0,29l-31.38,30.74l7.65,4.02l23.52,-24.69l23.92,24.7l7.66,-4.02l-31.37,-30.75l0,0l0,0zm-22.05,38.13l0,0l22.08,-22.09l22.02,22.09l0,0l0,0l0,21.67l-16.09,0l0,-15.3l-12.06,0l0,15.3l-15.95,0l0,-21.67l0,0l0,0l0,0zm22.05,-58.04c28.91,0 52.35,23.44 52.35,52.35c0,28.91 -23.44,52.35 -52.35,52.35s-52.35,-23.44 -52.35,-52.35c0,-28.91 23.44,-52.35 52.35,-52.35l0,0z" 
+                       class="" fill="#023367"/>
+                      </g>
+                      <path stroke="#FF0000" transform="rotate(45.13833236694336 124.08902740478514,123.99531555175781) " 
+                      id="svg_3" d="m94.856865,115.871761l58.464331,0l0,16.247101l-58.464331,0l0,-16.247101z" 
+                      stroke-width="0.001" fill="#023367"/>
+                    </g>
+                   </svg>
+            </div>
+                <!-- <i-bs 
+                    name="zoom-in"
+                    *ngIf = "zoomIcon"
+                    width="40"
+                    height="40" style="cursor: pointer;" (click)= "onClickHome()" 
+                    class="zoomInIcon">
+                </i-bs> -->
+                <!-- <img id="" class="img-responsive" src={{image_view}} 
                     style="display: inline-flex;position: absolute;
                             width:100% ;height:100%">
                 <i-bs 
@@ -61,15 +97,15 @@
                     *ngIf = "zoomIcon"
                     width="40"
                     height="40" style="cursor: pointer;" (click)= "onClickZoom()" 
-                     class="zoomInIcon">
-                </i-bs>
-            </div>
-            <div *ngIf = "zoom" class="zoom">
-                <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" 
-                    style="display: inline-block;position: relative;">
-                <span aria-hidden="true" class="zoomCloseIcon" 
-                    id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
-            </div>
+                    class="zoomInIcon">
+                </i-bs> -->
+            
+                <!-- <div *ngIf = "zoom" class="zoom">
+                    <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" 
+                        style="display: inline-block;position: relative;">
+                    <span aria-hidden="true" class="zoomCloseIcon" 
+                        id={{i}} (click) = "onZoomOut(i,$event)" style="cursor: pointer;">×</span>
+                </div> -->
             
             
             
@@ -135,11 +171,11 @@
                             (change)="selectId($event)"> 
                             <!-- Select_document_disabled  replace with false-->
                         <option [disabled]='Select_document_disabled' [hidden]="Select_document_disabled"
-                                 [selected]="!Select_document_disabled" >Select Document</option>                        
-                        <option *ngFor="let listOfDocument of listOfDocuments" >{{listOfDocument}}</option>
+                                 [selected]="!Select_document_disabled" value="Select Document" id="default_report_type">Select Document</option>                        
+                        <option *ngFor="let listOfDocument of listOfDocuments" value={{listOfDocument}} >{{listOfDocument}}</option>
                     </select>
                     <button style="position: absolute;vertical-align: inherit;width:25%;left:calc(60% + 5px);right:15%;" *ngIf="!uploadButton" class="btn btn-primary" 
-                        [disabled]='disabledupload' 
+                        [disabled]='disabledupload || uploadByteLimit' 
                         type="submit" >Upload
                     </button>
                     <button style="white-space: nowrap;position: absolute;vertical-align: inherit;
@@ -157,6 +193,13 @@
                 <div *ngIf="successAlert" 
                     class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                         Data stored Successfully!!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf="uploadByteLimit" class="alert alert-danger alert-dismissible fade show" 
+                        role="alert" style="margin-top: 10px;">
+                        <strong>File size limit reached!</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

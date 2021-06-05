@@ -1,5 +1,6 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component,Input,OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { truncateSync } from 'node:fs';
 import { ResponseService } from '../response.service';
 
 
@@ -13,10 +14,15 @@ export class ImageScanComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
   @ViewChild('closebutton1') closebutton1;
   @ViewChild('closebutton2') closebutton2;
+
+  @Input() pnzoom;
     
 //Variables declarations
   base64textString = [];
   fileNames = [];
+  bytes = [];
+  uploadByteLimit:boolean=false;
+  sumBytes:number=0;
   listOfDocuments:string[] = ["Nalan Gastro Centre", "Nalan Diagnostics" , "Pathway Diagnostics","Bioline"];
   result = {};
   result__keys =[];
@@ -73,6 +79,7 @@ export class ImageScanComponent implements OnInit {
   isUpdate4:boolean = true;
   isUpdate5:boolean = true;
 
+  
 //Constructor for using services
   constructor(private service: ResponseService,private formBuilder: FormBuilder) {
   }
@@ -80,8 +87,9 @@ export class ImageScanComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       files: new FormControl(null,Validators.required),
-      select: new FormControl(null, Validators.required)
+      select: new FormControl("Select Document", Validators.required)
     });
+
     this.formTable.get('scanCenterName').disable();
     this.formTable.get('patientName').disable();
     this.formTable.get('reportType').disable();
@@ -90,6 +98,15 @@ export class ImageScanComponent implements OnInit {
     
   }
   
+var_reset(e:string){
+  if(e==="full"){
+    this.bytes=[]
+    this.sumBytes=0;
+    this.uploadByteLimit=false;
+  }
+}
+
+
 
   formTable = this.formBuilder.group({ 
     scanCenterName: [""],
@@ -114,6 +131,7 @@ export class ImageScanComponent implements OnInit {
       return "No file chosen."
     }
     else if (e === 1) {
+      
       return (this.fileNames[0])
 
     }
@@ -121,8 +139,28 @@ export class ImageScanComponent implements OnInit {
       return e + " files"
     }
   }
+
+byteSize(s){
+  return encodeURI(s).split(/%..|./).length - 1;
+
+}
+  form_reset(x){
+    if(x !== this.selectDropdownId){
+      this.form = new FormGroup({
+        files: new FormControl(null,Validators.required),
+        select: new FormControl("Select Document", Validators.required)
+      });
+    }
+    else{
+    this.form = new FormGroup({
+          files: new FormControl(null,Validators.required),
+          select: new FormControl(this.selectDropdownId, Validators.required)
+        });
+      }
+  }
 //Functionality for select file from local storage
   onFileChange(event: any): void {
+    
     this.closeIcon = true;
     this.uploadFileAlert = false;
     var inputFile = event.target.files;
@@ -139,21 +177,30 @@ export class ImageScanComponent implements OnInit {
     if (this.Select_document_disabled === true) {
       this.disabledupload = false;
     }
-    
+   
   }
 
-  fileNameShow() {
-    this.showFileName = true;
-  }
-  fileNameNotShow() {
-    this.showFileName = false;
-  }
+
+  // fileNameShow() {
+  //   this.showFileName = true;
+  // }
+  // fileNameNotShow() {
+  //   this.showFileName = false;
+  // }
 //Store files in array
   handleReaderLoaded(e) {
+    
     this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
+    this.bytes.push(this.byteSize(this.base64textString[this.base64textString.length-1]));
+    this.sumBytes += this.bytes[this.bytes.length - 1];
+    // console.warn(this.bytes.reduce((a, b) => a + b, 0))
+    // console.log(this.sumBytes);
     this.image_view = this.base64textString[this.base64textString.length-1];
+    this.onClickHome()
     this.zoomIcon = true;
-    //console.log(this.base64textString)
+    this.uploadByteLimit = (this.sumBytes > 8100000 ? true:false);
+    this.disable_file_upload(this.uploadByteLimit);
+    // console.log(this.uploadByteLimit,(this.sumBytes > 8100000 ? true:false));
   }
   
 
@@ -165,6 +212,11 @@ export class ImageScanComponent implements OnInit {
     this.fileNames[id] = this.fileNames[id - 1];
     this.base64textString[id - 1] = temp
     this.fileNames[id - 1] = temp1;
+
+    var temp2 = this.bytes[id];
+    this.bytes[id] = this.bytes[id - 1];
+    this.bytes[id - 1] = temp2;
+    this.onClickHome()
   }
 
   onDownImage(event) {
@@ -177,34 +229,73 @@ export class ImageScanComponent implements OnInit {
     this.fileNames[id] = this.fileNames[id + 1];
     this.base64textString[id + 1] = temp;
     this.fileNames[id + 1] = temp1;
+
+    var temp2 = this.bytes[id];
+    this.bytes[id] = this.bytes[id + 1];
+    this.bytes[id + 1] = temp2;
+    this.onClickHome()
   }
   //Function for clicking image to show as large image
   onClick(event){
-    console.warn(event)
+    // console.warn(event)
     this.image_view = this.base64textString[event.target.attributes.id.value]
+    this.onClickHome()
     //console.log(this.image_view)
   }
-
+  
 //Remove  file from the list
   
   removeSelectedFile(index) {
     this.base64textString.splice(index, 1);
     this.fileNames.splice(index, 1);
+    this.sumBytes = this.sumBytes - this.bytes[index];
+    this.uploadByteLimit = (this.sumBytes > 8100000 ? true:false);
+    // console.log(this.sumBytes);
+    this.disable_file_upload(this.uploadByteLimit);
+    this.bytes.splice(index,1);
     this.image_view = this.base64textString[this.base64textString.length - 1];
+    
     if(this.base64textString.length === 0){
       this.zoomIcon = false;
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-      this.file.nativeElement.value = "";
+      // this.file.nativeElement.value = "";
       this.disabledupload = true;
       this.uploadFileAlert = true;
+      
     }
+    // console.warn(this.form.value["files"])
+    // console.warn(this.form.value.select)
+    this.onClickHome();
+    
+    this.form_reset(this.form.value.select);
+    
   }
+
+disable_file_upload(a){
+  let s1 = "btn btn-primary"
+  if(a===true){
+      s1 = "btn btn-primary disabled"
+  }
+  document.getElementById('choose_file_label').setAttribute('class', s1) ;
+}
+
+onClickHome(){
+  // let element = document.getElementById('scene').getAttribute('transform');
+  document.getElementById('scene').setAttribute('transform', "matrix(1 0 0 1 0 0)") ;
+  // document.getElementById('scene1').id = "scene";
+}
 
 //Image zoom funtion
   onClickZoom(){
-    this.zoom = true;
-    this.noOfFilesShow = false;
-    this.largeImage = false;
+    // this.zoom = true;
+    // this.noOfFilesShow = false;
+    // this.largeImage = false;
+    
+    // just grab a DOM element
+    
+    // console.warn(element)
+    // And pass it to panzoom
+    // this.pnzoom(element)
     // if(this.largeImage===true){
     //   this.largeImage = false;
     //   this.BrowseId='';
@@ -289,6 +380,7 @@ export class ImageScanComponent implements OnInit {
     this.invalidDocumentId = false;
     this.unKnownError = false;
     this.largeImage = true;
+    this.disable_file_upload(!this.largeImage);
     this.upArrow = false;
     this.downArrow = false;
     //this.form.value.select = null;
@@ -316,6 +408,8 @@ export class ImageScanComponent implements OnInit {
     // this.form.reset();
     this.Select_document_disabled = false;
     this.selectDropdownId = "";
+    this.form_reset("Select Document");
+    this.var_reset("full");
     
   }
 
@@ -327,6 +421,7 @@ export class ImageScanComponent implements OnInit {
     this.error = false;
     this.closeIcon = true;
     this.largeImage = true;
+    this.disable_file_upload(!this.largeImage);
     this.upArrow = false;
     this.downArrow = false;
     this.duplicate_browse =false;
@@ -352,6 +447,7 @@ export class ImageScanComponent implements OnInit {
     this.disabledupload = true; 
     this.tableShow = false;
     this.DocumentIdUploaded = "";
+    this.form_reset(this.form.value.select);
     if (this.tableShow) {
       //console.log(this.tableShow)
       this.getResult = false;
@@ -408,6 +504,7 @@ export class ImageScanComponent implements OnInit {
     this.errorAlert = false;
     this.error = false;
     this.largeImage = false;
+    this.disable_file_upload(!this.largeImage);
     this.zoom = false;
     this.duplicate_browse =true;
     this.tableShow = true;
@@ -578,6 +675,7 @@ export class ImageScanComponent implements OnInit {
         this.failedCount = this.failedCount + 1;
         this.duplicate_browse =false;
         this.largeImage = true;
+        this.disable_file_upload(!this.largeImage);
         this.fileNames = [];
         this.base64textString = [];
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
@@ -608,6 +706,8 @@ export class ImageScanComponent implements OnInit {
         this.DocumentIdUploaded = "";
         this.Select_document_disabled = false;
         this.selectDropdownId = "";
+        this.form_reset(this.form.value.select);
+        this.var_reset("full");
       }
       else{
         this.errorAlert = true;
@@ -654,6 +754,7 @@ export class ImageScanComponent implements OnInit {
         this.tableShow = false;
         this.duplicate_browse =false;
         this.largeImage = true;
+        this.disable_file_upload(!this.largeImage);
         this.fileNames = [];
         this.base64textString = [];
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
@@ -683,6 +784,8 @@ export class ImageScanComponent implements OnInit {
         this.DocumentIdUploaded = "";
         this.Select_document_disabled = false;
         this.selectDropdownId = "";
+        this.form_reset(this.form.value.select);
+        this.var_reset("full");
       }
       else{
         this.errorAlert = true;

@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatDividerModule} from '@angular/material/divider'
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,8 +26,10 @@ import {MatDividerModule} from '@angular/material/divider'
     CountdownModule,
     MatDividerModule,
     NgxBootstrapIconsModule.pick(allIcons),
-  ],
+    ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
+  
 })
 export class AppModule { }
