@@ -1,6 +1,6 @@
 import { Component,Input,OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { truncateSync } from 'node:fs';
+
 import { ResponseService } from '../response.service';
 
 
