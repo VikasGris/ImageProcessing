@@ -10,12 +10,14 @@ import { CountdownModule } from 'ngx-countdown';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatDividerModule} from '@angular/material/divider'
 
+import {ZoomComponentComponent} from "./zoom-component/zoom-component.component"
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ImageScanComponent,
+    ZoomComponentComponent
   ],
   imports: [
     NgbModule,

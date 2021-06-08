@@ -1,7 +1,7 @@
-import { Component,Input,OnInit, ViewChild } from '@angular/core';
+import { Component,Input,OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { truncateSync } from 'node:fs';
 import { ResponseService } from '../response.service';
+import panzoom from "panzoom";
 
 
 @Component({
@@ -14,10 +14,17 @@ export class ImageScanComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
   @ViewChild('closebutton1') closebutton1;
   @ViewChild('closebutton2') closebutton2;
+  @ViewChild('scene', { static: false }) scene: ElementRef;
 
-  @Input() pnzoom;
-    
+  ngAfterViewInit() {
+
+    // this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+    // this.currentZoomLevel = this.zoomLevels[4];
+    // panzoom(document.querySelector('#scene'));
+    this.panZoomController = panzoom(document.getElementById('scene'));
+  }
 //Variables declarations
+  panZoomController;
   base64textString = [];
   fileNames = [];
   bytes = [];
@@ -41,6 +48,7 @@ export class ImageScanComponent implements OnInit {
   closeIcon:boolean = true;
   disabledupload:boolean=true;
   image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  image_view_id:number=-1;
   form:FormGroup;
   error: boolean = false;
   isLoading:boolean = false;
@@ -90,11 +98,11 @@ export class ImageScanComponent implements OnInit {
       select: new FormControl("Select Document", Validators.required)
     });
 
-    this.formTable.get('scanCenterName').disable();
-    this.formTable.get('patientName').disable();
-    this.formTable.get('reportType').disable();
-    this.formTable.get('reportDate').disable();
-    this.formTable.get('impression').disable();
+    // this.formTable.get('scanCenterName').disable();
+    // this.formTable.get('patientName').disable();
+    // this.formTable.get('reportType').disable();
+    // this.formTable.get('reportDate').disable();
+    // this.formTable.get('impression').disable();
     
   }
   
@@ -108,24 +116,26 @@ var_reset(e:string){
 
 
 
-  formTable = this.formBuilder.group({ 
-    scanCenterName: [""],
-    scanCenterName_Confidence:[""],
-    patientName:[""],
-    patientName_Confidence:[""],
-    reportType:[""],
-    reportType_Confidence:[""],
-    reportDate:[""],
-    reportDate_Confidence:[""],
-    impression:[""],
-    impression_Confidence: [""],
-    heamatology_Confidence: [""],
+  // formTable = this.formBuilder.group({ 
+  //   scanCenterName: [""],
+  //   scanCenterName_Confidence:[""],
+  //   patientName:[""],
+  //   patientName_Confidence:[""],
+  //   reportType:[""],
+  //   reportType_Confidence:[""],
+  //   reportDate:[""],
+  //   reportDate_Confidence:[""],
+  //   impression:[""],
+  //   impression_Confidence: [""],
+  //   heamatology_Confidence: [""],
     
-  });
+  // });
 
-  get formTableControls() {
-    return this.formTable.controls;
-  }
+  // get formTableControls() {
+  //   return this.formTable.controls;
+  // }
+
+
   fileMessage(e) {
     if (e === 0) {
       return "No file chosen."
@@ -140,10 +150,11 @@ var_reset(e:string){
     }
   }
 
-byteSize(s){
-  return encodeURI(s).split(/%..|./).length - 1;
+  byteSize(s){
+    return encodeURI(s).split(/%..|./).length - 1;
 
-}
+  }
+
   form_reset(x){
     if(x !== this.selectDropdownId){
       this.form = new FormGroup({
@@ -158,6 +169,7 @@ byteSize(s){
         });
       }
   }
+
 //Functionality for select file from local storage
   onFileChange(event: any): void {
     
@@ -181,12 +193,6 @@ byteSize(s){
   }
 
 
-  // fileNameShow() {
-  //   this.showFileName = true;
-  // }
-  // fileNameNotShow() {
-  //   this.showFileName = false;
-  // }
 //Store files in array
   handleReaderLoaded(e) {
     
@@ -196,6 +202,7 @@ byteSize(s){
     // console.warn(this.bytes.reduce((a, b) => a + b, 0))
     // console.log(this.sumBytes);
     this.image_view = this.base64textString[this.base64textString.length-1];
+    this.image_view_id = this.base64textString.length-1 ;
     this.onClickHome()
     this.zoomIcon = true;
     this.uploadByteLimit = (this.sumBytes > 8100000 ? true:false);
@@ -239,6 +246,7 @@ byteSize(s){
   onClick(event){
     // console.warn(event)
     this.image_view = this.base64textString[event.target.attributes.id.value]
+    this.image_view_id = event.target.attributes.id.value;
     this.onClickHome()
     //console.log(this.image_view)
   }
@@ -254,10 +262,12 @@ byteSize(s){
     this.disable_file_upload(this.uploadByteLimit);
     this.bytes.splice(index,1);
     this.image_view = this.base64textString[this.base64textString.length - 1];
+    this.image_view_id = this.base64textString.length - 1 ;
     
     if(this.base64textString.length === 0){
       this.zoomIcon = false;
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+      this.image_view_id = -1;
       // this.file.nativeElement.value = "";
       this.disabledupload = true;
       this.uploadFileAlert = true;
@@ -280,8 +290,11 @@ disable_file_upload(a){
 }
 
 onClickHome(){
+  this.panZoomController.zoomAbs(0, 0, 1);
+  this.panZoomController.smoothMoveTo(0,0)
+
   // let element = document.getElementById('scene').getAttribute('transform');
-  document.getElementById('scene').setAttribute('transform', "matrix(1 0 0 1 0 0)") ;
+  // document.getElementById('scene').setAttribute('transform', "matrix(1 0 0 1 0 0)") ;
   // document.getElementById('scene1').id = "scene";
 }
 
@@ -385,6 +398,7 @@ onClickHome(){
     this.downArrow = false;
     //this.form.value.select = null;
     this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    this.image_view_id = -1;
     this.zoomIcon = false;
     this.newDocumentInput = false;
     this.markForReview = false;
@@ -679,6 +693,7 @@ onClickHome(){
         this.fileNames = [];
         this.base64textString = [];
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        this.image_view_id = -1;
         this.zoomIcon = false
         //this.form.value.select = null;
         this.result = {};
@@ -758,6 +773,7 @@ onClickHome(){
         this.fileNames = [];
         this.base64textString = [];
         this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        this.image_view_id =-1;
         this.zoomIcon = false
         //this.form.value.select = null;
         this.getResult = false;
