@@ -1,0 +1,30 @@
+div.background {
+    background-image: url('../assets/header.jpg');
+    opacity: 0.40;
+    height:40px;
+    border-bottom: outset;
+    /* border: 2px solid black; */
+}
+
+/* div h4 {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 1;
+} */
+
+.div_h4 {
+    position:absolute;
+    left:-5%;
+    top:0px;
+    right:30px;
+    height:40px;
+    bottom:0px;
+    white-space: nowrap;
+    text-align: center;
+    color: #0e0e0e;
+    margin: 0px;
+    font-weight: 750;
+    font-style: oblique;
+
+}

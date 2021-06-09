@@ -1,11 +1,11 @@
-<body style="height:100%;width:100%;position:absolute;top:0%;bottom:0%;left:10px;right:5px;overflow-x: hidden;">
+<body style="height:calc(100% - 50px);width:100%;position:absolute;top:40px;bottom:0%;left:5px;right:5px;overflow-x: hidden;">
     <!-- page left block -->
     <div style="height:100%;width:50%;position:absolute;top:0%;bottom:0%;left:0%;right:50%;" class="">
 
-        <!-- left top block -->
-        <div style="width:100%;height:50px;position:absolute;top:10px;bottom:0px;left:0%;right:42%;" class="d-flex">
+        <!-- left top block  top 10px-->
+        <div style="width:100%;height:50px;position:absolute;top:0px;bottom:0px;left:0%;right:42%;" class="d-flex">
             <!-- file upload -->
-            <div style="white-space: nowrap;width:70%;height:50px;position:absolute;top:0px;bottom:0px;left:0%;right:25%;" >
+            <div style="white-space: nowrap;width:70%;height:50px;position:absolute;top:0px;bottom:0px;left:4px;right:25%;" >
                 <form [formGroup]="form" (submit)="onSubmit()" class="form">
                     <input style="display:none;"
                             type="file" 
@@ -44,61 +44,46 @@
             </div>
             <!-- reset -->
             <div style="width:40px;height:50px;position:absolute;top:0px;bottom:0px;left:calc(100% - 110px);right:0%;">
-                <button class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Reset</button>
+                <button class="btn btn-danger btn_border" data-toggle="modal" data-target="#myModal2">Reset</button>
             </div>
         </div>
-        <!-- Show image larger and Zoom function -->
-        <div style="width:100%;height:calc(100% - 60px);
-            position:absolute;top:60px;bottom:0%;left:0%;right:0%;" 
+        
+        <!-- Show image larger and Zoom function; ht: (100% - 50px for button - 10px for margin)-->
+        <div style="width:100%;height:calc(100% - 50px);
+            position:absolute;top:50px;bottom:0%;left:0%;right:0%;" 
             class="">
             <!-- img block -->
+            
+                <!-- [style.display]="zoom ? 'none' : 'inline-flex'" -->
+            <div class="" id="image_scene" 
+                style="background-color: rgb(206 212 218);
+                position: absolute;left:5px;right:160px ;top:0%;bottom:1%;">
+                 <!-- this is the draggable root -->
+                <svg  class="box_shadow" style="position:absolute;width:100%;height:100%;left:0%;background-color:transparent">
+                
 
-            <div class="" id="image_scene" [style.display]="zoom ? 'none' : 'inline-flex'"
-                style="background-color: rgba(230, 230, 243, 0.986);
-                position: absolute;left:0px;right:160px ;top:0%;bottom:1%;">
-                  <svg  style="position:absolute;width:100%;height:100%;left:0%;background-color:transparent">
-                    <!-- this is the draggable root -->
-                        
+                    <image width="100%" height="100%" id="scene" transform="matrix(1 0 0 1 0 0)" 
+                    [attr.xlink:href]="image_view" />
                     
-                         <image width="100%" height="100%" id="scene" transform="matrix(1 0 0 1 0 0)" 
-                         [attr.xlink:href]="image_view" />
-                        
-                  </svg>
-
-                  <svg class="zoomInIcon button_hover" width="150" height="150" 
-                  
-                  transform="scale(0.25)" 
-                   fill-rule='evenodd' clip-rule="evenodd" 
-                  xmlns="http://www.w3.org/2000/svg" (click)="onClickHome()">
+                </svg>
+                <svg class="zoomInIcon button_hover" width="150" height="150" 
+                
+                    transform="scale(0.25)" 
+                    fill-rule='evenodd' clip-rule="evenodd" 
+                    xmlns="http://www.w3.org/2000/svg" (click)="onClickHome()">
 
                     <g >
-                      <g id="svg_1">
-                       <path id="svg_2" d="m61.44,0c33.93,0 61.44,27.51 61.44,61.44c0,33.93 -27.51,61.44 -61.44,61.44c-33.93,0 -61.44,-27.51 -61.44,-61.44c0,-33.93 27.51,-61.44 61.44,-61.44l0,0zm0,29l-31.38,30.74l7.65,4.02l23.52,-24.69l23.92,24.7l7.66,-4.02l-31.37,-30.75l0,0l0,0zm-22.05,38.13l0,0l22.08,-22.09l22.02,22.09l0,0l0,0l0,21.67l-16.09,0l0,-15.3l-12.06,0l0,15.3l-15.95,0l0,-21.67l0,0l0,0l0,0zm22.05,-58.04c28.91,0 52.35,23.44 52.35,52.35c0,28.91 -23.44,52.35 -52.35,52.35s-52.35,-23.44 -52.35,-52.35c0,-28.91 23.44,-52.35 52.35,-52.35l0,0z" 
-                       class="" fill="#023367"/>
-                      </g>
-                      <path stroke="#FF0000" transform="rotate(45.13833236694336 124.08902740478514,123.99531555175781) " 
-                      id="svg_3" d="m94.856865,115.871761l58.464331,0l0,16.247101l-58.464331,0l0,-16.247101z" 
-                      stroke-width="0.001" fill="#023367"/>
+                        <g id="svg_1">
+                            <path id="svg_2" d="m61.44,0c33.93,0 61.44,27.51 61.44,61.44c0,33.93 -27.51,61.44 -61.44,61.44c-33.93,0 -61.44,-27.51 -61.44,-61.44c0,-33.93 27.51,-61.44 61.44,-61.44l0,0zm0,29l-31.38,30.74l7.65,4.02l23.52,-24.69l23.92,24.7l7.66,-4.02l-31.37,-30.75l0,0l0,0zm-22.05,38.13l0,0l22.08,-22.09l22.02,22.09l0,0l0,0l0,21.67l-16.09,0l0,-15.3l-12.06,0l0,15.3l-15.95,0l0,-21.67l0,0l0,0l0,0zm22.05,-58.04c28.91,0 52.35,23.44 52.35,52.35c0,28.91 -23.44,52.35 -52.35,52.35s-52.35,-23.44 -52.35,-52.35c0,-28.91 23.44,-52.35 52.35,-52.35l0,0z" 
+                            class="" fill="#023367"/>
+                        </g>
+                        <path stroke="#FF0000" transform="rotate(45.13833236694336 124.08902740478514,123.99531555175781) " 
+                        id="svg_3" d="m94.856865,115.871761l58.464331,0l0,16.247101l-58.464331,0l0,-16.247101z" 
+                        stroke-width="0.001" fill="#023367"/>
                     </g>
-                   </svg>
+                </svg>
             </div>
-                <!-- <i-bs 
-                    name="zoom-in"
-                    *ngIf = "zoomIcon"
-                    width="40"
-                    height="40" style="cursor: pointer;" (click)= "onClickHome()" 
-                    class="zoomInIcon">
-                </i-bs> -->
-                <!-- <img id="" class="img-responsive" src={{image_view}} 
-                    style="display: inline-flex;position: absolute;
-                            width:100% ;height:100%">
-                <i-bs 
-                    name="zoom-in"
-                    *ngIf = "zoomIcon"
-                    width="40"
-                    height="40" style="cursor: pointer;" (click)= "onClickZoom()" 
-                    class="zoomInIcon">
-                </i-bs> -->
+                
             
                 <!-- <div *ngIf = "zoom" class="zoom">
                     <img src={{image_view}} alt="" id={{i}} class="ZoomImage img-responsive" 
@@ -109,9 +94,9 @@
             
             
             
-            <!-- list img -->
+            <!-- list img ; -->
             <div
-                 style="height:100%;width:150px;position: absolute;top: 0%;left: calc(100% - 150px);
+                 style="height:100% ;width:150px;position: absolute;top: 0%;left: calc(100% - 150px);
             right:0%;bottom: 0%;">
                 <div class="card2 mozilla_scroll" id="image1">
                     <div *ngFor="let item of base64textString;let i = index" style="display: inline-block;position: relative;">
@@ -142,9 +127,9 @@
             
         </div> -->
     
-        <!-- Right block -->
+        <!-- Right block  top 10px -->
         <div style="width:calc(50% - 10px);height:100%;position:absolute;left:50%;
-                    top:10px;right:0%;bottom:1%;">
+                    top:0px;right:0%;bottom:1%;">
             <!-- Counters -->
             <div style="overflow:hidden;width:100%;height:50px;position:absolute;
                         left:10px;top:0px;right:0%;" 
@@ -162,8 +147,8 @@
             <div style="width:100%;height:50px;position:absolute;left:10px;top:50px;right:0%;" 
                 class="d-flex">
                 <form [formGroup]="form" (submit)="onSubmit()" class="">
-                    <button for="" disabled  class="btn btn-outline-primary"
-                        style="white-space: nowrap;border-color: white;color:black;opacity: 0.88;
+                    <button for="" disabled  class="btn btn-outline-primary btn_border"
+                        style="white-space: nowrap;color:black;opacity: 0.88;
                         position: absolute;width:20%;left:0%;right:80%">Select Report
                     </button>
                     <select formControlName="select" style="position: absolute;width:40%;left:20%;right: 40%;"
@@ -174,12 +159,12 @@
                                  [selected]="!Select_document_disabled" value="Select Document" id="default_report_type">Select Document</option>                        
                         <option *ngFor="let listOfDocument of listOfDocuments" value={{listOfDocument}} >{{listOfDocument}}</option>
                     </select>
-                    <button style="position: absolute;vertical-align: inherit;width:25%;left:calc(60% + 5px);right:15%;" *ngIf="!uploadButton" class="btn btn-primary" 
+                    <button style="position: absolute;vertical-align: inherit;width:25%;left:calc(60% + 5px);right:15%;" *ngIf="!uploadButton" class="btn btn-primary btn_border" 
                         [disabled]='disabledupload || uploadByteLimit' 
                         type="submit" >Upload
                     </button>
                     <button style="white-space: nowrap;position: absolute;vertical-align: inherit;
-                        width:25%;left:calc(60% + 5px);right: 15%;" *ngIf="responseButton" class="btn btn-primary" 
+                        width:25%;left:calc(60% + 5px);right: 15%;" *ngIf="responseButton" class="btn btn-primary btn_border" 
                         type="button" nbButton status="primary">    
                         <span style="font-size: 8;">{{seconds}}s Estimated time</span>
                     </button>
@@ -189,17 +174,17 @@
                     </div> -->
                 </form>
             </div>
-            <div style="overflow-y: hidden;width:100%;height:55px;position:absolute;left:5%;top:95px;right:10%;">
+            <div style="overflow-y: scroll;width:100%;height:60px;position:absolute;left:5%;top:90px;right:10%;">
                 <div *ngIf="successAlert" 
                     class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        Data stored Successfully!!
+                        Data stored Successfully!!!
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div *ngIf="uploadByteLimit" class="alert alert-danger alert-dismissible fade show" 
                         role="alert" style="margin-top: 10px;">
-                        <strong>File size limit reached!</strong>
+                        <strong>Warning:</strong> Maximum number of files allowed per report is 8.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -216,7 +201,7 @@
                     </div>
                 </div>
                 <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Server can't respond please contact your admin
+                    Server can't respond please contact your Admin.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -233,7 +218,7 @@
                 di[key][1]===True
                 di_status=True -->
                 <div *ngIf="uploadFileAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Please select file to upload
+                    Please select file(s) to upload.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -398,16 +383,18 @@
                     </table>
                 </div>
             </div>
-            <div style="white-space: nowrap;width:100%;height:50px;position:absolute;left:50%;bottom:0.8%;right:0%;" class="d-flex">
+            <div style="white-space: nowrap;width:100%;height:40px;
+                position:absolute;left:50%;bottom:0px;right:0%;" 
+                class="d-flex">
                 <div style="width:15%;position: fixed;left:60%;" >
                     <button 
                     style="width:100%;"
-                    class="btn btn-primary" type="submit" data-toggle="modal" 
+                    class="btn btn-primary btn_border" type="submit" data-toggle="modal" 
                     data-target="#myModal" [disabled]="!markForReview || !tableShow">Mark for Review</button>
                 </div>
                 <div style="width:15%;position: fixed;left:75%;">
                     <button
-                    style="width:100%;" class="btn btn-primary" type="submit" 
+                    style="width:100%;" class="btn btn-primary btn_border" type="submit" 
                     data-toggle="modal" data-target="#myModal1" 
                     
                     [disabled]="!getResult || !tableShow">Update Database</button>
@@ -427,8 +414,8 @@
                     <p>Are you sure you want to proceed?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" #closebutton id="closeModal" (click)="onSubmitImage()">Yes</button>
-                    <button type="button" #closebutton class="btn btn-danger" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary btn_border" #closebutton id="closeModal" (click)="onSubmitImage()">Yes</button>
+                    <button type="button" #closebutton class="btn btn-danger btn_border" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
@@ -444,8 +431,8 @@
                     <p>Are you sure you want to proceed?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" #closebutton1 id="closeModal" (click)="onSubmitText()">Yes</button>
-                    <button type="button" #closebutton1 class="btn btn-danger" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary btn_border" #closebutton1 id="closeModal" (click)="onSubmitText()">Yes</button>
+                    <button type="button" #closebutton1 class="btn btn-danger btn_border" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
@@ -459,8 +446,8 @@
                 </div>
                 <div class="modal-body reset_modal_body">
                     <p>Are you sure you want to proceed?</p>
-                    <button type="button" style="margin-left: 128px;margin-right: 10px;" class="btn btn-primary" #closebutton2 id="closeModal" (click)="onEdit()">Partial Reset</button>
-                    <button type="button" style="border: white;" class="btn btn-danger" #closebutton2 id="closeModal" (click)="onReset()">Reset</button>
+                    <button type="button" style="margin-left: 128px;margin-right: 10px;" class="btn btn-primary btn_border" #closebutton2 id="closeModal" (click)="onEdit()">Partial Reset</button>
+                    <button type="button" style="border: white;" class="btn btn-danger btn_border" #closebutton2 id="closeModal" (click)="onReset()">Reset</button>
                 </div>
                 <div class="modal-footer footer">
                     <p><b>Note:</b>&nbsp;&nbsp;&nbsp;</p><br>
