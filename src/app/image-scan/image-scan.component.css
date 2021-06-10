@@ -9,7 +9,11 @@ pre {
     font-size: inherit;
     overflow-x: hidden;
 }
-
+.btn_counter{
+    opacity:1;
+    /* border-color: #ced4da; */
+    box-shadow:1px 1px 2px 0px;
+}
 /* width */
 ::-webkit-scrollbar {
     width: 8px;
