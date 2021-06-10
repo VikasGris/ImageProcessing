@@ -21,7 +21,14 @@ export class ImageScanComponent implements OnInit {
     // this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
     // this.currentZoomLevel = this.zoomLevels[4];
     // panzoom(document.querySelector('#scene'));
-    this.panZoomController = panzoom(document.getElementById('scene'));
+    this.panZoomController = panzoom(document.getElementById('scene'), {
+      maxZoom: 4,
+      minZoom: 0.8,
+      smoothScroll:false,
+      bounds: true,
+      boundsPadding: 0.05,
+    });
+    
   }
 //Variables declarations
   panZoomController;
@@ -291,8 +298,8 @@ disable_file_upload(a){
 
 onClickHome(){
   this.panZoomController.zoomAbs(0, 0, 1);
-  this.panZoomController.smoothMoveTo(0,0)
-
+  this.panZoomController.smoothMoveTo(0,0);
+  
   // let element = document.getElementById('scene').getAttribute('transform');
   // document.getElementById('scene').setAttribute('transform', "matrix(1 0 0 1 0 0)") ;
   // document.getElementById('scene1').id = "scene";

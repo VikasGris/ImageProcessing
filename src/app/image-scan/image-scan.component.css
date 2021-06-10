@@ -54,6 +54,7 @@ pre {
     margin-bottom: 0px;
     overflow-y: scroll;
     overflow-x: hidden;
+    border-radius:4px;
     
 }
 /* .alert-dismissible .close {
@@ -66,18 +67,19 @@ pre {
 } */
 
 .close {
-    float: right;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 0.5;
+    /* float: right; */
+    /* font-size: 1.5rem;
+    font-weight: 700; */
+    /* line-height: 0.5; */
+    font-family: cursive;
     color: #000;
-    text-shadow: 0 1px 0 #fff;
-    opacity: .5;
+    text-shadow: 1px ​1px 4px #909090;
+    opacity: .45;
 }
 
 .alert {
     position: absolute;
-    padding: .5rem 1.5rem;
+    /* padding: .5rem 1.5rem; */
     margin-bottom: 0rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
@@ -181,14 +183,19 @@ pre {
 }
 
 .scanImage {
-    border-radius: 0px;
-    padding: 4px;
-    margin: -2px;
-    width: 130px;
-    height: 170px;
-    margin-top: 10px;
-    margin-left: 7px;
+    border-radius: 5px;
+    padding: 0px;
+    margin: 10px 0px 10px 8px;
+    width: 126px;
+    height: 160px;
+    box-shadow: 0 0 5px -1px #000000;
+    opacity: 0.7;
 }
+.scanImage:hover {
+    box-shadow: 0 0 2px 2px rgba(19, 62, 202, .59);
+    opacity: 1.0;
+}
+
 
 /* .zoom {
     background-color: black;
@@ -199,22 +206,39 @@ pre {
 
 .closeIcon {
     position: absolute;
-    top: 5px;
-    left: 119px;
+    top: -7px;
+    left: 121px;
     font-weight: bold;
     font-size: xx-large;
 }
 
+.arrow_hover:hover{
+    /* color:#023367; */
+    color: #0003b3;
+    background-color: #e6e9ec;
+    box-shadow: 0px 0px 3px 2px #1a0bf140;
+    opacity:0.95;
+}
+
 .up_arrow {
     position: absolute;
-    top: 16px;
+    top: 5px;
     left: 58px;
+    /* #7d7e7b */
+    color: #7d7e7b;
+    background-color: #e5e7ef;
+    box-shadow: 0px 0px 2px 1px #1a0bf140;
+    opacity: 0.8;
 }
 
 .down_arrow {
     position: absolute;
-    top: 146px;
+    top: 150px;
     left: 58px;
+    color: #7d7e7b;
+    background-color: #e5e7ef;
+    box-shadow: 0px 0px 2px 1px #1a0bf140;
+    opacity: 0.8;
 }
 
 .button_hover{
@@ -279,9 +303,6 @@ pre {
     margin-left: 1px;
 }
 
-.scanImage:hover {
-    box-shadow: 0 0 5px 2px rgba(4, 186, 247, 0.5);
-}
 
 .card1 {
     width: 93%;
