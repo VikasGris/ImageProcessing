@@ -90,7 +90,7 @@ pre {
     margin-bottom: 0rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
-    width: 82%;
+    width: calc( 70% + 128px );
 }
 
 .file-input{
