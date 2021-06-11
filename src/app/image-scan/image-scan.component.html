@@ -305,14 +305,17 @@
             <!-- Results division -->
             <div style="width:95%;height:100%;position:absolute;left:10px;top:150px;right:1%;"
             class="scrollit" id="result">
-                <div class="table-wrapper mozilla_scroll" *ngIf="tableShow">
+                <div class="table-wrapper mozilla_scroll " *ngIf="tableShow" 
+                style="box-shadow: inset 0px 0px 5px 1px #acb2b9;border-radius: 6px;">
                     <table class="table tableScroll" style="overflow-y: auto;">
-                        <tbody style="overflow-y: auto;" >
+                        <tbody >
+                        
                             <tr>
                                 <th class="w-25"></th>
                                 <td class="w-65"></td>
                                 <th class="w-10" style="text-align: center;">C (%)</th>
                             </tr>
+                        
                             <tr *ngFor="let item of result_others | keyvalue">
 
                                 <th style="vertical-align: middle;">{{item.key.split('_').join(' ') | titlecase}}</th>
@@ -371,7 +374,8 @@
                     </table>
                     <br>
                     <table *ngIf="result_testreport_show" class="table table-borderless">
-                        <tbody>
+                        
+                        <thead  style="position: sticky;top: 0">
                             <tr class="d-flex border_bottom border_top">
                                 <th class="col-1" style="text-align: center;">S.No</th>
                                 <th class="col-4" style="text-align: center;">Test</th>
@@ -379,6 +383,8 @@
                                 <th class="col-3" style="text-align: center;">Units</th>
                                 <th class="col-1" style="text-align: center;">C(%)</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             <div *ngFor="let item of result_testreport | keyvalue">
                                 <tr class="d-flex border_bottom" style="padding: 0%;">
                                     <th class="col-1"></th>
