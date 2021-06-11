@@ -91,6 +91,7 @@ pre {
     border: 1px solid transparent;
     border-radius: 0.5rem;
     width: calc( 70% + 128px );
+    padding-right: 2.5rem;
 }
 
 .file-input{

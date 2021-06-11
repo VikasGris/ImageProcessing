@@ -30,6 +30,7 @@
     "jquery": "^3.6.0",
     "ng-image-fullscreen-view": "^2.0.0",
     "ngx-bootstrap-icons": "^1.4.6",
+    "ngx-connection-service": "^7.0.3",
     "ngx-countdown": "^11.0.3",
     "ngx-img-zoom": "^4.1.2",
     "ngx-spinner": "^11.0.1",
