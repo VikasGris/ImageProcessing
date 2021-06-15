@@ -424,7 +424,9 @@
                                     'below30':result_imp[1] >0 && result_imp[1] <30,
                                     'zero':result_imp[1] === 0
                                    }">
-                                    <textarea value={{result_imp[0]}} id='Impression' class="form-control impression" type="text" (change)="onchangeInput_imp($event)">
+                                    <textarea value={{result_imp[0]}} id='Impression' 
+                                    class="form-control impression mozilla_scroll" 
+                                    type="text" (change)="onchangeInput_imp($event)">
                                 </textarea>
                                 </td>
 

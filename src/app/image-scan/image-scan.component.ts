@@ -562,7 +562,7 @@ onClickHome(){
           this.result_date_show = false;
           //console.log(response.response)
           this.result__keys = Object.keys(response.response);
-          ////console.log(this.result__keys)
+          // console.log(this.result__keys)
           for (var i = 0; i < this.result__keys.length; i++){
             if (this.result__keys[i] === 'Test_Report') {
               this.result_testreport_show= true;
@@ -570,11 +570,13 @@ onClickHome(){
             }
             else if (this.result__keys[i] === 'Impression') {
               this.result_imp_show = true;
+              // console.log(response.response[this.result__keys[i]])
               this.result_imp = response.response[this.result__keys[i]]
             }
             else if (this.result__keys[i] === 'Date') {
               this.result_date_show = true;
               this.result_date = response.response[this.result__keys[i]]
+              this.result_date[0] = this.result_date[0].split("-").reverse().join("-")
             }
             else {
               this.result_others[this.result__keys[i]] = response.response[this.result__keys[i]]
@@ -583,8 +585,8 @@ onClickHome(){
           //console.log("After")
           //console.log(this.result_testreport,this.result_date,this.result_imp,this.result_others)
           //console.log(this.result_others)
-          var date = this.result_date[0]
-          this.result_date[0] = date.split("-").reverse().join("-")
+          // var date = this.result_date[0]
+          
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
@@ -605,6 +607,7 @@ onClickHome(){
             this.uploadButton = false;
           }
           else if(response.code === 2){
+            // console.log("here")
             this.invalidDocumentId = true;
             this.isLoading = false;
             this.responseButton = false;
