@@ -84,6 +84,12 @@ pre {
     opacity: .45;
 }
 
+.sticky_{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 .alert {
     position: absolute;
     /* padding: .5rem 1.5rem; */

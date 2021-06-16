@@ -437,9 +437,9 @@
                     </table>
                     <br>
                     <table *ngIf="result_testreport_show" class="table table-borderless">
-                        
-                        <thead  style="position: sticky;top: 0">
-                            <tr class="d-flex border_bottom border_top">
+                        <!-- class="sticky_" -->
+                        <thead >
+                            <tr class="d-flex border_top ">
                                 <th class="col-1" style="text-align: center;">S.No</th>
                                 <th class="col-4" style="text-align: center;">Test</th>
                                 <th class="col-3" style="text-align: center;">Result</th>
@@ -449,7 +449,7 @@
                         </thead>
                         <tbody>
                             <div *ngFor="let item of result_testreport | keyvalue">
-                                <tr class="d-flex border_bottom" style="padding: 0%;">
+                                <tr class="d-flex border_bottom border_top" style="padding: 0%;">
                                     <th class="col-1"></th>
                                     <th class="col-5">
                                         {{item.key.split('_').join(' ') | titlecase }}
@@ -458,7 +458,9 @@
                                     <th class="col-3"></th>
                                     <th class="col-1"></th>
                                 </tr>
-                                <tr *ngFor="let report of item.value;let i = index" class="d-flex border_bottom" style="padding: 0%;">
+                                <tr *ngFor="let report of item.value;let i = index" 
+                                class="d-flex border_bottom"
+                                style="padding: 0%;">
                                     <td class="col-1" style="padding: 12px;">{{i+1}}</td>
                                     <td [ngClass]="{
                                                 'above85':report[2] >=85,
@@ -468,7 +470,9 @@
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
                                             }" class="col-4">
-                                        <input type="text" value={{report[1][0]}} row={{i}} key={{item.key}} class="form-control" (change)="onchangeInput_0($event)">
+                                        <input type="text" value={{report[1][0]}} row={{i}} key={{item.key}} 
+                                        class="form-control" (change)="onchangeInput_0($event)" 
+                                        (click)="focusOnChangeInput($event)">
                                     </td>
                                     <td [ngClass]="{
                                                 'above85':report[2] >=85,
@@ -478,7 +482,9 @@
                                                 'below30':report[2] >0 && report[2] <30,
                                                 'zero':report[2] === 0
                                             }" class="col-3">
-                                        <input type="text" value={{report[1][1]}} row={{i}} key={{item.key}} class="form-control" (change)="onchangeInput_1($event)">
+                                        <input type="text" value={{report[1][1]}} row={{i}} key={{item.key}} 
+                                        class="form-control" (change)="onchangeInput_1($event)"
+                                        (click)="focusOnChangeInput($event)">
                                     </td>
                                     <td [ngClass]="{
                                             'above85':report[2] >=85,
@@ -488,12 +494,18 @@
                                             'below30':report[2] >0 && report[2] <30,
                                             'zero':report[2] === 0
                                         }" class="col-3">
-                                        <input type="text" row={{i}} key={{item.key}} value={{report[1][2]}} class="form-control" (change)="onchangeInput_2($event)">
+                                        <input type="text" row={{i}} key={{item.key}} value={{report[1][2]}} 
+                                        class="form-control" (change)="onchangeInput_2($event)"
+                                        (click)="focusOnChangeInput($event)">
                                     </td>
                                     <td class="col-1" style="padding: 12px;">{{report[2]}}</td>
                                 </tr>
-                                <button class="btn btn-primary" style="background-color: #007bff;margin: 5px;border-color: white;" id={{item.key}} (click)="onCreateInput($event)">Add</button>
-                                <mat-divider></mat-divider>
+                                <tr class="d-flex border_bottom" style="padding: 0%;">
+                                    <button class="btn btn-primary" style="background-color: #007bff;margin: 5px;
+                                    border-color: white;" id={{item.key}} (click)="onCreateInput($event)"
+                                    >Add</button>
+                                </tr>
+                                <!-- <mat-divider></mat-divider> -->
                             </div>
                         </tbody>
                     </table>

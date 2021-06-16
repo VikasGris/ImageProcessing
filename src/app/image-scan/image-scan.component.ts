@@ -297,7 +297,7 @@ disable_file_upload(a){
 }
 
 onClickHome(){
-  this.panZoomController.zoomAbs(0, 0, 1);
+  this.panZoomController.zoomAbs(0,0, 1);
   this.panZoomController.smoothMoveTo(0,0);
   
   // let element = document.getElementById('scene').getAttribute('transform');
@@ -497,26 +497,38 @@ onClickHome(){
   }
   onchangeInput_0(event) {
     var key = event.target.key;
-    //console.log(event)
-    var _id = event.target.attributes[3].value;
-    //console.log(_id)
-    var value = event.target.value;
-    //console.log(value)
-    this.result_testreport[key][_id][1][0] = value;
+    var _id = event.target.row;
+    // console.log(this.result_testreport[key][_id][0])
+    // this.focusOnChangeInput(this.result_testreport[key][_id][0])
+    this.result_testreport[key][_id][1][0] = event.target.value;
   }
   onchangeInput_1(event) {
     var key = event.target.key;
     var _id = event.target.row;
-    var value = event.target.value;
-    this.result_testreport[key][_id][1][1] = value;
+    this.result_testreport[key][_id][1][1] = event.target.value;
   }
   onchangeInput_2(event) {
     var key = event.target.key;
     var _id = event.target.row;
-    var value = event.target.value;
-    this.result_testreport[key][_id][1][2] = value;
+    this.result_testreport[key][_id][1][2] = event.target.value;
   }
     
+  focusOnChangeInput(event){
+    // console.log(event.target)
+
+    var key = event.target.key;
+    var _id = event.target.row;
+    // console.log(this.result_testreport[key][_id][0])
+    // console.warn(event)
+    let pg =this.result_testreport[key][_id][0];
+    if(pg>=0){
+      this.image_view = this.base64textString[pg];
+      this.image_view_id = pg;
+    }
+    
+    // this.onClickHome()
+    //console.log(this.image_view)
+  }
 
 //Send request and get Response to show result
   
