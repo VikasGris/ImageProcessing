@@ -259,13 +259,13 @@
                         [selected]="!Select_document_disabled" value="Select Document" 
                         id="default_report_type">Select Document
                         </option>                        
-                        <option *ngFor="let listOfDocument of listOfDocuments" 
+                        <option [disabled]="storingData" *ngFor="let listOfDocument of listOfDocuments" 
                         value={{listOfDocument}} >{{listOfDocument}}</option>
                     </select>
                     <button style="position: absolute;vertical-align: inherit;width:30%;
                     left:calc(40% + 140px);right:0%;" 
                     *ngIf="!uploadButton" class="btn btn-primary btn_border" 
-                        [disabled]='disabledupload || uploadByteLimit' 
+                        [disabled]='disabledupload || uploadByteLimit || storingData' 
                         type="submit" >Upload
                     </button>
                     <button style="white-space: nowrap;position: absolute;vertical-align: inherit;
@@ -298,7 +298,7 @@
                     </button>
                 </div>
                 <div *ngIf="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 0px;">
-                        <strong>Error!</strong> Please try again...
+                        <strong>Error storing data:</strong> Please check your network or contact your Admin.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

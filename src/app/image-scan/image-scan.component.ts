@@ -35,6 +35,7 @@ export class ImageScanComponent implements OnInit {
   base64textString = [];
   fileNames = [];
   bytes = [];
+  storingData:boolean=false;
   uploadByteLimit:boolean=false;
   sumBytes:number=0;
   listOfDocuments:string[] = ["Nalan Gastro Centre", "Nalan Diagnostics" , "Pathway Diagnostics","Bioline"];
@@ -678,6 +679,7 @@ onClickHome(){
   public onSubmitImage() {
     this.getResult = false;
     this.markForReview = false;
+    this.storingData = true;
     for (var i = 0; i < this.result__keys.length; i++){
       if (this.result__keys[i] === 'Test_Report') {
         this.result[this.result__keys[i]] = this.result_testreport
@@ -702,10 +704,12 @@ onClickHome(){
         'fields': this.result
       }
     };
+    this.errorAlert = false;
     this.closebutton.nativeElement.click();
     this.service.postResponseSaveasImage(params).subscribe(response => {
       this.success = response;
       if(response.code === "success"){
+        this.storingData = false;
         this.successAlert = true;
         this.tableShow = false;
         this.failedCount = this.failedCount + 1;
@@ -748,15 +752,24 @@ onClickHome(){
       }
       else{
         this.errorAlert = true;
+        this.getResult = true;
+        this.markForReview = true;
+        this.storingData = false;
       }
     }, (error) => {
       this.errorAlert = true;
-      this.failedCount = this.failedCount+1;
+      this.getResult = true;
+      this.markForReview = true;
+      this.storingData = false;
+      // // this.failedCount = this.failedCount+1;
     })
   }
 
 //Send data to database
   public onSubmitText() {
+    this.getResult = false;
+    this.markForReview = false;
+    this.storingData = true;
     for (var i = 0; i < this.result__keys.length; i++){
       if (this.result__keys[i] === 'Test_Report') {
         this.result[this.result__keys[i]] = this.result_testreport
@@ -782,9 +795,11 @@ onClickHome(){
       }
     };
     this.closebutton1.nativeElement.click();
+    this.errorAlert = false;
     this.service.postResponseSaveasText(finalOutput).subscribe(response => {
        this.success = response;
       if(response.code === "success"){
+        this.storingData = false;
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         //console.log(this.successCount)
@@ -827,9 +842,15 @@ onClickHome(){
       }
       else{
         this.errorAlert = true;
+        this.getResult = true;
+        this.markForReview = true;
+        this.storingData = false;
       }
     }, (error) => {
       this.errorAlert = true;
+      this.getResult = true;
+      this.markForReview = true;
+      this.storingData = false;
     })
   }
 }
