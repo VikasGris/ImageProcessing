@@ -61,7 +61,7 @@ export class ImageScanComponent implements OnInit {
   error: boolean = false;
   isLoading:boolean = false;
   selectDropdownId:string="";
-  getResult:boolean = false;
+  
   success={code:null,
           message:null};
   uploadFileAlert:boolean = false;
@@ -83,6 +83,7 @@ export class ImageScanComponent implements OnInit {
   duplicate_browse = false;
   BrowseId:string='';
   markForReview:boolean = false;
+  getResult:boolean = false;
   DocumentIdUploaded:string = '';
   waitForResponse: boolean = false;
   verifyDocumentId:boolean = false;
@@ -115,11 +116,59 @@ export class ImageScanComponent implements OnInit {
   }
   
 var_reset(e:string){
+  this.upArrow = false;
+  this.downArrow = false;
+  this.result={};
+  this.result_testreport={};
+  this.result_imp=[];
+  this.result_date=[];
+  this.result_others = {};
+  this.result_date_show = false;
+  this.result_imp_show = false;
+  this.result_testreport_show = false;
+  this.error = false;
+  this.duplicate_browse =false;
+  this.uploadFileAlert = false;
+  this.waitForResponse = false;
+  this.selectDropdownId = "";
+  this.Select_document_disabled = false;
+  this.isLoading = false
+  this.responseButton = false;
+  this.uploadButton = false;
+  this.disabledupload = true; 
+  this.tableShow = false;
+  this.DocumentIdUploaded = "";
+  this.largeImage = true;
+  this.disable_file_upload(!this.largeImage);
+  this.DropdownId = false;
+  this.verifyDocumentId = false;
+  this.invalidDocumentId = false;
+  this.unKnownError = false;
+  this.markForReview = false;
+  this.getResult = false;
+  
   if(e==="full"){
+    this.closebutton2.nativeElement.click();
     this.bytes=[]
     this.sumBytes=0;
     this.uploadByteLimit=false;
+  
+    // Testing needed
+    this.fileNames = [];
+    this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    this.image_view_id = -1;
+    this.newDocumentInput = false;
+    this.base64textString = [];
   }
+  else if(e === "partial"){
+    this.closebutton2.nativeElement.click();
+    this.closeIcon = true;
+    if (this.tableShow) {
+      this.getResult = false;
+      this.markForReview = false;
+    }
+  }
+
 }
 
 
@@ -212,7 +261,7 @@ var_reset(e:string){
     this.image_view = this.base64textString[this.base64textString.length-1];
     this.image_view_id = this.base64textString.length-1 ;
     this.onClickHome()
-    this.zoomIcon = true;
+    // this.zoomIcon = true;
     this.uploadByteLimit = (this.sumBytes > 8100000 ? true:false);
     this.disable_file_upload(this.uploadByteLimit);
     // console.log(this.uploadByteLimit,(this.sumBytes > 8100000 ? true:false));
@@ -273,7 +322,7 @@ var_reset(e:string){
     this.image_view_id = this.base64textString.length - 1 ;
     
     if(this.base64textString.length === 0){
-      this.zoomIcon = false;
+      // this.zoomIcon = false;
       this.image_view='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
       this.image_view_id = -1;
       // this.file.nativeElement.value = "";
@@ -353,11 +402,12 @@ onClickHome(){
         
         this.disabledupload = false;
         this.markForReview = false;
+        this.getResult = false;
 
         if (this.DocumentIdUploaded !== '') {
           if (this.DocumentIdUploaded !== this.form.value.select) {
-            this.markForReview = false;
-            this.getResult = false;
+            // this.markForReview = false;
+            // this.getResult = false;
           }
           else {
           
@@ -390,91 +440,93 @@ onClickHome(){
 
   onReset() {
 
-    this.closebutton2.nativeElement.click();
-    this.fileNames = [];
-    this.error = false;
-    this.uploadFileAlert = false;
-    this.waitForResponse = false;
-    this.duplicate_browse = false;
-    this.DropdownId = false;
-    this.verifyDocumentId = false;
-    this.invalidDocumentId = false;
-    this.unKnownError = false;
-    this.largeImage = true;
-    this.disable_file_upload(!this.largeImage);
-    this.upArrow = false;
-    this.downArrow = false;
-    //this.form.value.select = null;
-    this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-    this.image_view_id = -1;
-    this.zoomIcon = false;
-    this.newDocumentInput = false;
-    this.markForReview = false;
-    this.getResult = false;
-    this.base64textString = [];
+    // this.closebutton2.nativeElement.click();
+    // this.fileNames = [];
+    // this.error = false;
+    // this.uploadFileAlert = false;
+    // this.waitForResponse = false;
+    // this.duplicate_browse = false;
+    // this.DropdownId = false;
+    // this.verifyDocumentId = false;
+    // this.invalidDocumentId = false;
+    // this.unKnownError = false;
+    // this.largeImage = true;
+    // this.disable_file_upload(!this.largeImage);
+    // this.upArrow = false;
+    // this.downArrow = false;
+
+    // // this.form.value.select = null;
+    // this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    // this.image_view_id = -1;
+    // this.zoomIcon = false;
+    // this.newDocumentInput = false;
+    // this.markForReview = false;
+    // this.getResult = false;
+    // this.base64textString = [];
     
-    this.result={};
-    this.result_testreport={};
-    this.result_imp=[];
-    this.result_date=[];
-    this.result_others = {};
-    this.result_date_show = false;
-    this.result_imp_show = false;
-    this.result_testreport_show = false;
-    this.isLoading = false
-    this.responseButton = false;
-    this.uploadButton = false;
-    this.disabledupload = true; 
-    this.tableShow = false;
-    this.DocumentIdUploaded = "";
-    // this.form.reset();
-    this.Select_document_disabled = false;
-    this.selectDropdownId = "";
+    // this.result={};
+    // this.result_testreport={};
+    // this.result_imp=[];
+    // this.result_date=[];
+    // this.result_others = {};
+    // this.result_date_show = false;
+    // this.result_imp_show = false;
+    // this.result_testreport_show = false;
+    // this.isLoading = false
+    // this.responseButton = false;
+    // this.uploadButton = false;
+    // this.disabledupload = true; 
+    // this.tableShow = false;
+    // this.DocumentIdUploaded = "";
+    // this.Select_document_disabled = false;
+    // this.selectDropdownId = "";
     this.form_reset("Select Document");
     this.var_reset("full");
     
   }
 
   onEdit() {
-    this.Select_document_disabled = false;
-    this.selectDropdownId = "";
-    this.closebutton2.nativeElement.click();
-    //this.form.value.select = null;
-    this.error = false;
-    this.closeIcon = true;
-    this.largeImage = true;
-    this.disable_file_upload(!this.largeImage);
-    this.upArrow = false;
-    this.downArrow = false;
-    this.duplicate_browse =false;
-    this.uploadFileAlert = false;
-    this.waitForResponse = false;
-    this.DropdownId = false;
-    this.verifyDocumentId = false;
-    this.invalidDocumentId = false;
-    this.unKnownError = false;
-    this.markForReview = false;
-    this.getResult = false;
-    this.result={};
-    this.result_testreport={};
-    this.result_imp=[];
-    this.result_date=[];
-    this.result_others = {};
-    this.result_date_show = false;
-    this.result_imp_show = false;
-    this.result_testreport_show = false;
-    this.isLoading = false
-    this.responseButton = false;
-    this.uploadButton = false;
-    this.disabledupload = true; 
-    this.tableShow = false;
-    this.DocumentIdUploaded = "";
+    // this.Select_document_disabled = false;
+    // this.selectDropdownId = "";
+    // this.closebutton2.nativeElement.click();
+    // ////this.form.value.select = null;
+    // this.error = false;
+    // this.closeIcon = true;
+    // this.largeImage = true;
+    // this.disable_file_upload(!this.largeImage);
+    // //// this.upArrow = false;
+    // //// this.downArrow = false;
+    // this.duplicate_browse =false;
+    // this.uploadFileAlert = false;
+    // this.waitForResponse = false;
+    // this.DropdownId = false;
+    // this.verifyDocumentId = false;
+    // this.invalidDocumentId = false;
+    // this.unKnownError = false;
+    // this.markForReview = false;
+    // this.getResult = false;
+    // this.result={};
+    // this.result_testreport={};
+    // this.result_imp=[];
+    // this.result_date=[];
+    // this.result_others = {};
+    // this.result_date_show = false;
+    // this.result_imp_show = false;
+    // this.result_testreport_show = false;
+    // this.isLoading = false
+    // this.responseButton = false;
+    // this.uploadButton = false;
+    // this.disabledupload = true; 
+    // this.tableShow = false;
+    // this.DocumentIdUploaded = "";
+    
+    // if (this.tableShow) {
+    //   //console.log(this.tableShow)
+    //   this.getResult = false;
+    //   this.markForReview = false;
+    // }
     this.form_reset(this.form.value.select);
-    if (this.tableShow) {
-      //console.log(this.tableShow)
-      this.getResult = false;
-      this.markForReview = false;
-    }
+    this.var_reset("partial");
   }
 
   onchangeInput_date(event) {
@@ -549,6 +601,16 @@ onClickHome(){
     this.upArrow = true;
     this.downArrow = true;
     this.count();
+
+    this.result_testreport = {};
+    this.result_date = [];
+    this.result_imp = [];
+    this.result_others = {};
+    this.result = {};
+    this.result__keys = [];
+    this.result_testreport_show= false;
+    this.result_imp_show = false;
+    this.result_date_show = false;
     //console.log("Before")
     //console.log(this.result_testreport,this.result_date,this.result_imp,this.result_others)
     this.service.postTestResponse().subscribe(response =>{
@@ -564,15 +626,8 @@ onClickHome(){
         this.DocumentIdUploaded = this.selectDropdownId;
         this.service.postResponse(params).subscribe(response => {
           //console.log(response);
-          this.result_testreport = {};
-          this.result_date = [];
-          this.result_imp = [];
-          this.result_others = {};
-          this.result = {};
-          this.result__keys = [];
-          this.result_testreport_show= false;
-          this.result_imp_show = false;
-          this.result_date_show = false;
+          
+
           //console.log(response.response)
           this.result__keys = Object.keys(response.response);
           // console.log(this.result__keys)
@@ -595,22 +650,24 @@ onClickHome(){
               this.result_others[this.result__keys[i]] = response.response[this.result__keys[i]]
             }
           }
-          //console.log("After")
-          //console.log(this.result_testreport,this.result_date,this.result_imp,this.result_others)
-          //console.log(this.result_others)
-          // var date = this.result_date[0]
+          
           
           this.isLoading = false;
           this.uploadButton = false;
           this.responseButton = false;
           this.getResult = true;
           this.markForReview = true;
+          if(this.base64textString.length > 0){
           this.averageTime = Math.floor((this.seconds/this.base64textString.length ))
           //console.log(response.code )
+          }
+          else{
+            this.averageTime=7
+          }
           this.waitForResponse=false
           if(this.averageTime < 4){
-          this.averageTime = 7
-        }
+            this.averageTime = 7
+            }
           if (response.code === 20 || response.code === 3) {
             //console.log(response.code)
             this.verifyDocumentId = true
@@ -711,42 +768,42 @@ onClickHome(){
       if(response.code === "success"){
         this.storingData = false;
         this.successAlert = true;
-        this.tableShow = false;
         this.failedCount = this.failedCount + 1;
-        this.duplicate_browse =false;
-        this.largeImage = true;
-        this.disable_file_upload(!this.largeImage);
-        this.fileNames = [];
-        this.base64textString = [];
-        this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-        this.image_view_id = -1;
-        this.zoomIcon = false
-        //this.form.value.select = null;
-        this.result = {};
-        this.result_testreport={};
-        this.result_imp=[];
-        this.result_date=[];
-        this.result_others = {};
-        this.error = false;
-        this.uploadFileAlert = false;
-        this.waitForResponse = false;
-        this.DropdownId = false;
-        this.verifyDocumentId = false;
-        this.invalidDocumentId = false;
-        this.unKnownError = false;
-        this.result_date_show = false;
-        this.result_imp_show = false;
-        this.result_testreport_show = false;
-        this.getResult = false;
-        this.markForReview = false;
-        this.uploadButton = false;
-        this.disabledupload = true;
-        this.newDocumentInput = false;
-        this.zoom = false;
-        this.duplicate_browse = false;
-        this.DocumentIdUploaded = "";
-        this.Select_document_disabled = false;
-        this.selectDropdownId = "";
+        // this.tableShow = false;
+        // this.duplicate_browse =false;
+        // this.largeImage = true;
+        // this.disable_file_upload(!this.largeImage);
+        // this.fileNames = [];
+        // this.base64textString = [];
+        // this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        // this.image_view_id = -1;
+        // this.zoomIcon = false
+        // //this.form.value.select = null;
+        // this.result = {};
+        // this.result_testreport={};
+        // this.result_imp=[];
+        // this.result_date=[];
+        // this.result_others = {};
+        // this.error = false;
+        // this.uploadFileAlert = false;
+        // this.waitForResponse = false;
+        // this.DropdownId = false;
+        // this.verifyDocumentId = false;
+        // this.invalidDocumentId = false;
+        // this.unKnownError = false;
+        // this.result_date_show = false;
+        // this.result_imp_show = false;
+        // this.result_testreport_show = false;
+        // this.getResult = false;
+        // this.markForReview = false;
+        // this.uploadButton = false;
+        // this.disabledupload = true;
+        // this.newDocumentInput = false;
+        // this.zoom = false;
+        // this.duplicate_browse = false;
+        // this.DocumentIdUploaded = "";
+        // this.Select_document_disabled = false;
+        // this.selectDropdownId = "";
         this.form_reset(this.form.value.select);
         this.var_reset("full");
       }
@@ -803,40 +860,40 @@ onClickHome(){
         this.successAlert = true;
         this.successCount = this.successCount + 1;
         //console.log(this.successCount)
-        this.tableShow = false;
-        this.duplicate_browse =false;
-        this.largeImage = true;
-        this.disable_file_upload(!this.largeImage);
-        this.fileNames = [];
-        this.base64textString = [];
-        this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-        this.image_view_id =-1;
-        this.zoomIcon = false
-        //this.form.value.select = null;
-        this.getResult = false;
-        this.result = {};
-        this.result_testreport={};
-        this.result_imp=[];
-        this.result_date=[];
-        this.result_others = {};
-        this.error = false;
-        this.uploadFileAlert = false;
-        this.waitForResponse = false;
-        this.DropdownId = false;
-        this.verifyDocumentId = false;
-        this.invalidDocumentId = false;
-        this.unKnownError = false;
-        this.result_date_show = false;
-        this.result_imp_show = false;
-        this.result_testreport_show = false;
-        this.markForReview = false;
-        this.uploadButton = false;
-        this.disabledupload = true;
-        this.zoom = false;
-        this.duplicate_browse = false;
-        this.DocumentIdUploaded = "";
-        this.Select_document_disabled = false;
-        this.selectDropdownId = "";
+        // this.tableShow = false;
+        // this.duplicate_browse =false;
+        // this.largeImage = true;
+        // this.disable_file_upload(!this.largeImage);
+        // this.fileNames = [];
+        // this.base64textString = [];
+        // this.image_view = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+        // this.image_view_id =-1;
+        // this.zoomIcon = false
+        // ////this.form.value.select = null;
+        // this.getResult = false;
+        // this.result = {};
+        // this.result_testreport={};
+        // this.result_imp=[];
+        // this.result_date=[];
+        // this.result_others = {};
+        // this.error = false;
+        // this.uploadFileAlert = false;
+        // this.waitForResponse = false;
+        // this.DropdownId = false;
+        // this.verifyDocumentId = false;
+        // this.invalidDocumentId = false;
+        // this.unKnownError = false;
+        // this.result_date_show = false;
+        // this.result_imp_show = false;
+        // this.result_testreport_show = false;
+        // this.markForReview = false;
+        // this.uploadButton = false;
+        // this.disabledupload = true;
+        // this.zoom = false;
+        // this.duplicate_browse = false;
+        // this.DocumentIdUploaded = "";
+        // this.Select_document_disabled = false;
+        // this.selectDropdownId = "";
         this.form_reset(this.form.value.select);
         this.var_reset("full");
       }
